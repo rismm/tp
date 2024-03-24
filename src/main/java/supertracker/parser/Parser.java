@@ -43,8 +43,6 @@ public class Parser {
     private static final String PRICE_GROUP = "price";
     private static final String EX_DATE_GROUP = "expiry";
     private static final String EX_DATE_FORMAT = "dd-MM-yyyy";
-    private static final String INVALID_EX_DATE_FORMAT = "dd-MM-yyyyy";
-    private static final String INVALID_EX_DATE = "01-01-99999";
     private static final String SORT_QUANTITY_FLAG = "sq";
     private static final String SORT_PRICE_FLAG = "sp";
     private static final String REVERSE_FLAG = "r";
@@ -240,8 +238,8 @@ public class Parser {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
         }
 
-        String dateString = null;
-        LocalDate expiryDate = LocalDate.parse(INVALID_EX_DATE, DateTimeFormatter.ofPattern(INVALID_EX_DATE_FORMAT));
+        String dateString;
+        LocalDate expiryDate = null;
 
         boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
 

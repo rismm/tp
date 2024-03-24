@@ -1,5 +1,6 @@
 package supertracker.ui;
 
+import supertracker.TrackerException;
 import supertracker.item.Item;
 
 import java.time.LocalDate;
@@ -87,8 +88,12 @@ public class Ui {
         printIndent(newItemOpening(item));
         printIndent(quantityMessage(item));
         printIndent(priceMessage(item));
-        if (!item.getExpiryDate().isEqual(LocalDate.parse("01/01/99999", DateTimeFormatter.ofPattern("dd/MM/yyyyy")))) {
-            printIndent(expiryDateMessage(item));
+        try {
+            if (!item.getExpiryDate().isEqual(null)) {
+                printIndent(expiryDateMessage(item));
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 
