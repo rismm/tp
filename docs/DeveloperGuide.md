@@ -156,23 +156,23 @@ The following is a class diagram of the DeleteCommand and its relevant dependenc
 *:(*
 
 The `DeleteCommand` class implements the `Command` interface and is responsible for deleting existing items in the
-`Inventory`. A DeleteCommand instance is created when calling the `parseDeleteCommand` method called in Parser class.
+inventory. A DeleteCommand instance is created when calling the `parseDeleteCommand` method called in Parser class.
 This method parses the input and ensures that the command parameter (item name) exists in the inventory. The `execute()`
-method in the class will call the `delete` method from `inventory` class to remove the item. It will then execute
+method in the class will call the `delete` method from `Inventory` class to remove the item. It will then execute
 the `saveData` method from `FileManager` class to save changes to the inventory.
 
 ### Find Command
 The following is a class diagram of the FindCommand and its relevant dependencies
 ![FindCommandClass](uml-diagrams/FindCommandClass.png)
 
-The `FindCommand` class implements the `Command` interface and is responsible for searching for name in items provided by `Inventory`.
-A FindCommand instance is created by the `parseFindCommand` method called by Parser, which ensures that the provided parameter (name) is valid.
+The `FindCommand` class implements the `Command` interface and is responsible for searching for items in the inventory by name.
+A FindCommand instance is created by the `parseFindCommand` method called by `Parser`, which ensures that the provided parameter (name) is valid.
 
 #### Dependencies
-- `Inventory`: For getting the inventory list of items
+- `Inventory`: For getting the list of items in the inventory
 - `Ui`: To notify the user about the successful execution of `FindCommand`
 
-The following sequence diagram shows the execution of a NewCommand  
+The following sequence diagram shows the execution of a FindCommand  
 ![FindCommandSequence](uml-diagrams/FindCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `FindCommand`
@@ -182,6 +182,60 @@ The following sequence diagram shows the execution of a NewCommand
 5. On every iteration, the item will be checked if it contains the word that is to be found
 6. If the item contains the word, the `foundItem` method of the Ui class is called and the `isFound` variable is assigned a true value
 7. After the loop ends, if the `isFound` variable is still false, the `noItemFound` method of the Ui class is called to notify that no item has been found containing the word
+
+### List Command
+The following is a class diagram of the FindCommand and its relevant dependencies
+![ListCommandClass](uml-diagrams/ListCommandClass.png)
+
+The `ListCommand` class implements the `Command` interface and is responsible for printing out a list of items in the inventory to the output.
+A ListCommand instance is created by the `parseListCommand` method called by Parser, which parses the user input to determine how the list should be printed out.
+
+#### Dependencies
+- `Item`: For getting the comparator needed to sort the list of items
+- `Inventory`: For getting the list of items in the inventory
+- `Ui`: To print the list of items in the inventory to the output
+
+The 5 parameters in the constructor `hasQuantity`, `hasPrice`, `firstParam`, `sortBy`, `reverse` are used to determine how the list should be printed out.
+- `hasQuantity`
+    - True if the user has input the quantity flag `q/`, false otherwise
+    - Quantity will be printed to the output if true
+- `hasPrice`
+    - True if the user has input the price flag `p/`, false otherwise
+    - Price will be printed to the output if true
+- `firstParam`
+    - Can only take 3 possible values `"q"`,`"p"` or `""`. 
+    - `"q"` if the quantity flag comes before the price flag.
+    - `"p"` if the price flag comes before the quantity flag
+    - If both quantity and price flag do not exist, then `""` would be the default value (this variable would no longer be used in the execution of `ListCommand`)
+    - Quantity will be printed before price if `"q"`
+    - Price will be printed before quantity if `"p"`
+- `sortBy`
+    - Can only take 3 possible values `"q"`,`"p"` or `""`
+    - `"q"` if the user has input the sort by quantity flag `sq/`
+    - `"p"` if the user has input the sort by price flag `sp/`
+    - `""` would be the default value if the user did not input any sorting flag
+    - If multiple sorting flags are input by the user, `sortBy` will take the value corresponding to the first sorting flag
+- `reverse`
+    - True if the user has input the reverse flag `r/`, false otherwise.
+
+There are 6 sorting modes in total
+1. `sortBy == ""` and `reverse == false`: Alphabetical ascending (e.g. A-Z)
+2. `sortBy == ""` and `reverse == true`: Alphabetical descending (e.g. Z-A)
+3. `sortBy == "q"` and `reverse == false`: Quantity ascending
+4. `sortBy == "q"` and `reverse == true`: Quantity descending
+5. `sortBy == "p"` and `reverse == false`: Price ascending
+6. `sortBy == "p"` and `reverse == true`: Price descending
+
+The following sequence diagram shows the execution of a ListCommand  
+![ListCommandSequence](uml-diagrams/ListCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `ListCommand`
+2. The `getItems` method of the `Inventory` class is called to get an `ArrayList` of items in the inventory
+3. The `listIntro` method of the `Ui` class is called to print out the total number of items in the inventory
+4. Depending on the value of `sortBy`, either the `sortByQuantity`, `sortByPrice` or `sortByName` method of the `Item` class will be called.
+A comparator used to sort the `ArrayList` of items is returned.
+5. The `sort` method of the `ArrayList` of items is called with a comparator as an input parameter.
+6. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output.
 
 ## Product scope
 ### Target user profile

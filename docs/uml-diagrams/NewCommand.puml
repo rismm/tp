@@ -62,6 +62,7 @@ participant "FileManager" as FileManager <<class>> #bcf7cf
 participant "Inventory" as Inventory <<class>> #d5eac2
 participant "Ui" as Ui <<class>> #e5c2ea
 participant ":Item" as Item #fbffb2
+
 SuperTracker -> NewCommand : execute()
 activate NewCommand #cbf7f4
 
