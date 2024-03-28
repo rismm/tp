@@ -30,7 +30,8 @@ public class RemoveCommandTest {
         int quantityToRemove = 50;
         int newQuantity = quantity - quantityToRemove;
 
-        Command newCommand = new NewCommand(name, quantity, price, null);
+        LocalDate date = LocalDate.parse("22-08-2013", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
         Command removeCommand = new RemoveCommand(name, quantityToRemove);
         removeCommand.execute();

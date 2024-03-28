@@ -26,7 +26,7 @@ public class AddCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("01/01/2113", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate date = LocalDate.parse("01-01-2113", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         int quantityToAdd = 50;
         int newQuantity = quantity + quantityToAdd;

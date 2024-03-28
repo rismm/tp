@@ -43,6 +43,8 @@ public class Parser {
     private static final String PRICE_GROUP = "price";
     private static final String EX_DATE_GROUP = "expiry";
     private static final String EX_DATE_FORMAT = "dd-MM-yyyy";
+    protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    protected static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final String SORT_QUANTITY_FLAG = "sq";
     private static final String SORT_PRICE_FLAG = "sp";
     private static final String REVERSE_FLAG = "r";
@@ -59,7 +61,8 @@ public class Parser {
             + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String UPDATE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + "(?<" + QUANTITY_GROUP + ">(?:" + QUANTITY_FLAG + BASE_FLAG + ".*)?) "
-            + "(?<" + PRICE_GROUP + ">(?:" + PRICE_FLAG + BASE_FLAG + ".*)?) ";
+            + "(?<" + PRICE_GROUP + ">(?:" + PRICE_FLAG + BASE_FLAG + ".*)?) "
+            + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String LIST_COMMAND_REGEX = "(?<" + QUANTITY_GROUP + ">(?:" + QUANTITY_FLAG + BASE_FLAG
             + ".*)?) (?<" + PRICE_GROUP + ">(?:" + PRICE_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + SORT_QUANTITY_GROUP + ">(?:" + SORT_QUANTITY_FLAG + BASE_FLAG + ".*)?) "
@@ -185,7 +188,7 @@ public class Parser {
     }
 
     private static Command parseUpdateCommand(String input) throws TrackerException {
-        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG};
+        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
         Matcher matcher = getPatternMatcher(UPDATE_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
@@ -195,8 +198,9 @@ public class Parser {
         String name = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).replace(QUANTITY_FLAG + BASE_FLAG, "").trim();
         String priceString = matcher.group(PRICE_GROUP).replace(PRICE_FLAG + BASE_FLAG, "").trim();
+        String dateString = matcher.group(EX_DATE_GROUP).replace(EX_DATE_FLAG + BASE_FLAG, "").trim();
 
-        if (name.isEmpty() || (quantityString.isEmpty() && priceString.isEmpty())) {
+        if (name.isEmpty() || (quantityString.isEmpty() && priceString.isEmpty() && dateString.isEmpty())) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
         }
 
@@ -206,6 +210,7 @@ public class Parser {
 
         int quantity = -1;
         double price = -1;
+        LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
 
         try {
             if (!quantityString.isEmpty()) {
@@ -214,8 +219,13 @@ public class Parser {
             if (!priceString.isEmpty()) {
                 price = roundTo2Dp(Double.parseDouble(priceString));
             }
+            if (!dateString.isEmpty()) {
+                expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+            }
         } catch (NumberFormatException e) {
             throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
         }
 
         if (!quantityString.isEmpty() && quantity < 0) {
@@ -226,7 +236,7 @@ public class Parser {
             throw new TrackerException(ErrorMessage.PRICE_TOO_SMALL);
         }
 
-        return new UpdateCommand(name, quantity, price);
+        return new UpdateCommand(name, quantity, price, expiryDate);
     }
 
     private static Command parseNewCommand(String input) throws TrackerException {
@@ -246,7 +256,7 @@ public class Parser {
         }
 
         String dateString;
-        LocalDate expiryDate = null;
+        LocalDate expiryDate = DATE_NOT_EXIST;
 
         boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
 

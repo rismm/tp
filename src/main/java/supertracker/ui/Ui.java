@@ -3,6 +3,7 @@ package supertracker.ui;
 import supertracker.TrackerException;
 import supertracker.item.Item;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import java.util.List;
@@ -39,6 +40,10 @@ public class Ui {
     private static String expiryDateMessage(Item item) {
         return "Expiry Date: " + item.getExpiryDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
+
+    protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+
+    protected static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
     private static String updateItemOpening(Item item) {
         return item.getName() + " has been successfully updated!";
@@ -91,11 +96,11 @@ public class Ui {
         printIndent(quantityMessage(item));
         printIndent(priceMessage(item));
         try {
-            if (!item.getExpiryDate().isEqual(null)) {
+            if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
                 printIndent(expiryDateMessage(item));
             }
         } catch (NullPointerException e) {
-            assert (item.getExpiryDate().isEqual(null));
+//            assert (item.getExpiryDate().isEqual(null));
         }
     }
 
