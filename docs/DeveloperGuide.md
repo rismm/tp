@@ -119,7 +119,7 @@ The following sequence diagram shows the execution of a NewCommand
 
 1. The `SuperTracker` class calls the `execute` method of `NewCommand`
 2. A new `Item` object with the given parameters (name, quantity, price, expiry date) is created and returned to `NewCommand`
-3. The `put` method of the `Inventory` class is called to add the newly created item into the `inventory`
+3. The `put` method of the `Inventory` class is called to add the newly created item into the inventory
 4. The `newCommandSuccess` method of the `Ui` class is called to notify that `NewCommand` has been successfully executed
 5. The `saveData` method of the `FileManager` class is called to save the new item added onto the hard disk
 
@@ -147,8 +147,9 @@ updated). If the condition holds true it retrieves the item's previous quantity.
 4. There is another optional check for newPrice being -1 (an invalid value that indicates that price should not be
    updated). If the condition holds true it retrieves the item's previous price.
 5. A new `Item` object with the given parameters (name, new quantity, new price, old expiry date) is created and returned to `UpdateCommand`
-6. The `put` method of the `Inventory` class is called to update the item in the `inventory`
+6. The `put` method of the `Inventory` class is called to update the item in the inventory
 7. The `UpdateCommandSuccess` method of the `Ui` class is called to notify that `UpdateCommand` has been successfully executed
+8. The `saveData` method of the `FileManager` class is called to save updated item onto the hard disk
 
 ### Find Command
 The following is a class diagram of the FindCommand and its relevant dependencies
@@ -161,7 +162,7 @@ A FindCommand instance is created by the `parseFindCommand` method called by Par
 - `Inventory`: For getting the inventory list of items
 - `Ui`: To notify the user about the successful execution of `FindCommand`
 
-The following sequence diagram shows the execution of a NewCommand
+The following sequence diagram shows the execution of a NewCommand  
 ![FindCommandSequence](uml-diagrams/FindCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `FindCommand`

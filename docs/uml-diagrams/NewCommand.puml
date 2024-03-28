@@ -82,7 +82,6 @@ deactivate Ui
 
 NewCommand -> FileManager : saveData()
 activate FileManager #bcf7cf
-FileManager -> Inventory : getItems()
 FileManager --> NewCommand
 deactivate FileManager
 

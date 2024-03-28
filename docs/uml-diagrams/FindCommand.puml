@@ -54,7 +54,7 @@ activate Inventory #d5eac2
 Inventory --> FindCommand : items
 deactivate Inventory
 
-loop until every item in items are checked
+loop until every item in items is checked
     opt item contains the word
     FindCommand -> Ui : foundItem(item:String, index:int)
     activate Ui #e5c2ea
