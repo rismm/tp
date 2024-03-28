@@ -17,12 +17,12 @@ public class FindCommand implements Command {
     public void execute() {
         int index = 1;
         boolean isFound = false;
-        List<Item> items = Inventory.items();
+        List<Item> items = Inventory.getItems();
 
         Ui.findIntro();
         for (Item item : items) {
             if(item.getName().contains(name)) {
-                Ui.findItem(item, index);
+                Ui.foundItem(item, index);
                 index++;
                 isFound = true;
             }
