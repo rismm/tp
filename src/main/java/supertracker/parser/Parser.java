@@ -247,7 +247,8 @@ public class Parser {
         }
     }
 
-    private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString) throws TrackerException {
+    private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString)
+            throws TrackerException {
         if (name.isEmpty() || (quantityString.isEmpty() && priceString.isEmpty())) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
         }
@@ -285,7 +286,8 @@ public class Parser {
         return sortBy;
     }
 
-    private static void validateNonEmptyParamsReport(String reportType, String thresholdString) throws TrackerException {
+    private static void validateNonEmptyParamsReport(String reportType, String thresholdString)
+            throws TrackerException {
         if (reportType.isEmpty() || (reportType.equals("low stock") && thresholdString.isEmpty())) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
         }
