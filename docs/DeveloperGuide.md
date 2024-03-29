@@ -195,7 +195,7 @@ A ListCommand instance is created by the `parseListCommand` method called by Par
 - `Inventory`: For getting the list of items in the inventory
 - `Ui`: To print the list of items in the inventory to the output
 
-The 5 parameters in the constructor `hasQuantity`, `hasPrice`, `firstParam`, `sortBy`, `reverse` are used to determine how the list should be printed out.
+The 5 parameters in the constructor `hasQuantity`, `hasPrice`, `firstParam`, `sortBy`, `isReverse` are used to determine how the list should be printed out.
 - `hasQuantity`
     - True if the user has input the quantity flag `q/`, false otherwise
     - Quantity will be printed to the output if true
@@ -215,16 +215,16 @@ The 5 parameters in the constructor `hasQuantity`, `hasPrice`, `firstParam`, `so
     - `"p"` if the user has input the sort by price flag `sp/`
     - `""` would be the default value if the user did not input any sorting flag
     - If multiple sorting flags are input by the user, `sortBy` will take the value corresponding to the first sorting flag
-- `reverse`
+- `isReverse`
     - True if the user has input the reverse flag `r/`, false otherwise.
 
 There are 6 sorting modes in total
-1. `sortBy == ""` and `reverse == false`: Alphabetical ascending (e.g. A-Z)
-2. `sortBy == ""` and `reverse == true`: Alphabetical descending (e.g. Z-A)
-3. `sortBy == "q"` and `reverse == false`: Quantity ascending
-4. `sortBy == "q"` and `reverse == true`: Quantity descending
-5. `sortBy == "p"` and `reverse == false`: Price ascending
-6. `sortBy == "p"` and `reverse == true`: Price descending
+1. `sortBy == ""` and `isReverse == false`: Alphabetical ascending (e.g. A-Z)
+2. `sortBy == ""` and `isReverse == true`: Alphabetical descending (e.g. Z-A)
+3. `sortBy == "q"` and `isReverse == false`: Quantity ascending
+4. `sortBy == "q"` and `isReverse == true`: Quantity descending
+5. `sortBy == "p"` and `isReverse == false`: Price ascending
+6. `sortBy == "p"` and `isReverse == true`: Price descending
 
 The following sequence diagram shows the execution of a ListCommand  
 ![ListCommandSequence](uml-diagrams/ListCommandSequence.png)
@@ -233,9 +233,10 @@ The following sequence diagram shows the execution of a ListCommand
 2. The `getItems` method of the `Inventory` class is called to get an `ArrayList` of items in the inventory
 3. The `listIntro` method of the `Ui` class is called to print out the total number of items in the inventory
 4. Depending on the value of `sortBy`, either the `sortByQuantity`, `sortByPrice` or `sortByName` method of the `Item` class will be called.
-A comparator used to sort the `ArrayList` of items is returned.
-5. The `sort` method of the `ArrayList` of items is called with a comparator as an input parameter.
-6. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output.
+A comparator used to sort the `ArrayList` of items is returned
+5. The `sort` method of the `ArrayList` of items is called with a comparator as an input parameter
+6. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
+7. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
 
 ## Product scope
 ### Target user profile

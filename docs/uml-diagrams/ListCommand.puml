@@ -24,8 +24,8 @@ class ListCommand {
     -hasPrice:boolean
     -firstParam:String
     -sortBy:String
-    -reverse:boolean
-    +NewCommand(hasQuantity:boolean, hasPrice:boolean, firstParam:String, sortBy:String, reverse:boolean)
+    -isReverse:boolean
+    +NewCommand(hasQuantity:boolean, hasPrice:boolean, firstParam:String, sortBy:String, isReverse:boolean)
     +execute():void
     +isExit():boolean
 }
@@ -56,7 +56,7 @@ participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
 participant ":ListCommand" as ListCommand #cbf7f4
 participant "Inventory" as Inventory <<class>> #d5eac2
 participant "Item" as Item <<class>> #fbffb2
-participant "Collection" as Collection <<class>> #ffcdd6
+participant "Collections" as Collections <<class>> #ffcdd6
 participant "Ui" as Ui <<class>> #e5c2ea
 participant ":ArrayList<Item>" as ArrayList #bcf7cf
 
@@ -107,12 +107,14 @@ activate ArrayList #bcf7cf
 ArrayList --> ListCommand
 deactivate ArrayList
 
-opt reverse
+opt isReverse
 
-ListCommand -> Collection : reverse(items:ArrayList<Item>)
-activate Collection #ffcdd6
-Collection --> ListCommand
-deactivate Collection
+ListCommand -> Collections : reverse(items:ArrayList<Item>)
+activate Collections #ffcdd6
+Collections --> ListCommand
+deactivate Collections
+
+end
 
 loop items
 
