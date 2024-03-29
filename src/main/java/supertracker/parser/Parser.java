@@ -73,8 +73,9 @@ public class Parser {
     private static final String REMOVE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) ";
     private static final String FIND_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) ";
+
     private static final String REPORT_COMMAND_REGEX = REPORT_TYPE_FLAG + BASE_FLAG + "(?<" + REPORT_TYPE_GROUP +
-            ">.*) " + THRESHOLD_FLAG + BASE_FLAG + "(?<" + THRESHOLD_GROUP + ">.*) ";
+            ">.*) " + "(?<" + THRESHOLD_GROUP + ">(?:" + THRESHOLD_FLAG + BASE_FLAG + ".*)?) ";
 
 
     /**
@@ -443,24 +444,33 @@ public class Parser {
         }
 
         String reportType = matcher.group(REPORT_TYPE_GROUP).trim();
-        String thresholdString = matcher.group(THRESHOLD_GROUP).trim();
+        String thresholdString = matcher.group(THRESHOLD_GROUP).
+                replace(THRESHOLD_FLAG + BASE_FLAG, "").trim();
 
-        if (reportType.isEmpty() || thresholdString.isEmpty()) {
+        if (reportType.isEmpty() || (reportType.equals("low stock") && thresholdString.isEmpty())) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
         }
 
-        int threshold;
-
-        try {
-            threshold = Integer.parseInt(thresholdString);
-        } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+        if (reportType.equals("expiry") && !thresholdString.isEmpty()) {
+            throw new TrackerException(ErrorMessage.INVALID_EXPIRY_REPORT_FORMAT);
         }
 
-        if (threshold < 0) {
-            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
+        if (!reportType.equals("expiry") && !reportType.equals("low stock")) {
+            throw new TrackerException(ErrorMessage.INVALID_REPORT_TYPE);
         }
 
+        int threshold = -1;
+        if (reportType.equals("low stock")){
+            try {
+                threshold = Integer.parseInt(thresholdString);
+            } catch (NumberFormatException e) {
+                throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+            }
+
+            if (threshold < 0) {
+                throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
+            }
+        }
         return new ReportCommand(reportType, threshold);
     }
 
