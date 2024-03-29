@@ -29,8 +29,7 @@ public class ReportCommand implements Command{
                 }
             }
             Ui.reportCommandSuccess(reportItems, reportType);
-        }
-        else if (reportType.equals("expiry")) {
+        } else if (reportType.equals("expiry")) {
             assert threshold == -1;
             for (Item item : items) {
                 if (item.getExpiryDate().isBefore(expiryThresholdDate)) {
