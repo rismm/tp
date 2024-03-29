@@ -5,6 +5,7 @@ import supertracker.item.Inventory;
 import supertracker.item.Item;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListCommand implements Command {
@@ -33,17 +34,21 @@ public class ListCommand implements Command {
         List<Item> items = Inventory.getItems();
         Ui.listIntro(items.size());
 
+        Comparator<Item> comparator;
+
         switch (sortBy) {
         case QUANTITY_FLAG:
-            items.sort(Item.sortByQuantity());
+            comparator = Item.sortByQuantity();
             break;
         case PRICE_FLAG:
-            items.sort(Item.sortByPrice());
+            comparator = Item.sortByPrice();
             break;
         default:
-            items.sort(Item.sortByName());
+            comparator = Item.sortByName();
             break;
         }
+
+        items.sort(comparator);
 
         if (reverse) {
             Collections.reverse(items);
