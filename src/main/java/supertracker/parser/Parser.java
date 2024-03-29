@@ -369,12 +369,12 @@ public class Parser {
         boolean hasPrice = !matcher.group(PRICE_GROUP).isEmpty();
         boolean hasSortQuantity = !matcher.group(SORT_QUANTITY_GROUP).isEmpty();
         boolean hasSortPrice = !matcher.group(SORT_PRICE_GROUP).isEmpty();
-        boolean reverse = !matcher.group(REVERSE_GROUP).isEmpty();
+        boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
         String firstParam = getFirstParam(input, hasQuantity, hasPrice);
         String sortBy = getSortBy(input, hasSortQuantity, hasSortPrice);
 
-        return new ListCommand(hasQuantity, hasPrice, firstParam, sortBy, reverse);
+        return new ListCommand(hasQuantity, hasPrice, firstParam, sortBy, isReverse);
     }
 
     //@@vimalapugazhan
