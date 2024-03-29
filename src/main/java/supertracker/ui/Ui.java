@@ -133,19 +133,27 @@ public class Ui {
         if (reportItems.isEmpty()) {
             printIndent(REPORT_NO_ITEMS_OPENING);
         } else if (reportType.equals("low stock")) {
-            printIndent(reportLowStockOpening(reportItems.size()));
-            for (Item item : reportItems) {
-                printIndent(reportNameMessage(item, count));
-                printIndent(reportQuantityMessage(item));
-                count += 1;
-            }
+            lowStockSuccess(reportItems, count);
         } else if (reportType.equals("expiry")) {
-            printIndent(reportExpiryOpening(reportItems.size()));
-            for (Item item : reportItems) {
-                printIndent(reportNameMessage(item, count));
-                printIndent(reportExpiryDateMessage(item));
-                count += 1;
-            }
+            expirySuccess(reportItems, count);
+        }
+    }
+
+    private static void expirySuccess(List<Item> reportItems, int count) {
+        printIndent(reportExpiryOpening(reportItems.size()));
+        for (Item item : reportItems) {
+            printIndent(reportNameMessage(item, count));
+            printIndent(reportExpiryDateMessage(item));
+            count += 1;
+        }
+    }
+
+    private static void lowStockSuccess(List<Item> reportItems, int count) {
+        printIndent(reportLowStockOpening(reportItems.size()));
+        for (Item item : reportItems) {
+            printIndent(reportNameMessage(item, count));
+            printIndent(reportQuantityMessage(item));
+            count += 1;
         }
     }
 
