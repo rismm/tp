@@ -9,7 +9,6 @@ import supertracker.item.Item;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,12 +25,12 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse("22-08-2013", DATE_FORMAT);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         int newQuantity = 200;
         double newPrice = 3.00;
-        LocalDate newExpiryDate = LocalDate.parse("05-12-2113", DATE_FORMAT);
+        LocalDate newExpiryDate = LocalDate.parse("05-12-2113", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
@@ -52,8 +51,8 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse("22-08-2013", DATE_FORMAT);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
@@ -67,8 +66,8 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse("22-08-2013", DATE_FORMAT);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
@@ -82,8 +81,8 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse("22-08-2013", DATE_FORMAT);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
@@ -97,8 +96,8 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse("22-08-2013", DATE_FORMAT);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();

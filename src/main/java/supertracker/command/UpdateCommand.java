@@ -9,7 +9,6 @@ import supertracker.item.Item;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 public class UpdateCommand implements Command {
     private String name;

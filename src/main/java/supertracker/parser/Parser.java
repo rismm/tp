@@ -17,6 +17,8 @@ import supertracker.ui.ErrorMessage;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,9 +49,11 @@ public class Parser {
     protected static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final String SORT_QUANTITY_FLAG = "sq";
     private static final String SORT_PRICE_FLAG = "sp";
+    private static final String SORT_EX_DATE_FLAG = "se";
     private static final String REVERSE_FLAG = "r";
     private static final String SORT_QUANTITY_GROUP = "sortQuantity";
     private static final String SORT_PRICE_GROUP = "sortPrice";
+    private static final String SORT_EX_DATE_GROUP = "sortExpiry";
     private static final String REVERSE_GROUP = "reverse";
     private static final String REPORT_TYPE_FLAG = "r";
     private static final String REPORT_TYPE_GROUP = "reportType";
@@ -65,8 +69,10 @@ public class Parser {
             + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String LIST_COMMAND_REGEX = "(?<" + QUANTITY_GROUP + ">(?:" + QUANTITY_FLAG + BASE_FLAG
             + ".*)?) (?<" + PRICE_GROUP + ">(?:" + PRICE_FLAG + BASE_FLAG + ".*)?) "
+            + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + SORT_QUANTITY_GROUP + ">(?:" + SORT_QUANTITY_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + SORT_PRICE_GROUP + ">(?:" + SORT_PRICE_FLAG + BASE_FLAG + ".*)?) "
+            + "(?<" + SORT_EX_DATE_FLAG + ">(?:" + SORT_EX_DATE_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + REVERSE_GROUP + ">(?:" + REVERSE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String DELETE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) ";
     private static final String ADD_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
@@ -296,7 +302,8 @@ public class Parser {
     }
 
     private static Command parseListCommand(String input) throws TrackerException {
-        String[] flags = {QUANTITY_FLAG, PRICE_FLAG, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, REVERSE_FLAG};
+        String[] flags = {QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG,
+            SORT_EX_DATE_FLAG, REVERSE_FLAG};
         Matcher matcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
@@ -305,16 +312,45 @@ public class Parser {
 
         boolean hasQuantity = !matcher.group(QUANTITY_GROUP).isEmpty();
         boolean hasPrice = !matcher.group(PRICE_GROUP).isEmpty();
+        boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
         boolean hasSortQuantity = !matcher.group(SORT_QUANTITY_GROUP).isEmpty();
         boolean hasSortPrice = !matcher.group(SORT_PRICE_GROUP).isEmpty();
+        //boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean reverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
+        ArrayList<Integer> position = new ArrayList<>();
         // to check if q comes before p or vice versa
         String firstParam = "";
-        if (hasQuantity && hasPrice) {
-            int quantityPosition = input.indexOf(QUANTITY_FLAG + BASE_FLAG);
-            int pricePosition = input.indexOf(PRICE_FLAG + BASE_FLAG);
-            firstParam = quantityPosition < pricePosition ? QUANTITY_FLAG : PRICE_FLAG;
+        String secondParam = "";
+
+        int quantityPosition;
+        int pricePosition;
+        int expiryPosition;
+
+        if (hasQuantity) {
+            quantityPosition = input.indexOf(QUANTITY_FLAG + BASE_FLAG);
+            position.add(quantityPosition);
+        }
+        if (hasPrice) {
+            pricePosition = input.indexOf(PRICE_FLAG + BASE_FLAG);
+            position.add(pricePosition);
+        }
+        if (hasExpiry) {
+            expiryPosition = input.indexOf(EX_DATE_FLAG + BASE_FLAG);
+            position.add(expiryPosition);
+        }
+
+        int firstParamPos;
+        int secondParamPos;
+        Collections.sort(position);
+        try {
+            firstParamPos = position.get(0);
+            secondParamPos = position.get(1);
+
+            firstParam = input.substring(firstParamPos, firstParamPos + 1);
+            secondParam = input.substring(secondParamPos, secondParamPos + 1);
+        } catch (NullPointerException | IndexOutOfBoundsException ignored) {
+            assert (position.size() < 2);
         }
 
         // sort by whichever sorting method comes first
@@ -330,7 +366,7 @@ public class Parser {
             sortBy = PRICE_FLAG;
         }
 
-        return new ListCommand(hasQuantity, hasPrice, firstParam, sortBy, reverse);
+        return new ListCommand(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam, sortBy, reverse);
     }
 
     //@@vimalapugazhan

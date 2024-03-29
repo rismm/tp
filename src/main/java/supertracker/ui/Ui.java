@@ -1,6 +1,5 @@
 package supertracker.ui;
 
-import supertracker.TrackerException;
 import supertracker.item.Item;
 
 import java.time.LocalDate;
@@ -12,6 +11,7 @@ public class Ui {
     private static final String LINE = "    --------------------------------------------------------------------------";
     private static final String QUANTITY_FLAG = "q";
     private static final String PRICE_FLAG = "p";
+    private static final String EX_DATE_FLAG = "e";
     private static final String EMPTY_LIST_MESSAGE = "Nothing to list! No items in inventory!";
     private static final String SINGLE_ITEM_LIST_MESSAGE= "There is 1 unique item in your inventory:";
     private static final String INVALID_COMMAND_MESSAGE = "Sorry! Invalid command!";
@@ -37,8 +37,9 @@ public class Ui {
         return item.getName() + " has been added to the inventory!";
     }
 
+    private static final DateTimeFormatter DATE_FORMAT_PRINT  = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static String expiryDateMessage(Item item) {
-        return "Expiry Date: " + item.getExpiryDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return "Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT);
     }
 
     protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
@@ -100,7 +101,7 @@ public class Ui {
                 printIndent(expiryDateMessage(item));
             }
         } catch (NullPointerException e) {
-//            assert (item.getExpiryDate().isEqual(null));
+            assert (item.getExpiryDate().isEqual(null));
         }
     }
 
@@ -108,6 +109,7 @@ public class Ui {
         printIndent(updateItemOpening(item));
         printIndent(quantityMessage(item));
         printIndent(priceMessage(item));
+        printIndent(expiryDateMessage(item));
     }
 
     public static void deleteCommandSuccess(String name) {
@@ -158,24 +160,78 @@ public class Ui {
         printIndent(FIND_OPENING_MESSAGE);
     }
 
-    public static void listItem(Item item, int index, boolean hasQuantity, boolean hasPrice, String firstParam) {
+    public static void listItem(Item item, int index, boolean hasQuantity, boolean hasPrice,
+            boolean hasExpiry, String firstParam, String secondParam) {
+
         String stringToPrint = index + ". Name: " + item.getName();
         String quantityString = "    Quantity: " + item.getQuantity();
         String priceString = "    Price: " + item.getPriceString();
+        String expiryString;
+        if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
+            expiryString = "    Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT);
+        } else {
+            expiryString = "";
+        }
+        stringToPrint = getStringToPrint(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam,
+                stringToPrint, quantityString, priceString, expiryString);
+        printIndent(stringToPrint);
+    }
 
-        if (hasQuantity && hasPrice) {
+    private static String getStringToPrint(boolean hasQuantity, boolean hasPrice, boolean hasExpiry, String firstParam,
+            String secondParam, String stringToPrint, String quantityString, String priceString, String expiryString) {
+
+        if (hasQuantity && hasPrice && hasExpiry) {
+            switch (firstParam) {
+            case QUANTITY_FLAG:
+                if (secondParam.equals(PRICE_FLAG)) {
+                    stringToPrint += (quantityString + priceString + expiryString);
+                } else {
+                    stringToPrint += (quantityString + expiryString + priceString);
+                }
+                break;
+            case PRICE_FLAG:
+                if (secondParam.equals(QUANTITY_FLAG)) {
+                    stringToPrint += (priceString + quantityString + expiryString);
+                } else {
+                    stringToPrint += (priceString + expiryString + quantityString);
+                }
+                break;
+            case EX_DATE_FLAG:
+                if (secondParam.equals(quantityString)) {
+                    stringToPrint += (expiryString + quantityString + priceString);
+                } else {
+                    stringToPrint += (expiryString + priceString + quantityString);
+                }
+                break;
+            default:
+                return stringToPrint;       //review
+            }
+        } else if (hasQuantity && hasPrice) {
             if (firstParam.equals(QUANTITY_FLAG)) {
                 stringToPrint += (quantityString + priceString);
-            } else if (firstParam.equals(PRICE_FLAG)) {
+            } else {
                 stringToPrint += (priceString + quantityString);
+            }
+        } else if (hasQuantity && hasExpiry) {
+            if (firstParam.equals(QUANTITY_FLAG)) {
+                stringToPrint += (quantityString + expiryString);
+            } else {
+                stringToPrint += (expiryString + quantityString);
+            }
+        } else if (hasPrice && hasExpiry) {
+            if (firstParam.equals(PRICE_FLAG)) {
+                stringToPrint += (priceString + expiryString);
+            } else {
+                stringToPrint += (expiryString + priceString);
             }
         } else if (hasQuantity) {
             stringToPrint += quantityString;
         } else if (hasPrice) {
             stringToPrint += priceString;
+        } else if (hasExpiry) {
+            stringToPrint += expiryString;
         }
-
-        printIndent(stringToPrint);
+        return stringToPrint;
     }
 
     public static void printError(String errorMessage) {
