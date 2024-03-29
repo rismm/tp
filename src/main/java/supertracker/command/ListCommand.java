@@ -15,14 +15,14 @@ public class ListCommand implements Command {
     private boolean hasPrice;
     private String firstParam;
     private String sortBy;
-    private boolean reverse;
+    private boolean isReverse;
 
-    public ListCommand(boolean hasQuantity, boolean hasPrice, String firstParam, String sortBy, boolean reverse) {
+    public ListCommand(boolean hasQuantity, boolean hasPrice, String firstParam, String sortBy, boolean isReverse) {
         this.hasQuantity = hasQuantity;
         this.hasPrice = hasPrice;
         this.firstParam = firstParam;
         this.sortBy = sortBy;
-        this.reverse = reverse;
+        this.isReverse = isReverse;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ListCommand implements Command {
 
         items.sort(comparator);
 
-        if (reverse) {
+        if (isReverse) {
             Collections.reverse(items);
         }
 
