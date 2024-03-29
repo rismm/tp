@@ -73,8 +73,9 @@ public class Parser {
     private static final String REMOVE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) ";
     private static final String FIND_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) ";
+
     private static final String REPORT_COMMAND_REGEX = REPORT_TYPE_FLAG + BASE_FLAG + "(?<" + REPORT_TYPE_GROUP +
-            ">.*) " + THRESHOLD_FLAG + BASE_FLAG + "(?<" + THRESHOLD_GROUP + ">.*) ";
+            ">.*) " + "(?<" + THRESHOLD_GROUP + ">(?:" + THRESHOLD_FLAG + BASE_FLAG + ".*)?) ";
 
 
     /**
@@ -269,7 +270,7 @@ public class Parser {
     }
 
     private static String getSortBy(String input, boolean hasSortQuantity, boolean hasSortPrice) {
-        String sortBy = "";
+        String sortBy;
         if (hasSortQuantity && hasSortPrice) {
             int sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
             int sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
@@ -282,6 +283,24 @@ public class Parser {
             sortBy = "";
         }
         return sortBy;
+    }
+
+    private static void validateNonEmptyParamsReport(String reportType, String thresholdString) throws TrackerException {
+        if (reportType.isEmpty() || (reportType.equals("low stock") && thresholdString.isEmpty())) {
+            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+        }
+    }
+
+    private static void validateReportFormat(String reportType, String thresholdString) throws TrackerException {
+        if (reportType.equals("expiry") && !thresholdString.isEmpty()) {
+            throw new TrackerException(ErrorMessage.INVALID_EXPIRY_REPORT_FORMAT);
+        }
+    }
+
+    private static void validateReportType(String reportType) throws TrackerException {
+        if (!reportType.equals("expiry") && !reportType.equals("low stock")) {
+            throw new TrackerException(ErrorMessage.INVALID_REPORT_TYPE);
+        }
     }
 
     private static Command parseNewCommand(String input) throws TrackerException {
@@ -439,15 +458,18 @@ public class Parser {
         }
 
         String reportType = matcher.group(REPORT_TYPE_GROUP).trim();
-        String thresholdString = matcher.group(THRESHOLD_GROUP).trim();
+        String thresholdString = matcher.group(THRESHOLD_GROUP).
+                replace(THRESHOLD_FLAG + BASE_FLAG, "").trim();
 
-        validateNonEmptyParam(reportType);
-        validateNonEmptyParam(thresholdString);
+        validateNonEmptyParamsReport(reportType, thresholdString);
+        validateReportFormat(reportType, thresholdString);
+        validateReportType(reportType);
 
-        int threshold = parseQuantity(thresholdString);
-        validateNonNegativeQuantity(thresholdString, threshold);
-
+        int threshold = -1;
+        if (reportType.equals("low stock")){
+            threshold = parseQuantity(thresholdString);
+            validateNonNegativeQuantity(thresholdString, threshold);
+        }
         return new ReportCommand(reportType, threshold);
     }
-
 }

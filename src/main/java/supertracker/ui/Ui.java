@@ -53,12 +53,26 @@ public class Ui {
         return quantityRemoved + " " + item.getName() + " removed from inventory!";
     }
 
-    private static String reportLowStockOpening(Item reportItem, int count) {
+    private static String reportLowStockOpening(int quantity) {
+        assert quantity >= 0;
+        String isOrAre = quantity == 1 ? "is " : "are ";
+        return "There " + isOrAre + quantity + " items low on stocks!";
+    }
+    private static String reportExpiryOpening(int quantity) {
+        assert quantity >= 0;
+        String isOrAre = quantity == 1 ? "is " : "are ";
+        return "There " + isOrAre + quantity + " items close to expiry!";
+    }
+    private static String reportNameMessage(Item reportItem, int count) {
         return count + ". Name: " + reportItem.getName();
     }
 
-    private static String reportLowStockQuantityMessage(Item reportItem) {
+    private static String reportQuantityMessage(Item reportItem) {
         return "   Current Quantity: " + reportItem.getQuantity();
+    }
+
+    private static String reportExpiryDateMessage(Item reportItem) {
+        return "   Expiry Date: " + reportItem.getExpiryDate();
     }
 
     public static void printIndent(String string) {
@@ -115,15 +129,21 @@ public class Ui {
     }
 
     public static void reportCommandSuccess(List<Item> reportItems, String reportType) {
+        int count = 1;
         if (reportItems.isEmpty()) {
             printIndent(REPORT_NO_ITEMS_OPENING);
-        } else {
-            int count = 1;
+        } else if (reportType.equals("low stock")) {
+            printIndent(reportLowStockOpening(reportItems.size()));
             for (Item item : reportItems) {
-                if (reportType.equals("low stock")) {
-                    printIndent(reportLowStockOpening(item, count));
-                    printIndent(reportLowStockQuantityMessage(item));
-                }
+                printIndent(reportNameMessage(item, count));
+                printIndent(reportQuantityMessage(item));
+                count += 1;
+            }
+        } else if (reportType.equals("expiry")) {
+            printIndent(reportExpiryOpening(reportItems.size()));
+            for (Item item : reportItems) {
+                printIndent(reportNameMessage(item, count));
+                printIndent(reportExpiryDateMessage(item));
                 count += 1;
             }
         }
