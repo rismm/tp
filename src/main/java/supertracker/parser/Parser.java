@@ -91,6 +91,12 @@ public class Parser {
         return input.substring(0, input.indexOf(" "));
     }
 
+    /**
+     * Returns the string of parameters right after the first word separated by white space in the user's input
+     * 
+     * @param input a String of the user's input
+     * @return a String of the parameters in the user input
+     */
     private static String getParameters(String input) {
         if (!input.contains(" ")) {
             return "";
@@ -145,13 +151,16 @@ public class Parser {
     }
 
     /**
-     * Returns a String in the format of a regex expression pattern for parsing of command inputs
+     * Returns a String in the format of a regex expression pattern for parsing of command inputs. The format depends
+     * on the order of the flags in the input paramFlags String array. The inputParams "q/28 n/name n/nine" with the
+     * paramFlags {n, q}, for example, will return a String "n/name q/28 " accordingly.
      *
      * @param inputParams a String of the input parameters
      * @param paramFlags a String array with the specified flags to split the input parameters
      * @return a String of the input parameters in the format of a regex expression specified by the input flags
      */
     private static String makeStringPattern(String inputParams, String[] paramFlags) {
+        // Build the regex to split the inputParam String
         StringBuilder flagBuilder = new StringBuilder();
         for (String flag : paramFlags) {
             flagBuilder.append(flag);
@@ -176,6 +185,16 @@ public class Parser {
         return stringPattern.toString();
     }
 
+    /**
+     * Creates a relevant pattern string from the user's input parameters and matches the string to a regular
+     * expression, returning a new Matcher object.
+     *
+     * @param regex the regular expression for any specific command input
+     * @param input a String of the user's input parameters
+     * @param paramFlags a String array with the specified flags to split the input parameters
+     * @return a Matcher object that will check for a match between the user's input parameters and the relevant
+     * regular expression
+     */
     private static Matcher getPatternMatcher(String regex, String input, String[] paramFlags) {
         Pattern p = Pattern.compile(regex);
         String commandPattern = makeStringPattern(input, paramFlags);
