@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ReportCommandTest {
     private static final String INVALID_EX_DATE_FORMAT = "dd-MM-yyyyy";
+    private static final DateTimeFormatter VALID_EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final String INVALID_EX_DATE = "01-01-99999";
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -65,11 +66,15 @@ public class ReportCommandTest {
         Command c = Parser.parseCommand(userInput);
         c.execute();
 
+        LocalDate currDate = LocalDate.now();
+        String dateToday = currDate.format(VALID_EX_DATE_FORMAT);
+        String dateTwoWeeksAgo = currDate.minusWeeks(2).format(VALID_EX_DATE_FORMAT);
+
         String expected = "     There are 2 items close to expiry!" + LINE_SEPARATOR +
                 "     1. Name: orange" + LINE_SEPARATOR +
-                "        Expiry Date: 2024-03-29" + LINE_SEPARATOR +
+                "        Expiry Date: " + dateToday + LINE_SEPARATOR +
                 "     2. Name: banana" + LINE_SEPARATOR +
-                "        Expiry Date: 2024-03-15" + LINE_SEPARATOR;
+                "        Expiry Date: " + dateTwoWeeksAgo + LINE_SEPARATOR;
         String actual = outContent.toString();
         assertEquals(expected, actual);
     }

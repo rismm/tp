@@ -93,7 +93,7 @@ public class Parser {
 
     /**
      * Returns the string of parameters right after the first word separated by white space in the user's input
-     * 
+     *
      * @param input a String of the user's input
      * @return a String of the parameters in the user input
      */
@@ -192,8 +192,7 @@ public class Parser {
      * @param regex the regular expression for any specific command input
      * @param input a String of the user's input parameters
      * @param paramFlags a String array with the specified flags to split the input parameters
-     * @return a Matcher object that will check for a match between the user's input parameters and the relevant
-     * regular expression
+     * @return a Matcher object that will check for a match between the user's input parameters and the relevant regex
      */
     private static Matcher getPatternMatcher(String regex, String input, String[] paramFlags) {
         Pattern p = Pattern.compile(regex);
