@@ -109,7 +109,7 @@ public class Ui {
         printIndent(updateItemOpening(item));
         printIndent(quantityMessage(item));
         printIndent(priceMessage(item));
-        printIndent(expiryDateMessage(item));
+        printIndent(expiryDateMessage(item)); //edit
     }
 
     public static void deleteCommandSuccess(String name) {
@@ -181,31 +181,8 @@ public class Ui {
             String secondParam, String stringToPrint, String quantityString, String priceString, String expiryString) {
 
         if (hasQuantity && hasPrice && hasExpiry) {
-            switch (firstParam) {
-            case QUANTITY_FLAG:
-                if (secondParam.equals(PRICE_FLAG)) {
-                    stringToPrint += (quantityString + priceString + expiryString);
-                } else {
-                    stringToPrint += (quantityString + expiryString + priceString);
-                }
-                break;
-            case PRICE_FLAG:
-                if (secondParam.equals(QUANTITY_FLAG)) {
-                    stringToPrint += (priceString + quantityString + expiryString);
-                } else {
-                    stringToPrint += (priceString + expiryString + quantityString);
-                }
-                break;
-            case EX_DATE_FLAG:
-                if (secondParam.equals(quantityString)) {
-                    stringToPrint += (expiryString + quantityString + priceString);
-                } else {
-                    stringToPrint += (expiryString + priceString + quantityString);
-                }
-                break;
-            default:
-                return stringToPrint;       //review
-            }
+            stringToPrint = getStringThreeInput (firstParam, secondParam, stringToPrint,
+                quantityString, priceString, expiryString);
         } else if (hasQuantity && hasPrice) {
             if (firstParam.equals(QUANTITY_FLAG)) {
                 stringToPrint += (quantityString + priceString);
@@ -230,6 +207,35 @@ public class Ui {
             stringToPrint += priceString;
         } else if (hasExpiry) {
             stringToPrint += expiryString;
+        }
+        return stringToPrint;
+    }
+
+    private static String getStringThreeInput (String firstParam, String secondParam, String stringToPrint,
+        String quantityString, String priceString, String expiryString) {
+        switch (firstParam) {
+        case QUANTITY_FLAG:
+            if (secondParam.equals(PRICE_FLAG)) {
+                stringToPrint += (quantityString + priceString + expiryString);
+            } else {
+                stringToPrint += (quantityString + expiryString + priceString);
+            }
+            break;
+        case PRICE_FLAG:
+            if (secondParam.equals(QUANTITY_FLAG)) {
+                stringToPrint += (priceString + quantityString + expiryString);
+            } else {
+                stringToPrint += (priceString + expiryString + quantityString);
+            }
+            break;
+        case EX_DATE_FLAG:
+            if (secondParam.equals(quantityString)) {
+                stringToPrint += (expiryString + quantityString + priceString);
+            } else {
+                stringToPrint += (expiryString + priceString + quantityString);
+            }
+            break;
+        default: return null;
         }
         return stringToPrint;
     }

@@ -72,7 +72,7 @@ public class Parser {
             + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + SORT_QUANTITY_GROUP + ">(?:" + SORT_QUANTITY_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + SORT_PRICE_GROUP + ">(?:" + SORT_PRICE_FLAG + BASE_FLAG + ".*)?) "
-            + "(?<" + SORT_EX_DATE_FLAG + ">(?:" + SORT_EX_DATE_FLAG + BASE_FLAG + ".*)?) "
+            + "(?<" + SORT_EX_DATE_GROUP + ">(?:" + SORT_EX_DATE_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + REVERSE_GROUP + ">(?:" + REVERSE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String DELETE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) ";
     private static final String ADD_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
@@ -315,11 +315,11 @@ public class Parser {
         boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
         boolean hasSortQuantity = !matcher.group(SORT_QUANTITY_GROUP).isEmpty();
         boolean hasSortPrice = !matcher.group(SORT_PRICE_GROUP).isEmpty();
-        //boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
+        boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean reverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
         ArrayList<Integer> position = new ArrayList<>();
-        // to check if q comes before p or vice versa
+        // to check if p, q, e appears first and second
         String firstParam = "";
         String secondParam = "";
 
@@ -343,6 +343,7 @@ public class Parser {
         int firstParamPos;
         int secondParamPos;
         Collections.sort(position);
+
         try {
             firstParamPos = position.get(0);
             secondParamPos = position.get(1);
@@ -356,16 +357,31 @@ public class Parser {
         // sort by whichever sorting method comes first
         // if sorting method is unspecified then sort by alphabet
         String sortBy = "";
-        if (hasSortQuantity && hasSortPrice) {
-            int sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
-            int sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
-            sortBy = sortQuantityPosition < sortPricePosition ? QUANTITY_FLAG : PRICE_FLAG;
-        } else if (hasSortQuantity) {
-            sortBy = QUANTITY_FLAG;
-        } else if (hasSortPrice) {
-            sortBy = PRICE_FLAG;
+        position.clear();
+        int sortQuantityPosition;
+        int sortPricePosition;
+        int sortExpiryPosition;
+
+        if (hasSortQuantity) {
+            sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
+            position.add(sortQuantityPosition);
+        }
+        if (hasSortPrice) {
+            sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
+            position.add(sortPricePosition);
+        }
+        if (hasSortExpiry) {
+            sortExpiryPosition = input.indexOf(SORT_EX_DATE_FLAG + BASE_FLAG);
+            position.add(sortExpiryPosition);
         }
 
+        Collections.sort(position);
+        int sortByPos;
+
+        if (hasSortExpiry || hasSortPrice || hasSortQuantity) {
+            sortByPos = position.get(0);
+            sortBy = input.substring(sortByPos + 1, sortByPos + 2);
+        }
         return new ListCommand(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam, sortBy, reverse);
     }
 

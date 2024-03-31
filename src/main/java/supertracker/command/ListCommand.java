@@ -47,6 +47,9 @@ public class ListCommand implements Command {
         case PRICE_FLAG:
             items.sort(Item.sortByPrice());
             break;
+        case EX_DATE_FLAG:
+            items.sort(Item.sortByExpiry());
+            break;
         default:
             items.sort(Item.sortByName());
             break;
