@@ -38,7 +38,7 @@ public class Item {
     }
 
     public static Comparator<Item> sortByName() {
-        return Comparator.comparing(Item::getName);
+        return Comparator.comparing(Item::getName, String.CASE_INSENSITIVE_ORDER);
     }
 
     public static Comparator<Item> sortByQuantity() {
