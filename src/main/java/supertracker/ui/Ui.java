@@ -124,7 +124,9 @@ public class Ui {
         printIndent(updateItemOpening(item));
         printIndent(quantityMessage(item));
         printIndent(priceMessage(item));
-        printIndent(expiryDateMessage(item)); //edit
+        if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
+            printIndent(expiryDateMessage(item));
+        }
     }
 
     public static void deleteCommandSuccess(String name) {
