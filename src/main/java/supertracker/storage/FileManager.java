@@ -24,7 +24,7 @@ public class FileManager {
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     protected static final String NO_DATE = "no date";
     protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    protected static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    protected static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     protected static final int MAX_NUMBER_OF_PARAMS = 5;
     protected static final int NAME_INDEX = 0;
     protected static final int QUANTITY_INDEX = 1;
@@ -81,12 +81,12 @@ public class FileManager {
         }
 
         Inventory.clear();
-        Scanner s = new Scanner(saveFile);
+        Scanner fileScanner = new Scanner(saveFile);
         String itemData;
         int corruptedData = 0;
-        while (s.hasNext()) {
+        while (fileScanner.hasNext()) {
             try {
-                itemData = s.nextLine();
+                itemData = fileScanner.nextLine();
                 Item item = parseItemData(itemData);
                 Inventory.put(item.getName(), item);
             } catch (Exception e) {
@@ -96,7 +96,7 @@ public class FileManager {
         if (corruptedData != 0) {
             Ui.printError(ErrorMessage.FILE_CORRUPTED_ERROR);
         }
-        s.close();
+        fileScanner.close();
     }
 
     private static String getItemData(Item item) {
@@ -112,7 +112,7 @@ public class FileManager {
 
         LocalDate exDate = item.getExpiryDate();
         String date = NO_DATE;
-        if (!exDate.isEqual(DATE_NOT_EXIST)) {
+        if (!exDate.isEqual(UNDEFINED_DATE)) {
             date = exDate.format(DATE_FORMAT);
         }
 
@@ -140,7 +140,7 @@ public class FileManager {
             throw new Exception();
         }
 
-        LocalDate date = DATE_NOT_EXIST;
+        LocalDate date = UNDEFINED_DATE;
         if (!data[DATE_INDEX].equals(NO_DATE)) {
             date = LocalDate.parse(data[DATE_INDEX], DATE_FORMAT);
         }

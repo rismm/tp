@@ -20,6 +20,7 @@ public class Ui {
     private static final String BASIC_ERROR_MESSAGE = "Oh no! An error has occurred in your input";
     private static final String FIND_OPENING_MESSAGE = "Here are your found items:";
     private static final String REPORT_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
+    private static final DateTimeFormatter VALID_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private static String listSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -62,12 +63,26 @@ public class Ui {
         return quantityRemoved + " " + item.getName() + " removed from inventory!";
     }
 
-    private static String reportLowStockOpening(Item reportItem, int count) {
+    private static String reportLowStockOpening(int quantity) {
+        assert quantity >= 0;
+        String isOrAre = quantity == 1 ? "is " : "are ";
+        return "There " + isOrAre + quantity + " items low on stocks!";
+    }
+    private static String reportExpiryOpening(int quantity) {
+        assert quantity >= 0;
+        String isOrAre = quantity == 1 ? "is " : "are ";
+        return "There " + isOrAre + quantity + " items close to expiry!";
+    }
+    private static String reportNameMessage(Item reportItem, int count) {
         return count + ". Name: " + reportItem.getName();
     }
 
-    private static String reportLowStockQuantityMessage(Item reportItem) {
+    private static String reportQuantityMessage(Item reportItem) {
         return "   Current Quantity: " + reportItem.getQuantity();
+    }
+
+    private static String reportExpiryDateMessage(Item reportItem) {
+        return "   Expiry Date: " + reportItem.getExpiryDate().format(VALID_DATE_FORMAT);
     }
 
     public static void printIndent(String string) {
@@ -129,17 +144,31 @@ public class Ui {
     }
 
     public static void reportCommandSuccess(List<Item> reportItems, String reportType) {
+        int count = 1;
         if (reportItems.isEmpty()) {
             printIndent(REPORT_NO_ITEMS_OPENING);
-        } else {
-            int count = 1;
-            for (Item item : reportItems) {
-                if (reportType.equals("low stock")) {
-                    printIndent(reportLowStockOpening(item, count));
-                    printIndent(reportLowStockQuantityMessage(item));
-                }
-                count += 1;
-            }
+        } else if (reportType.equals("low stock")) {
+            lowStockSuccess(reportItems, count);
+        } else if (reportType.equals("expiry")) {
+            expirySuccess(reportItems, count);
+        }
+    }
+
+    private static void expirySuccess(List<Item> reportItems, int count) {
+        printIndent(reportExpiryOpening(reportItems.size()));
+        for (Item item : reportItems) {
+            printIndent(reportNameMessage(item, count));
+            printIndent(reportExpiryDateMessage(item));
+            count += 1;
+        }
+    }
+
+    private static void lowStockSuccess(List<Item> reportItems, int count) {
+        printIndent(reportLowStockOpening(reportItems.size()));
+        for (Item item : reportItems) {
+            printIndent(reportNameMessage(item, count));
+            printIndent(reportQuantityMessage(item));
+            count += 1;
         }
     }
 
@@ -229,7 +258,7 @@ public class Ui {
             }
             break;
         case EX_DATE_FLAG:
-            if (secondParam.equals(quantityString)) {
+            if (secondParam.equals(QUANTITY_FLAG)) {
                 stringToPrint += (expiryString + quantityString + priceString);
             } else {
                 stringToPrint += (expiryString + priceString + quantityString);

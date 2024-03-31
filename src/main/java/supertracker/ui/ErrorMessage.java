@@ -9,7 +9,12 @@ public class ErrorMessage {
     public static final String INVALID_NEW_ITEM_FORMAT = "Invalid new command format!";
     public static final String INVALID_ADD_FORMAT = "Invalid add command format!";
     public static final String INVALID_REMOVE_FORMAT = "Invalid remove command format!";
-    public static final String INVALID_REPORT_FORMAT = "Invalid report command format!";
+    public static final String INVALID_REPORT_FORMAT = "Invalid report command format! Follow 'report r/{report type}" +
+            " t/{threshold}";
+    public static final String INVALID_REPORT_TYPE = "Please select a valid report type. Only 'low stock' and " +
+            "'expiry' are available.";
+    public static final String INVALID_EXPIRY_REPORT_FORMAT = "If report type is 'expiry' threshold should not be " +
+            "specified. ";
     public static final String ITEM_NOT_IN_LIST_UPDATE =
             " does not exist in inventory. Unable to update its values. =(";
     public static final String ITEM_NOT_IN_LIST_DELETE =

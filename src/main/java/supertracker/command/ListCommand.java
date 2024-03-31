@@ -5,6 +5,7 @@ import supertracker.item.Inventory;
 import supertracker.item.Item;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListCommand implements Command {
@@ -17,17 +18,18 @@ public class ListCommand implements Command {
     private String firstParam;
     private String secondParam;
     private String sortBy;
-    private boolean reverse;
+    private boolean isReverse;
 
     public ListCommand(boolean hasQuantity, boolean hasPrice, boolean hasExpiry,
-            String firstParam, String secondParam, String sortBy, boolean reverse) {
+            String firstParam, String secondParam, String sortBy, boolean isReverse) {
+
         this.hasQuantity = hasQuantity;
         this.hasPrice = hasPrice;
         this.hasExpiry = hasExpiry;
         this.firstParam = firstParam;
         this.secondParam = secondParam;
         this.sortBy = sortBy;
-        this.reverse = reverse;
+        this.isReverse = isReverse;
     }
 
     @Override
@@ -40,22 +42,26 @@ public class ListCommand implements Command {
         List<Item> items = Inventory.getItems();
         Ui.listIntro(items.size());
 
+        Comparator<Item> comparator;
+
         switch (sortBy) {
         case QUANTITY_FLAG:
-            items.sort(Item.sortByQuantity());
+            comparator = Item.sortByQuantity();
             break;
         case PRICE_FLAG:
-            items.sort(Item.sortByPrice());
+            comparator = Item.sortByPrice();
             break;
         case EX_DATE_FLAG:
-            items.sort(Item.sortByExpiry());
+            comparator = Item.sortByExpiry();
             break;
         default:
-            items.sort(Item.sortByName());
+            comparator = Item.sortByName();
             break;
         }
 
-        if (reverse) {
+        items.sort(comparator);
+
+        if (isReverse) {
             Collections.reverse(items);
         }
 

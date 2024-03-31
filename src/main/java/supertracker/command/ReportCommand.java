@@ -21,21 +21,30 @@ public class ReportCommand implements Command{
         List<Item> items = Inventory.getItems();
         List<Item> reportItems = new ArrayList<>();
         LocalDate currDate = LocalDate.now();
+        LocalDate expiryThresholdDate = currDate.plusWeeks(1);
         if (reportType.equals("low stock")) {
-            for (Item item : items) {
-                if (item.getQuantity() < threshold) {
-                    reportItems.add(item);
-                }
-            }
-            Ui.reportCommandSuccess(reportItems, reportType);
+            createLowStockReport(items, reportItems);
+        } else if (reportType.equals("expiry")) {
+            createExpiryReport(items, expiryThresholdDate, reportItems);
         }
-        /* for (Item item : items) {
-                if (item.getExpiryDate() < currDate) {
-                    reportItems.add(item);
-                }
+        Ui.reportCommandSuccess(reportItems, reportType);
+    }
+
+    private void createExpiryReport(List<Item> items, LocalDate expiryThresholdDate, List<Item> reportItems) {
+        assert threshold == -1;
+        for (Item item : items) {
+            if (item.getExpiryDate().isBefore(expiryThresholdDate)) {
+                reportItems.add(item);
             }
-            Ui.reportCommandSuccess(reportItems, reportType);
-         */
+        }
+    }
+
+    private void createLowStockReport(List<Item> items, List<Item> reportItems) {
+        for (Item item : items) {
+            if (item.getQuantity() < threshold) {
+                reportItems.add(item);
+            }
+        }
     }
 
     @Override

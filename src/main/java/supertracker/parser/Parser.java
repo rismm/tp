@@ -80,8 +80,9 @@ public class Parser {
     private static final String REMOVE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) ";
     private static final String FIND_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) ";
+
     private static final String REPORT_COMMAND_REGEX = REPORT_TYPE_FLAG + BASE_FLAG + "(?<" + REPORT_TYPE_GROUP +
-            ">.*) " + THRESHOLD_FLAG + BASE_FLAG + "(?<" + THRESHOLD_GROUP + ">.*) ";
+            ">.*) " + "(?<" + THRESHOLD_GROUP + ">(?:" + THRESHOLD_FLAG + BASE_FLAG + ".*)?) ";
 
 
     /**
@@ -97,6 +98,12 @@ public class Parser {
         return input.substring(0, input.indexOf(" "));
     }
 
+    /**
+     * Returns the string of parameters right after the first word separated by white space in the user's input
+     *
+     * @param input a String of the user's input
+     * @return a String of the parameters in the user input
+     */
     private static String getParameters(String input) {
         if (!input.contains(" ")) {
             return "";
@@ -151,13 +158,16 @@ public class Parser {
     }
 
     /**
-     * Returns a String in the format of a regex expression pattern for parsing of command inputs
+     * Returns a String in the format of a regex expression pattern for parsing of command inputs. The format depends
+     * on the order of the flags in the input paramFlags String array. The inputParams "q/28 n/name n/nine" with the
+     * paramFlags {n, q}, for example, will return a String "n/name q/28 " accordingly.
      *
      * @param inputParams a String of the input parameters
      * @param paramFlags a String array with the specified flags to split the input parameters
      * @return a String of the input parameters in the format of a regex expression specified by the input flags
      */
     private static String makeStringPattern(String inputParams, String[] paramFlags) {
+        // Build the regex to split the inputParam String
         StringBuilder flagBuilder = new StringBuilder();
         for (String flag : paramFlags) {
             flagBuilder.append(flag);
@@ -182,6 +192,15 @@ public class Parser {
         return stringPattern.toString();
     }
 
+    /**
+     * Creates a relevant pattern string from the user's input parameters and matches the string to a regular
+     * expression, returning a new Matcher object.
+     *
+     * @param regex the regular expression for any specific command input
+     * @param input a String of the user's input parameters
+     * @param paramFlags a String array with the specified flags to split the input parameters
+     * @return a Matcher object that will check for a match between the user's input parameters and the relevant regex
+     */
     private static Matcher getPatternMatcher(String regex, String input, String[] paramFlags) {
         Pattern p = Pattern.compile(regex);
         String commandPattern = makeStringPattern(input, paramFlags);
@@ -191,6 +210,205 @@ public class Parser {
 
     private static double roundTo2Dp(double unroundedValue) {
         return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
+    }
+
+    private static void validateNonNegativeQuantity(String quantityString, int quantity) throws TrackerException {
+        if (!quantityString.isEmpty() && quantity < 0) {
+            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
+        }
+    }
+
+    private static void validateNonNegativePrice(String priceString, double price) throws TrackerException {
+        if (!priceString.isEmpty() && price < 0) {
+            throw new TrackerException(ErrorMessage.PRICE_TOO_SMALL);
+        }
+    }
+
+    private static int parseQuantity(String quantityString) throws TrackerException {
+        int quantity = -1;
+        try {
+            if (!quantityString.isEmpty()) {
+                quantity = Integer.parseInt(quantityString);
+            }
+            return quantity;
+        } catch (NumberFormatException e) {
+            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+        }
+    }
+
+    private static double parsePrice(String priceString) throws TrackerException {
+        double price = -1;
+        try {
+            if (!priceString.isEmpty()) {
+                price = roundTo2Dp(Double.parseDouble(priceString));
+            }
+            return price;
+        } catch (NumberFormatException e) {
+            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+        }
+    }
+
+    private static LocalDate parseExpiryDate(String dateString) throws TrackerException {
+        LocalDate expiryDate = DATE_NOT_EXIST;
+        try {
+            if (!dateString.isEmpty()) {
+                expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+            }
+            return expiryDate;
+        } catch (DateTimeParseException e) {
+            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
+        }
+    }
+    private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
+        LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
+
+        try {
+            if (!dateString.isEmpty()) {
+                if (dateString.equals("nil")) {
+                    expiryDate = DATE_NOT_EXIST;
+                } else {
+                    expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
+        }
+        return expiryDate;
+    }
+
+
+    private static void validateItemExistsInInventory(String name, String errorMessage) throws TrackerException {
+        if (!Inventory.contains(name)) {
+            throw new TrackerException(name + errorMessage);
+        }
+    }
+
+    private static void validateItemNotInInventory(String name) throws TrackerException {
+        if (Inventory.contains(name)) {
+            throw new TrackerException(name + ErrorMessage.ITEM_IN_LIST_NEW);
+        }
+    }
+
+    private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString,
+            String expiryString)
+            throws TrackerException {
+        if (name.isEmpty() || (quantityString.isEmpty() && priceString.isEmpty() && expiryString.isEmpty())) {
+            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+        }
+    }
+
+    private static void validateNonEmptyParam(String string) throws TrackerException {
+        if (string.isEmpty()) {
+            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+        }
+    }
+
+    private static ArrayList<Integer> getParamPositions(String input, boolean hasQuantity, boolean hasPrice,
+            boolean hasExpiry) {
+        ArrayList<Integer> paramPositions =  new ArrayList<>();
+        // to check if p, q, e appears first and second
+
+        int quantityPosition;
+        int pricePosition;
+        int expiryPosition;
+
+        if (hasQuantity) {
+            quantityPosition = input.indexOf(QUANTITY_FLAG + BASE_FLAG);
+            paramPositions.add(quantityPosition);
+        }
+        if (hasPrice) {
+            pricePosition = input.indexOf(PRICE_FLAG + BASE_FLAG);
+            paramPositions.add(pricePosition);
+        }
+        if (hasExpiry) {
+            expiryPosition = input.indexOf(EX_DATE_FLAG + BASE_FLAG);
+            paramPositions.add(expiryPosition);
+        }
+
+        Collections.sort(paramPositions);
+
+        return paramPositions;
+    }
+
+    private static String getSortBy(String input, boolean hasSortQuantity, boolean hasSortPrice, boolean hasSortExpiry) {
+        String sortBy;
+        int sortQuantityPosition;
+        int sortPricePosition;
+        int sortExpiryPosition;
+        ArrayList<Integer> sortParamPos = new ArrayList<>();
+
+        if (hasSortQuantity) {
+            sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
+            sortParamPos.add(sortQuantityPosition);
+        }
+        if (hasSortPrice) {
+            sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
+            sortParamPos.add(sortPricePosition);
+        }
+        if (hasSortExpiry) {
+            sortExpiryPosition = input.indexOf(SORT_EX_DATE_FLAG + BASE_FLAG);
+            sortParamPos.add(sortExpiryPosition);
+        }
+
+        Collections.sort(sortParamPos);
+        int sortByPos;
+
+        if (hasSortExpiry || hasSortPrice || hasSortQuantity) {
+            sortByPos = sortParamPos.get(0);
+            sortBy = input.substring(sortByPos + 1, sortByPos + 2);
+        } else {
+            sortBy = "";
+        }
+        return sortBy;
+    }
+
+    private static void validateNonEmptyParamsReport(String reportType, String thresholdString)
+            throws TrackerException {
+        if (reportType.isEmpty() || (reportType.equals("low stock") && thresholdString.isEmpty())) {
+            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+        }
+    }
+
+    private static void validateReportFormat(String reportType, String thresholdString) throws TrackerException {
+        if (reportType.equals("expiry") && !thresholdString.isEmpty()) {
+            throw new TrackerException(ErrorMessage.INVALID_EXPIRY_REPORT_FORMAT);
+        }
+    }
+
+    private static void validateReportType(String reportType) throws TrackerException {
+        if (!reportType.equals("expiry") && !reportType.equals("low stock")) {
+            throw new TrackerException(ErrorMessage.INVALID_REPORT_TYPE);
+        }
+    }
+
+    private static Command parseNewCommand(String input) throws TrackerException {
+        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
+        Matcher matcher = getPatternMatcher(NEW_COMMAND_REGEX, input, flags);
+
+        if (!matcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_NEW_ITEM_FORMAT);
+        }
+
+        String name = matcher.group(NAME_GROUP).trim();
+        String quantityString = matcher.group(QUANTITY_GROUP).trim();
+        String priceString = matcher.group(PRICE_GROUP).trim();
+        String dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
+
+        validateNonEmptyParam(name);
+        validateNonEmptyParam(quantityString);
+        validateNonEmptyParam(priceString);
+        validateItemNotInInventory(name);
+
+        int quantity = parseQuantity(quantityString);
+        double price = parsePrice(priceString);
+        LocalDate expiryDate = parseExpiryDate(dateString);
+
+        validateNonNegativeQuantity(quantityString, quantity);
+        validateNonNegativePrice(priceString, price);
+
+        return new NewCommand(name, quantity, price, expiryDate);
     }
 
     private static Command parseUpdateCommand(String input) throws TrackerException {
@@ -206,100 +424,77 @@ public class Parser {
         String priceString = matcher.group(PRICE_GROUP).replace(PRICE_FLAG + BASE_FLAG, "").trim();
         String dateString = matcher.group(EX_DATE_GROUP).replace(EX_DATE_FLAG + BASE_FLAG, "").trim();
 
-        if (name.isEmpty() || (quantityString.isEmpty() && priceString.isEmpty() && dateString.isEmpty())) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-        }
+        validateNonEmptyParamsUpdate(name, quantityString, priceString, dateString);
+        validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_UPDATE);
 
-        if (!Inventory.contains(name)) {
-            throw new TrackerException(name + ErrorMessage.ITEM_NOT_IN_LIST_UPDATE);
-        }
 
-        int quantity = -1;
-        double price = -1;
-        LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
+        int quantity = parseQuantity(quantityString);
+        double price = parsePrice(priceString);
+        LocalDate expiryDate = parseExpiryDateUpdate(dateString);
 
-        try {
-            if (!quantityString.isEmpty()) {
-                quantity = Integer.parseInt(quantityString);
-            }
-            if (!priceString.isEmpty()) {
-                price = roundTo2Dp(Double.parseDouble(priceString));
-            }
-            if (!dateString.isEmpty()) {
-                expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
-            }
-        } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
-        } catch (DateTimeParseException e) {
-            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
-        }
-
-        if (!quantityString.isEmpty() && quantity < 0) {
-            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
-        }
-
-        if (!priceString.isEmpty() && price < 0) {
-            throw new TrackerException(ErrorMessage.PRICE_TOO_SMALL);
-        }
-
+        validateNonNegativeQuantity(quantityString, quantity);
+        validateNonNegativePrice(priceString, price);
+        
         return new UpdateCommand(name, quantity, price, expiryDate);
     }
 
-    private static Command parseNewCommand(String input) throws TrackerException {
-        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
-        Matcher matcher = getPatternMatcher(NEW_COMMAND_REGEX, input, flags);
 
-        if (!matcher.matches()) {
-            throw new TrackerException(ErrorMessage.INVALID_NEW_ITEM_FORMAT);
-        }
 
-        String name = matcher.group(NAME_GROUP).trim();
-        String quantityString = matcher.group(QUANTITY_GROUP).trim();
-        String priceString = matcher.group(PRICE_GROUP).trim();
-
-        if (name.isEmpty() || quantityString.isEmpty() || priceString.isEmpty()) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-        }
-
-        String dateString;
-        LocalDate expiryDate = DATE_NOT_EXIST;
-
-        boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
-
-        try {
-            if (hasExpiry) {
-                dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
-                expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
-            }
-        } catch (DateTimeParseException e) {
-            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
-        }
-
-        if (Inventory.contains(name)) {
-            throw new TrackerException(name + ErrorMessage.ITEM_IN_LIST_NEW);
-        }
-
-        int quantity;
-        double price;
-
-        // throws NumberFormatException if strings cannot be parsed
-        try {
-            quantity = Integer.parseInt(quantityString);
-            price = roundTo2Dp(Double.parseDouble(priceString));
-        } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
-        }
-
-        if (quantity < 0) {
-            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
-        }
-
-        if (price < 0) {
-            throw new TrackerException(ErrorMessage.PRICE_TOO_SMALL);
-        }
-
-        return new NewCommand(name, quantity, price, expiryDate);
-    }
+//    private static Command parseNewCommand(String input) throws TrackerException {
+//        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
+//        Matcher matcher = getPatternMatcher(NEW_COMMAND_REGEX, input, flags);
+//
+//        if (!matcher.matches()) {
+//            throw new TrackerException(ErrorMessage.INVALID_NEW_ITEM_FORMAT);
+//        }
+//
+//        String name = matcher.group(NAME_GROUP).trim();
+//        String quantityString = matcher.group(QUANTITY_GROUP).trim();
+//        String priceString = matcher.group(PRICE_GROUP).trim();
+//
+//        if (name.isEmpty() || quantityString.isEmpty() || priceString.isEmpty()) {
+//            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+//        }
+//
+//        String dateString;
+//        LocalDate expiryDate = DATE_NOT_EXIST;
+//
+//        boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
+//
+//        try {
+//            if (hasExpiry) {
+//                dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
+//                expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+//            }
+//        } catch (DateTimeParseException e) {
+//            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
+//        }
+//
+//        if (Inventory.contains(name)) {
+//            throw new TrackerException(name + ErrorMessage.ITEM_IN_LIST_NEW);
+//        }
+//
+//        int quantity;
+//        double price;
+//
+//        // throws NumberFormatException if strings cannot be parsed
+//        try {
+//            quantity = Integer.parseInt(quantityString);
+//            price = roundTo2Dp(Double.parseDouble(priceString));
+//        } catch (NumberFormatException e) {
+//            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+//        }
+//
+//        if (quantity < 0) {
+//            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
+//        }
+//
+//        if (price < 0) {
+//            throw new TrackerException(ErrorMessage.PRICE_TOO_SMALL);
+//        }
+//
+//        return new NewCommand(name, quantity, price, expiryDate);
+//    }
 
     private static Command parseListCommand(String input) throws TrackerException {
         String[] flags = {QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG,
@@ -316,73 +511,26 @@ public class Parser {
         boolean hasSortQuantity = !matcher.group(SORT_QUANTITY_GROUP).isEmpty();
         boolean hasSortPrice = !matcher.group(SORT_PRICE_GROUP).isEmpty();
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
-        boolean reverse = !matcher.group(REVERSE_GROUP).isEmpty();
+        boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        ArrayList<Integer> position = new ArrayList<>();
-        // to check if p, q, e appears first and second
+        ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry);
         String firstParam = "";
         String secondParam = "";
 
-        int quantityPosition;
-        int pricePosition;
-        int expiryPosition;
-
-        if (hasQuantity) {
-            quantityPosition = input.indexOf(QUANTITY_FLAG + BASE_FLAG);
-            position.add(quantityPosition);
-        }
-        if (hasPrice) {
-            pricePosition = input.indexOf(PRICE_FLAG + BASE_FLAG);
-            position.add(pricePosition);
-        }
-        if (hasExpiry) {
-            expiryPosition = input.indexOf(EX_DATE_FLAG + BASE_FLAG);
-            position.add(expiryPosition);
-        }
-
-        int firstParamPos;
-        int secondParamPos;
-        Collections.sort(position);
-
         try {
-            firstParamPos = position.get(0);
-            secondParamPos = position.get(1);
-
+            int firstParamPos = paramOrder.get(0);
+            int secondParamPos = paramOrder.get(1);
             firstParam = input.substring(firstParamPos, firstParamPos + 1);
             secondParam = input.substring(secondParamPos, secondParamPos + 1);
         } catch (NullPointerException | IndexOutOfBoundsException ignored) {
-            assert (position.size() < 2);
+            assert (paramOrder.size() < 2);
         }
 
         // sort by whichever sorting method comes first
         // if sorting method is unspecified then sort by alphabet
-        String sortBy = "";
-        position.clear();
-        int sortQuantityPosition;
-        int sortPricePosition;
-        int sortExpiryPosition;
+        String sortBy = getSortBy(input, hasSortQuantity, hasSortPrice, hasSortExpiry);
 
-        if (hasSortQuantity) {
-            sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
-            position.add(sortQuantityPosition);
-        }
-        if (hasSortPrice) {
-            sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
-            position.add(sortPricePosition);
-        }
-        if (hasSortExpiry) {
-            sortExpiryPosition = input.indexOf(SORT_EX_DATE_FLAG + BASE_FLAG);
-            position.add(sortExpiryPosition);
-        }
-
-        Collections.sort(position);
-        int sortByPos;
-
-        if (hasSortExpiry || hasSortPrice || hasSortQuantity) {
-            sortByPos = position.get(0);
-            sortBy = input.substring(sortByPos + 1, sortByPos + 2);
-        }
-        return new ListCommand(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam, sortBy, reverse);
+        return new ListCommand(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam, sortBy, isReverse);
     }
 
     //@@vimalapugazhan
@@ -396,13 +544,8 @@ public class Parser {
 
         String name = matcher.group(NAME_GROUP).trim();
 
-        if (name.isEmpty()) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-        }
-
-        if (!Inventory.contains(name)) {
-            throw new TrackerException(name + ErrorMessage.ITEM_NOT_IN_LIST_DELETE);
-        }
+        validateNonEmptyParam(name);
+        validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_DELETE);
 
         return new DeleteCommand(name);
     }
@@ -418,26 +561,12 @@ public class Parser {
         String name = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).trim();
 
-        if (name.isEmpty() || quantityString.isEmpty()) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-        }
+        validateNonEmptyParam(name);
+        validateNonEmptyParam(quantityString);
+        validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_ADD);
 
-        if (!Inventory.contains(name)) {
-            throw new TrackerException(name + ErrorMessage.ITEM_NOT_IN_LIST_ADD);
-        }
-
-        int quantity;
-
-        // throws NumberFormatException if strings cannot be parsed
-        try {
-            quantity = Integer.parseInt(quantityString);
-        } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
-        }
-
-        if (quantity < 0) {
-            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
-        }
+        int quantity = parseQuantity(quantityString);
+        validateNonNegativeQuantity(quantityString, quantity);
 
         return new AddCommand(name,quantity);
     }
@@ -453,26 +582,12 @@ public class Parser {
         String name = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).trim();
 
-        if (name.isEmpty() || quantityString.isEmpty()) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-        }
+        validateNonEmptyParam(name);
+        validateNonEmptyParam(quantityString);
+        validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_REMOVE);
 
-        if (!Inventory.contains(name)) {
-            throw new TrackerException(name + ErrorMessage.ITEM_NOT_IN_LIST_REMOVE);
-        }
-
-        int quantity;
-
-        // throws NumberFormatException if strings cannot be parsed
-        try {
-            quantity = Integer.parseInt(quantityString);
-        } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
-        }
-
-        if (quantity < 0) {
-            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
-        }
+        int quantity = parseQuantity(quantityString);
+        validateNonNegativeQuantity(quantityString, quantity);
 
         return new RemoveCommand(name, quantity);
     }
@@ -487,9 +602,7 @@ public class Parser {
 
         String name = matcher.group(NAME_GROUP).trim();
 
-        if (name.isEmpty()) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-        }
+        validateNonEmptyParam(name);
 
         return new FindCommand(name);
     }
@@ -503,25 +616,18 @@ public class Parser {
         }
 
         String reportType = matcher.group(REPORT_TYPE_GROUP).trim();
-        String thresholdString = matcher.group(THRESHOLD_GROUP).trim();
+        String thresholdString = matcher.group(THRESHOLD_GROUP).
+                replace(THRESHOLD_FLAG + BASE_FLAG, "").trim();
 
-        if (reportType.isEmpty() || thresholdString.isEmpty()) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+        validateNonEmptyParamsReport(reportType, thresholdString);
+        validateReportFormat(reportType, thresholdString);
+        validateReportType(reportType);
+
+        int threshold = -1;
+        if (reportType.equals("low stock")){
+            threshold = parseQuantity(thresholdString);
+            validateNonNegativeQuantity(thresholdString, threshold);
         }
-
-        int threshold;
-
-        try {
-            threshold = Integer.parseInt(thresholdString);
-        } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
-        }
-
-        if (threshold < 0) {
-            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
-        }
-
         return new ReportCommand(reportType, threshold);
     }
-
 }
