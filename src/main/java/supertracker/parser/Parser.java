@@ -332,7 +332,8 @@ public class Parser {
         return paramPositions;
     }
 
-    private static String getSortBy(String input, boolean hasSortQuantity, boolean hasSortPrice, boolean hasSortExpiry) {
+    private static String getSortBy(String input, boolean hasSortQuantity, boolean hasSortPrice,
+            boolean hasSortExpiry) {
         String sortBy;
         int sortQuantityPosition;
         int sortPricePosition;
@@ -437,64 +438,6 @@ public class Parser {
         
         return new UpdateCommand(name, quantity, price, expiryDate);
     }
-
-
-
-//    private static Command parseNewCommand(String input) throws TrackerException {
-//        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
-//        Matcher matcher = getPatternMatcher(NEW_COMMAND_REGEX, input, flags);
-//
-//        if (!matcher.matches()) {
-//            throw new TrackerException(ErrorMessage.INVALID_NEW_ITEM_FORMAT);
-//        }
-//
-//        String name = matcher.group(NAME_GROUP).trim();
-//        String quantityString = matcher.group(QUANTITY_GROUP).trim();
-//        String priceString = matcher.group(PRICE_GROUP).trim();
-//
-//        if (name.isEmpty() || quantityString.isEmpty() || priceString.isEmpty()) {
-//            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-//        }
-//
-//        String dateString;
-//        LocalDate expiryDate = DATE_NOT_EXIST;
-//
-//        boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
-//
-//        try {
-//            if (hasExpiry) {
-//                dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
-//                expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
-//            }
-//        } catch (DateTimeParseException e) {
-//            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
-//        }
-//
-//        if (Inventory.contains(name)) {
-//            throw new TrackerException(name + ErrorMessage.ITEM_IN_LIST_NEW);
-//        }
-//
-//        int quantity;
-//        double price;
-//
-//        // throws NumberFormatException if strings cannot be parsed
-//        try {
-//            quantity = Integer.parseInt(quantityString);
-//            price = roundTo2Dp(Double.parseDouble(priceString));
-//        } catch (NumberFormatException e) {
-//            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
-//        }
-//
-//        if (quantity < 0) {
-//            throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
-//        }
-//
-//        if (price < 0) {
-//            throw new TrackerException(ErrorMessage.PRICE_TOO_SMALL);
-//        }
-//
-//        return new NewCommand(name, quantity, price, expiryDate);
-//    }
 
     private static Command parseListCommand(String input) throws TrackerException {
         String[] flags = {QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG,
