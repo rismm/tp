@@ -26,7 +26,8 @@ public class FileManagerTest {
             new NewCommand("orange", 10, 2.00, CURR_DATE),
             new NewCommand("6969", 50, 15.9, UNDEFINED_DATE),
             new NewCommand("a1@   lol  qwe^^%qw)e", 9431, 21.57, UNDEFINED_DATE),
-            new NewCommand("1_+$%$_)00", 9999999, 20.90, CURR_DATE)};
+            new NewCommand("1_+$%$_)00", 9999999, 20.90, CURR_DATE)
+        };
 
         for (NewCommand newItem : newItems) {
             newItem.execute();
