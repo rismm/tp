@@ -7,16 +7,20 @@ import supertracker.item.Inventory;
 import supertracker.item.Item;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class UpdateCommand implements Command {
     private String name;
     private int newQuantity;
     private double newPrice;
+    private LocalDate newExpiryDate;
 
-    public UpdateCommand(String name, int newQuantity, double newPrice) {
+    public UpdateCommand(String name, int newQuantity, double newPrice, LocalDate newExpiryDate) {
         this.name = name;
         this.newQuantity = newQuantity;
         this.newPrice = newPrice;
+        this.newExpiryDate = newExpiryDate;
     }
 
     @Override
@@ -31,10 +35,16 @@ public class UpdateCommand implements Command {
             newPrice = oldItem.getPrice();
         }
 
+        LocalDate invalidDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
+        if (newExpiryDate.isEqual(invalidDate)) {
+            newExpiryDate = oldItem.getExpiryDate();
+        }
+
         assert newQuantity >= 0;
         assert newPrice >= 0;
+        assert !newExpiryDate.isEqual(invalidDate);
 
-        Item newItem = new Item(name, newQuantity, newPrice, oldItem.getExpiryDate());
+        Item newItem = new Item(name, newQuantity, newPrice, newExpiryDate);
         Inventory.put(name, newItem);
         Ui.updateCommandSuccess(newItem);
 

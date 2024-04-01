@@ -17,6 +17,8 @@ import supertracker.ui.ErrorMessage;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,14 +44,16 @@ public class Parser {
     private static final String QUANTITY_GROUP = "quantity";
     private static final String PRICE_GROUP = "price";
     private static final String EX_DATE_GROUP = "expiry";
+    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final String EX_DATE_FORMAT = "dd-MM-yyyy";
-    private static final String INVALID_EX_DATE_FORMAT = "dd-MM-yyyyy";
-    private static final String INVALID_EX_DATE = "01-01-99999";
     private static final String SORT_QUANTITY_FLAG = "sq";
     private static final String SORT_PRICE_FLAG = "sp";
+    private static final String SORT_EX_DATE_FLAG = "se";
     private static final String REVERSE_FLAG = "r";
     private static final String SORT_QUANTITY_GROUP = "sortQuantity";
     private static final String SORT_PRICE_GROUP = "sortPrice";
+    private static final String SORT_EX_DATE_GROUP = "sortExpiry";
     private static final String REVERSE_GROUP = "reverse";
     private static final String REPORT_TYPE_FLAG = "r";
     private static final String REPORT_TYPE_GROUP = "reportType";
@@ -61,11 +65,14 @@ public class Parser {
             + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String UPDATE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + "(?<" + QUANTITY_GROUP + ">(?:" + QUANTITY_FLAG + BASE_FLAG + ".*)?) "
-            + "(?<" + PRICE_GROUP + ">(?:" + PRICE_FLAG + BASE_FLAG + ".*)?) ";
+            + "(?<" + PRICE_GROUP + ">(?:" + PRICE_FLAG + BASE_FLAG + ".*)?) "
+            + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String LIST_COMMAND_REGEX = "(?<" + QUANTITY_GROUP + ">(?:" + QUANTITY_FLAG + BASE_FLAG
             + ".*)?) (?<" + PRICE_GROUP + ">(?:" + PRICE_FLAG + BASE_FLAG + ".*)?) "
+            + "(?<" + EX_DATE_GROUP + ">(?:" + EX_DATE_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + SORT_QUANTITY_GROUP + ">(?:" + SORT_QUANTITY_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + SORT_PRICE_GROUP + ">(?:" + SORT_PRICE_FLAG + BASE_FLAG + ".*)?) "
+            + "(?<" + SORT_EX_DATE_GROUP + ">(?:" + SORT_EX_DATE_FLAG + BASE_FLAG + ".*)?) "
             + "(?<" + REVERSE_GROUP + ">(?:" + REVERSE_FLAG + BASE_FLAG + ".*)?) ";
     private static final String DELETE_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) ";
     private static final String ADD_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
@@ -242,7 +249,7 @@ public class Parser {
     }
 
     private static LocalDate parseExpiryDate(String dateString) throws TrackerException {
-        LocalDate expiryDate = LocalDate.parse(INVALID_EX_DATE, DateTimeFormatter.ofPattern(INVALID_EX_DATE_FORMAT));
+        LocalDate expiryDate = DATE_NOT_EXIST;
         try {
             if (!dateString.isEmpty()) {
                 expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
@@ -252,6 +259,25 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
         }
     }
+    private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
+        LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
+
+        try {
+            if (!dateString.isEmpty()) {
+                if (dateString.equals("nil")) {
+                    expiryDate = DATE_NOT_EXIST;
+                } else {
+                    expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
+        }
+        return expiryDate;
+    }
+
 
     private static void validateItemExistsInInventory(String name, String errorMessage) throws TrackerException {
         if (!Inventory.contains(name)) {
@@ -265,9 +291,10 @@ public class Parser {
         }
     }
 
-    private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString)
+    private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString,
+            String expiryString)
             throws TrackerException {
-        if (name.isEmpty() || (quantityString.isEmpty() && priceString.isEmpty())) {
+        if (name.isEmpty() || (quantityString.isEmpty() && priceString.isEmpty() && expiryString.isEmpty())) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
         }
     }
@@ -278,26 +305,60 @@ public class Parser {
         }
     }
 
-    private static String getFirstParam(String input, boolean hasQuantity, boolean hasPrice) {
-        String firstParam = "";
-        if (hasQuantity && hasPrice) {
-            int quantityPosition = input.indexOf(QUANTITY_FLAG + BASE_FLAG);
-            int pricePosition = input.indexOf(PRICE_FLAG + BASE_FLAG);
-            firstParam = quantityPosition < pricePosition ? QUANTITY_FLAG : PRICE_FLAG;
+    private static ArrayList<Integer> getParamPositions(String input, boolean hasQuantity, boolean hasPrice,
+            boolean hasExpiry) {
+        ArrayList<Integer> paramPositions =  new ArrayList<>();
+        // to check if p, q, e appears first and second
+
+        int quantityPosition;
+        int pricePosition;
+        int expiryPosition;
+
+        if (hasQuantity) {
+            quantityPosition = input.indexOf(QUANTITY_FLAG + BASE_FLAG);
+            paramPositions.add(quantityPosition);
         }
-        return firstParam;
+        if (hasPrice) {
+            pricePosition = input.indexOf(PRICE_FLAG + BASE_FLAG);
+            paramPositions.add(pricePosition);
+        }
+        if (hasExpiry) {
+            expiryPosition = input.indexOf(EX_DATE_FLAG + BASE_FLAG);
+            paramPositions.add(expiryPosition);
+        }
+
+        Collections.sort(paramPositions);
+
+        return paramPositions;
     }
 
-    private static String getSortBy(String input, boolean hasSortQuantity, boolean hasSortPrice) {
+    private static String getSortBy(String input, boolean hasSortQuantity, boolean hasSortPrice,
+            boolean hasSortExpiry) {
         String sortBy;
-        if (hasSortQuantity && hasSortPrice) {
-            int sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
-            int sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
-            sortBy = sortQuantityPosition < sortPricePosition ? QUANTITY_FLAG : PRICE_FLAG;
-        } else if (hasSortQuantity) {
-            sortBy = QUANTITY_FLAG;
-        } else if (hasSortPrice) {
-            sortBy = PRICE_FLAG;
+        int sortQuantityPosition;
+        int sortPricePosition;
+        int sortExpiryPosition;
+        ArrayList<Integer> sortParamPos = new ArrayList<>();
+
+        if (hasSortQuantity) {
+            sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
+            sortParamPos.add(sortQuantityPosition);
+        }
+        if (hasSortPrice) {
+            sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
+            sortParamPos.add(sortPricePosition);
+        }
+        if (hasSortExpiry) {
+            sortExpiryPosition = input.indexOf(SORT_EX_DATE_FLAG + BASE_FLAG);
+            sortParamPos.add(sortExpiryPosition);
+        }
+
+        Collections.sort(sortParamPos);
+        int sortByPos;
+
+        if (hasSortExpiry || hasSortPrice || hasSortQuantity) {
+            sortByPos = sortParamPos.get(0);
+            sortBy = input.substring(sortByPos + 1, sortByPos + 2);
         } else {
             sortBy = "";
         }
@@ -352,7 +413,7 @@ public class Parser {
     }
 
     private static Command parseUpdateCommand(String input) throws TrackerException {
-        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG};
+        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
         Matcher matcher = getPatternMatcher(UPDATE_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
@@ -362,21 +423,25 @@ public class Parser {
         String name = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).replace(QUANTITY_FLAG + BASE_FLAG, "").trim();
         String priceString = matcher.group(PRICE_GROUP).replace(PRICE_FLAG + BASE_FLAG, "").trim();
+        String dateString = matcher.group(EX_DATE_GROUP).replace(EX_DATE_FLAG + BASE_FLAG, "").trim();
 
-        validateNonEmptyParamsUpdate(name, quantityString, priceString);
+        validateNonEmptyParamsUpdate(name, quantityString, priceString, dateString);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_UPDATE);
+
 
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
+        LocalDate expiryDate = parseExpiryDateUpdate(dateString);
 
         validateNonNegativeQuantity(quantityString, quantity);
         validateNonNegativePrice(priceString, price);
-
-        return new UpdateCommand(name, quantity, price);
+        
+        return new UpdateCommand(name, quantity, price, expiryDate);
     }
 
     private static Command parseListCommand(String input) throws TrackerException {
-        String[] flags = {QUANTITY_FLAG, PRICE_FLAG, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, REVERSE_FLAG};
+        String[] flags = {QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG,
+            SORT_EX_DATE_FLAG, REVERSE_FLAG};
         Matcher matcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
@@ -385,14 +450,30 @@ public class Parser {
 
         boolean hasQuantity = !matcher.group(QUANTITY_GROUP).isEmpty();
         boolean hasPrice = !matcher.group(PRICE_GROUP).isEmpty();
+        boolean hasExpiry = !matcher.group(EX_DATE_GROUP).isEmpty();
         boolean hasSortQuantity = !matcher.group(SORT_QUANTITY_GROUP).isEmpty();
         boolean hasSortPrice = !matcher.group(SORT_PRICE_GROUP).isEmpty();
+        boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        String firstParam = getFirstParam(input, hasQuantity, hasPrice);
-        String sortBy = getSortBy(input, hasSortQuantity, hasSortPrice);
+        ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry);
+        String firstParam = "";
+        String secondParam = "";
 
-        return new ListCommand(hasQuantity, hasPrice, firstParam, sortBy, isReverse);
+        try {
+            int firstParamPos = paramOrder.get(0);
+            int secondParamPos = paramOrder.get(1);
+            firstParam = input.substring(firstParamPos, firstParamPos + 1);
+            secondParam = input.substring(secondParamPos, secondParamPos + 1);
+        } catch (NullPointerException | IndexOutOfBoundsException ignored) {
+            assert (paramOrder.size() < 2);
+        }
+
+        // sort by whichever sorting method comes first
+        // if sorting method is unspecified then sort by alphabet
+        String sortBy = getSortBy(input, hasSortQuantity, hasSortPrice, hasSortExpiry);
+
+        return new ListCommand(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam, sortBy, isReverse);
     }
 
     //@@vimalapugazhan

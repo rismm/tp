@@ -22,7 +22,7 @@ public class DeleteCommandTest {
 
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("01/01/2113", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate date = LocalDate.parse("01-01-2113", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         Command newCommand = new NewCommand(NAME, quantity, price, date);
         newCommand.execute();

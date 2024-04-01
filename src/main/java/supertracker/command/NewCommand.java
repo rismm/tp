@@ -13,7 +13,6 @@ public class NewCommand implements Command {
     private String name;
     private int quantity;
     private double price;
-
     private LocalDate expiryDate;
 
     public NewCommand(String name, int quantity, double price, LocalDate expiryDate) {

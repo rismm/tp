@@ -161,6 +161,12 @@ This method parses the input and ensures that the command parameter (item name) 
 method in the class will call the `delete` method from `Inventory` class to remove the item. It will then execute
 the `saveData` method from `FileManager` class to save changes to the inventory.
 
+#### Dependencies
+- `Inventory`: Checking and deleting item from inventory
+- `Ui`: To notify the user about the successful execution of `DeleteCommand`
+
+The following sequence diagram shows the execution of a DeleteCommand
+
 ### Find Command
 The following is a class diagram of the FindCommand and its relevant dependencies
 ![FindCommandClass](uml-diagrams/FindCommandClass.png)
