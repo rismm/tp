@@ -18,6 +18,7 @@ public class FileManagerTest {
     private static final DateTimeFormatter INVALID_EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse(INVALID_EX_DATE, INVALID_EX_DATE_FORMAT);
     private static final LocalDate CURR_DATE = LocalDate.now();
+
     @BeforeAll
     public static void setUp() throws IOException {
         Inventory.clear();
