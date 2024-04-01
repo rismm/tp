@@ -26,7 +26,7 @@ public class NewCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("22/08/2013", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate date = LocalDate.parse("22-08-2013", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         Command command = new NewCommand(name, quantity, price, date);
         command.execute();
 
@@ -55,13 +55,13 @@ public class NewCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("22/08/2013", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate date = LocalDate.parse("22-08-2013", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         Command newCommand = new NewCommand(name, quantity, price, date);
 
         newCommand.execute();
 
-        String userInput = "new n/milk q/100 p/5.00 e/22/08/2013";
+        String userInput = "new n/milk q/100 p/5.00 e/22-08-2013";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
@@ -82,10 +82,10 @@ public class NewCommandTest {
         String invalidExpiryDateInputNumber = "new n/milk q/100 p/5.33 e/5.33";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(invalidExpiryDateInputNumber));
 
-        String invalidExpiryDateYearFormat = "new n/milk q/100 p/5.33 e/22/11/22331";
+        String invalidExpiryDateYearFormat = "new n/milk q/100 p/5.33 e/22-11-22331";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(invalidExpiryDateYearFormat));
 
-        String invalidExpiryDateOrder = "new n/milk q/100 p/5.33 e/2113/11/13";
+        String invalidExpiryDateOrder = "new n/milk q/100 p/5.33 e/21/11/2113";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(invalidExpiryDateOrder));
     }
 

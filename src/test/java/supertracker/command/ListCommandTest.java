@@ -30,8 +30,9 @@ public class ListCommandTest {
     private static final String A_PRICE = "    Price: $2.00";
     private static final String B_PRICE = "    Price: $1.00";
     private static final String C_PRICE = "    Price: $3.00";
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final String A_EX_DATE = "    Expiry Date: 01/01/2113";
-    private static final String B_EX_DATE = "    Expiry Date: 13/03/2023";
+    private static final String B_EX_DATE = "    Expiry Date: 13/03/2123";
     private static final String C_EX_DATE = "    Expiry Date: 22/08/2013";
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -40,9 +41,9 @@ public class ListCommandTest {
     @BeforeAll
     public static void setUp() {
         Inventory.clear();
-        LocalDate dateA = LocalDate.parse("01/01/2113", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        LocalDate dateB = LocalDate.parse("13/03/2023", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        LocalDate dateC = LocalDate.parse("22/08/2013", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate dateA = LocalDate.parse("01-01-2113", DATE_FORMAT);
+        LocalDate dateB = LocalDate.parse("13-03-2123", DATE_FORMAT);
+        LocalDate dateC = LocalDate.parse("22-08-2013", DATE_FORMAT);
 
         Command[] commands = {
             new NewCommand("Apple", 3, 2.00, dateA),
@@ -162,6 +163,59 @@ public class ListCommandTest {
         String actual = outContent.toString();
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void listCommand_expiryDate_correctlyConstructed() throws TrackerException {
+        String userInput = "list e/";
+        Command c = Parser.parseCommand(userInput);
+        c.execute();
+        String expected = LIST_INTRO +
+                INDEX_1 + A_NAME + A_EX_DATE + LINE_SEPARATOR +
+                INDEX_2 + B_NAME + B_EX_DATE + LINE_SEPARATOR +
+                INDEX_3 + C_NAME + C_EX_DATE + LINE_SEPARATOR;
+        String actual = outContent.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void listCommand_expiryDateBeforePriceQuantity_correctlyConstructed() throws TrackerException {
+        String userInput = "list e/ p/ q/";
+        Command c = Parser.parseCommand(userInput);
+        c.execute();
+        String expected = LIST_INTRO +
+                INDEX_1 + A_NAME + A_EX_DATE + A_PRICE + A_QUANTITY + LINE_SEPARATOR +
+                INDEX_2 + B_NAME + B_EX_DATE + B_PRICE + B_QUANTITY + LINE_SEPARATOR +
+                INDEX_3 + C_NAME + C_EX_DATE + C_PRICE + C_QUANTITY + LINE_SEPARATOR;
+        String actual = outContent.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void listCommand_expiryAscending_correctlyConstructed() throws TrackerException {
+        String userInput = "list e/ se/ sq/ sp/";
+        Command c = Parser.parseCommand(userInput);
+        c.execute();
+        String expected = LIST_INTRO +
+                INDEX_1 + C_NAME + C_EX_DATE + LINE_SEPARATOR +
+                INDEX_2 + A_NAME + A_EX_DATE + LINE_SEPARATOR +
+                INDEX_3 + B_NAME + B_EX_DATE + LINE_SEPARATOR;
+        String actual = outContent.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void listCommand_expiryDescending_correctlyConstructed() throws TrackerException {
+        String userInput = "list e/ se/ sq/ sp/ r/";
+        Command c = Parser.parseCommand(userInput);
+        c.execute();
+        String expected = LIST_INTRO +
+                INDEX_1 + B_NAME + B_EX_DATE + LINE_SEPARATOR +
+                INDEX_2 + A_NAME + A_EX_DATE + LINE_SEPARATOR +
+                INDEX_3 + C_NAME + C_EX_DATE + LINE_SEPARATOR;
+        String actual = outContent.toString();
+        assertEquals(expected, actual);
+    }
+
 
     @AfterEach
     public void restoreStreams() {

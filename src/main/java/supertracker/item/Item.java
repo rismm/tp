@@ -48,4 +48,8 @@ public class Item {
     public static Comparator<Item> sortByPrice() {
         return Comparator.comparingDouble(Item::getPrice);
     }
+
+    public static Comparator<Item> sortByExpiry() {
+        return Comparator.comparing(Item::getExpiryDate);
+    }
 }

@@ -10,11 +10,19 @@ import supertracker.command.QuitCommand;
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class ParserTest {
+    protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final DateTimeFormatter DATE_FORMAT  = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    protected static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+
+
     @Test
     public void parseCommand_validNewCommandInput_newCommand() throws TrackerException {
         String[] inputs = {"new n/apple q/50 p/99.5", "new p/99.5 q/23 n/elephant", "new q/88 n/banana p/213"};
@@ -38,7 +46,7 @@ public class ParserTest {
 
     @Test
     public void parseCommand_validUpdateCommandInput_updateCommand() throws TrackerException {
-        Command newItem = Parser.parseCommand("new n/banana milkshake q/11 p/12.2");
+        Command newItem = Parser.parseCommand("new n/banana milkshake q/11 p/12.2 e/13-12-2054");
         newItem.execute();
 
         Command update = Parser.parseCommand("update n/banana milkshake q/15 p/9.11");
@@ -47,6 +55,7 @@ public class ParserTest {
         Item bShake = Inventory.get("banana milkshake");
         assertEquals(15, bShake.getQuantity());
         assertEquals(9.11, bShake.getPrice());
+        assertEquals(LocalDate.parse("13-12-2054", DATE_FORMAT), bShake.getExpiryDate());
 
         update = Parser.parseCommand("update n/banana milkshake q/6969");
         update.execute();
@@ -54,6 +63,11 @@ public class ParserTest {
         assertEquals(6969, bShake.getQuantity());
 
         update = Parser.parseCommand("update n/banana milkshake p/96.96");
+        update.execute();
+        bShake = Inventory.get("banana milkshake");
+        assertEquals(96.96, bShake.getPrice());
+
+        update = Parser.parseCommand("update n/banana milkshake q/96 e/");
         update.execute();
         bShake = Inventory.get("banana milkshake");
         assertEquals(96.96, bShake.getPrice());

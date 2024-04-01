@@ -25,7 +25,7 @@ public class ErrorMessage {
             " does not exist in inventory. Unable to decrease its quantity. =(";
     public static final String ITEM_IN_LIST_NEW = " already exists in inventory. Use the update command instead.";
     public static final String INVALID_NUMBER_FORMAT = "Invalid values for price/quantity";
-    public static final String INVALID_DATE_FORMAT = "Invalid date. Follow \"dd/mm/yyyy\" format";
+    public static final String INVALID_DATE_FORMAT = "Invalid date. Follow \"dd-mm-yyyy\" format";
     public static final String QUANTITY_TOO_SMALL = "Quantity should be more than equal to 0";
     public static final String PRICE_TOO_SMALL = "Price should be more than 0";
     public static final String FILE_HANDLER_ERROR = "Error setting up file handler";

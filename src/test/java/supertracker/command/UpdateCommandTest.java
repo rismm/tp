@@ -25,14 +25,16 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("22/08/2013", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         int newQuantity = 200;
         double newPrice = 3.00;
+        LocalDate newExpiryDate = LocalDate.parse("05-12-2113", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
-        Command updateCommand = new UpdateCommand(name, newQuantity, newPrice);
+        Command updateCommand = new UpdateCommand(name, newQuantity, newPrice, newExpiryDate);
         updateCommand.execute();
 
         assertTrue(Inventory.contains(name));
@@ -41,6 +43,7 @@ public class UpdateCommandTest {
         assertEquals(name, item.getName());
         assertEquals(newQuantity, item.getQuantity());
         assertEquals(newPrice, item.getPrice());
+        assertEquals(newExpiryDate, item.getExpiryDate());
     }
 
     @Test
@@ -48,7 +51,8 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("22/08/2013", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
@@ -62,7 +66,8 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("22/08/2013", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
@@ -76,12 +81,28 @@ public class UpdateCommandTest {
         String name = "Milk";
         int quantity = 100;
         double price = 5.00;
-        LocalDate date = LocalDate.parse("22/08/2013", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
 
         Command newCommand = new NewCommand(name, quantity, price, date);
         newCommand.execute();
 
         String userInput = "update n/apple q/20 p/3";
+        assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
+    }
+
+    @Test
+    public void updateCommand_invalidDateInput() {
+        String name = "Milk";
+        int quantity = 100;
+        double price = 5.00;
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
+
+        Command newCommand = new NewCommand(name, quantity, price, date);
+        newCommand.execute();
+
+        String userInput = "update n/Milk p/3 e/17/23/13";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 }
