@@ -44,9 +44,9 @@ public class Parser {
     private static final String QUANTITY_GROUP = "quantity";
     private static final String PRICE_GROUP = "price";
     private static final String EX_DATE_GROUP = "expiry";
+    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final String EX_DATE_FORMAT = "dd-MM-yyyy";
-    protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    protected static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final String SORT_QUANTITY_FLAG = "sq";
     private static final String SORT_PRICE_FLAG = "sp";
     private static final String SORT_EX_DATE_FLAG = "se";

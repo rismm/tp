@@ -30,7 +30,7 @@ public class ListCommandTest {
     private static final String A_PRICE = "    Price: $2.00";
     private static final String B_PRICE = "    Price: $1.00";
     private static final String C_PRICE = "    Price: $3.00";
-    protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final String A_EX_DATE = "    Expiry Date: 01/01/2113";
     private static final String B_EX_DATE = "    Expiry Date: 13/03/2123";
     private static final String C_EX_DATE = "    Expiry Date: 22/08/2013";

@@ -20,7 +20,10 @@ public class Ui {
     private static final String BASIC_ERROR_MESSAGE = "Oh no! An error has occurred in your input";
     private static final String FIND_OPENING_MESSAGE = "Here are your found items:";
     private static final String REPORT_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
+    private static final DateTimeFormatter DATE_FORMAT_PRINT  = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter VALID_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
     private static String listSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -38,14 +41,9 @@ public class Ui {
         return item.getName() + " has been added to the inventory!";
     }
 
-    private static final DateTimeFormatter DATE_FORMAT_PRINT  = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static String expiryDateMessage(Item item) {
         return "Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT);
     }
-
-    protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-
-    protected static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
     private static String updateItemOpening(Item item) {
         return item.getName() + " has been successfully updated!";
