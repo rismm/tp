@@ -21,14 +21,14 @@ public class FindCommand implements Command {
 
         Ui.findIntro();
         for (Item item : items) {
-            if (item.getName().contains(name)) {
-                Ui.foundItem(item, index);
+            if (item.getName().toLowerCase().contains(name.toLowerCase())) {
+                Ui.printFoundItem(item, index);
                 index++;
                 isFound = true;
             }
         }
         if (!isFound) {
-            Ui.noItemFound(name);
+            Ui.printNoItemFound(name);
         }
     }
 

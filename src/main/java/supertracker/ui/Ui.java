@@ -25,19 +25,19 @@ public class Ui {
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
-    private static String listSize(int size){
+    private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
     }
-
-    private static String priceMessage(Item item) {
+  
+    private static String getPriceMessage(Item item) {
         return "Price: " + item.getPriceString();
     }
 
-    private static String quantityMessage(Item item) {
+    private static String getQuantityMessage(Item item) {
         return "Quantity: " + item.getQuantity();
     }
 
-    private static String newItemOpening(Item item) {
+    private static String getNewItemOpening(Item item) {
         return item.getName() + " has been added to the inventory!";
     }
 
@@ -106,9 +106,9 @@ public class Ui {
     }
 
     public static void newCommandSuccess(Item item) {
-        printIndent(newItemOpening(item));
-        printIndent(quantityMessage(item));
-        printIndent(priceMessage(item));
+        printIndent(getNewItemOpening(item));
+        printIndent(getQuantityMessage(item));
+        printIndent(getPriceMessage(item));
         try {
             if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
                 printIndent(expiryDateMessage(item));
@@ -120,8 +120,8 @@ public class Ui {
 
     public static void updateCommandSuccess(Item item) {
         printIndent(updateItemOpening(item));
-        printIndent(quantityMessage(item));
-        printIndent(priceMessage(item));
+        printIndent(getQuantityMessage(item));
+        printIndent(getPriceMessage(item));
         if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
             printIndent(expiryDateMessage(item));
         }
@@ -134,13 +134,13 @@ public class Ui {
     public static void addCommandSuccess(Item item, int quantityAdded) {
         assert quantityAdded >= 0;
         printIndent(addItemOpening(item, quantityAdded));
-        printIndent(quantityMessage(item));
+        printIndent(getQuantityMessage(item));
     }
 
     public static void removeCommandSuccess(Item item, int quantityRemoved) {
         assert quantityRemoved >= 0;
         printIndent(removeItemOpening(item, quantityRemoved));
-        printIndent(quantityMessage(item));
+        printIndent(getQuantityMessage(item));
     }
 
     public static void reportCommandSuccess(List<Item> reportItems, String reportType) {
@@ -182,7 +182,7 @@ public class Ui {
             printIndent(SINGLE_ITEM_LIST_MESSAGE);
             return;
         }
-        printIndent(listSize(size));
+        printIndent(getListSize(size));
     }
 
     public static void findIntro() {
@@ -274,7 +274,7 @@ public class Ui {
         printIndent(errorMessage);
     }
 
-    public static void foundItem(Item item, int index) {
+    public static void printFoundItem(Item item, int index) {
         String stringToPrint = index + ". Name: " + item.getName();
         String quantityString = "    Quantity: " + item.getQuantity();
         String priceString = "    Price: " + item.getPriceString();
@@ -283,7 +283,7 @@ public class Ui {
         printIndent(stringToPrint);
     }
 
-    public static void noItemFound(String name) {
+    public static void printNoItemFound(String name) {
         String stringToPrint = "So sorry, Your item: " + name + " could not be found.";
         printIndent(stringToPrint);
     }
