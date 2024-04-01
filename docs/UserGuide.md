@@ -14,13 +14,16 @@ optimized for use via a Command Line Interface (CLI).
   - [Update an item: `update`](#update-an-item-update)
   - [List all items: `list`](#list-all-items-list)
   - [Quit the program: `quit`](#quit-the-program-quit)
+  - [Saving inventory data](#saving-inventory-data)
+  - [Loading inventory data](#loading-inventory-data)
+  - [Editing the data file](#editing-the-data-file)
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Quick Start
 
 1. Ensure that you have Java 11 or above installed in your Computer.
-2. Download the latest `SuperTracker.jar` from [here](http://link.to/duke).
+2. Download the latest `SuperTracker.jar` from [here](https://github.com/AY2324S2-CS2113-T13-4/tp/releases).
 3. Open a command terminal, cd into the folder you put the jar file in, and use the `java -jar SuperTracker.jar` command to run the application.
 4. Type the command in the command box and press Enter to execute it.
 5. Refer to the [Features](#features-) below for details of each command and its format.
@@ -175,6 +178,27 @@ Quits the program
 
 Format: `quit`
 
+<br>
+
+### Saving inventory data
+Inventory data in the program is saved to the hard disk in the file path `./data/` in the same directory that
+the `SuperTracker.jar` file is in. Data will be saved automatically after any command that changes the item data in the inventory.
+
+<br>
+
+### Loading inventory data
+Data that has been saved to the hard disk will be loaded and read by the program each time it is launched. 
+If there is no data file, the program will the loading process.
+
+<br>
+
+### Editing the data file
+Inventory data of the `SuperTracker` program is stored in a text file `items.txt` in the path `./data/` relative to 
+the directory the `SuperTracker.jar` file is in. Users can edit and update the inventory data directly through the data file
+if they would like to do so.
+> Note: Edit the data file at your own caution. If the changes made to the data file are in an invalid format, the program
+> will ignore those changes on its next load. The changes will be erased on the next automatic save, so do keep a backup of the data 
+> file before editing.
 
 --------------------------------------------------------------------------------------------------------------------
 
