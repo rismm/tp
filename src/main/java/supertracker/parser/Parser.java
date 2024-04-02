@@ -59,6 +59,8 @@ public class Parser {
     private static final String REPORT_TYPE_GROUP = "reportType";
     private static final String THRESHOLD_FLAG = "t";
     private static final String THRESHOLD_GROUP = "threshold";
+
+    //To be used in getPatternMatcher to split the input into its respective parameter groups
     private static final String NEW_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) "
             + PRICE_FLAG + BASE_FLAG + "(?<" + PRICE_GROUP + ">.*) "

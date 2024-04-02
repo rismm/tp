@@ -166,7 +166,7 @@ the `saveData` method from `FileManager` class to save changes to the inventory.
 - `Ui`: To notify the user about the successful execution of `DeleteCommand`
 
 The following sequence diagram shows the execution of a DeleteCommand<br>
-![DeleteCommandSequence](uml-diagrams/DeleteCommandSequence.PNG)
+![DeleteCommandSequence](uml-diagrams/DeleteCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `DeleteCommand`
 2. The `contains` method of `Inventory` to check if the item exists in the inventory
