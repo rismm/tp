@@ -27,7 +27,8 @@ class UpdateCommand {
     -name:String
     -newQuantity: int
     -newPrice: double
-    +UpdateCommand(name: String, newQuantity: int, newPrice: double)
+    -newExpiryDate : LocalDate
+    +UpdateCommand(name: String, newQuantity: int, newPrice: double, newExpiryDate: LocalDate)
     +execute(): void
     +isQuit(): boolean
 }
@@ -83,6 +84,13 @@ opt newPrice == -1
     UpdateCommand -> Item: getPrice()
     activate Item #fbffb2
     Item --> UpdateCommand: oldItemPrice
+    deactivate Item
+end
+
+opt newExpiryDate == "1-1-1"
+    UpdateCommand -> Item: getExpiryDate()
+    activate Item #fbffb2
+    Item --> UpdateCommand: oldExpiryDate
     deactivate Item
 end
 
