@@ -27,7 +27,8 @@ class NewCommand {
     -name:String
     -quantity:int
     -price:double
-    +NewCommand(name:String, quantity:int, price:double)
+    -expiryDate:LocalDate
+    +NewCommand(name:String, quantity:int, price:double, expiryDate:LocalDate)
     +execute():void
     +isExit():boolean
 }

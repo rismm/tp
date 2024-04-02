@@ -22,10 +22,13 @@ interface Command {
 class ListCommand {
     -hasQuantity:boolean
     -hasPrice:boolean
+    -hasExpiry:boolean
     -firstParam:String
+    -secondParam:String
     -sortBy:String
     -isReverse:boolean
-    +NewCommand(hasQuantity:boolean, hasPrice:boolean, firstParam:String, sortBy:String, isReverse:boolean)
+    +ListCommand(hasQuantity:boolean, hasPrice:boolean, hasExpiry:boolean,
+    firstParam:String, secondParam:String, sortBy:String, isReverse:boolean)
     +execute():void
     +isExit():boolean
 }
@@ -34,6 +37,7 @@ class Item {
     {static}+sortByName():Comparator<Item>
     {static}+sortByQuantity():Comparator<Item>
     {static}+sortByPrice():Comparator<Item>
+    {static}+sortByExpiry():Comparator<Item>
 }
 
 class Inventory {
@@ -41,8 +45,9 @@ class Inventory {
 }
 
 class Ui {
-    {static}+listIntro(size:int):void
-    {static}+listItem(item:Item, index:int, hasQuantity:boolean, hasPrice:boolean, firstParam:String):void
+     {static}+listIntro(size:int):void
+    {static}+listItem(item:Item, index:int, hasQuantity:boolean, hasPrice:boolean,
+    {static}hasExpiry:boolean, firstParam:String, secondParam:String):void
 }
 
 class Parser {
@@ -93,12 +98,22 @@ activate Item #fbffb2
 Item --> ListCommand : comparator:Comparator<Item>
 deactivate Item
 
+else sortBy == "e"
+
+ListCommand -> Item : sortByExpiry()
+activate Item #fbffb2
+Item --> ListCommand : comparator:Comparator<Item>
+deactivate Item
+
+
 else else
 
 ListCommand -> Item : sortByName()
 activate Item #fbffb2
 Item --> ListCommand : comparator:Comparator<Item>
 deactivate Item
+
+
 
 end
 
@@ -118,7 +133,7 @@ end
 
 loop items
 
-ListCommand -> Ui : listItem(item:Item, index:int, hasQuantity:boolean, hasPrice:boolean, firstParam:String)
+ListCommand -> Ui : listItem(item:Item, index:int, hasQuantity:boolean, hasPrice:boolean, hasExpiry:boolean, firstParam:String, secondParam:String):void)
 activate Ui #e5c2ea
 Ui --> ListCommand
 deactivate Ui

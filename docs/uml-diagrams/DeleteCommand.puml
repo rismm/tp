@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam classAttributeIconSize 0
+
+abstract class Command
+class Inventory
+class FileManager
+class Ui
+class Parser
+class DeleteCommand
+
+Command <|.. DeleteCommand
+Inventory <.. DeleteCommand
+FileManager <.. DeleteCommand
+Inventory <.. FileManager
+DeleteCommand <.. Parser
+Ui <.. DeleteCommand
+
+interface Command {
+    + execute(): void
+    + isQuit(): boolean
+}
+
+class DeleteCommand {
+    - name: String
+    + DeleteCommand(name: String)
+    + execute(): void
+    + isQuit(): boolean
+}
+
+class Inventory {
+    {static} + contains(name: String): boolean
+    {static} + delete(name: String): void
+}
+
+class FileManager {
+    {static} + saveData(): void
+}
+
+class Ui {
+    {static} + deleteCommandSuccess(name: String): void
+    {static} + printError(message: String): void
+}
+
+class Parser {
+    {static}-parseDeleteCommand(input:String):DeleteCommand
+}
+@enduml
+
+@startuml
+hide footbox
+participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
+participant ":DeleteCommand" as DeleteCommand #cbf7f4
+participant "Inventory" as Inventory <<class>> #d5eac2
+participant "FileManager" as FileManager <<class>> #ffecb3
+participant "Ui" as Ui <<class>> #e5c2ea
+
+SuperTracker -> DeleteCommand : execute()
+activate DeleteCommand #cbf7f4
+
+DeleteCommand -> Inventory : contains(name: String)
+activate Inventory #d5eac2
+Inventory --> DeleteCommand : true
+deactivate Inventory
+
+DeleteCommand -> Inventory : delete(name: String)
+activate Inventory
+Inventory --> DeleteCommand
+deactivate Inventory
+
+DeleteCommand -> Ui : deleteCommandSuccess(name: String)
+activate Ui #e5c2ea
+Ui --> DeleteCommand
+deactivate Ui
+
+DeleteCommand -> FileManager : saveData()
+activate FileManager #ffecb3
+FileManager --> DeleteCommand
+deactivate FileManager
+
+deactivate DeleteCommand
+@enduml
