@@ -173,6 +173,38 @@ There are 3 unique items in your inventory:
 
 <br>
 
+### Prints report: `report`
+Lists all items that match the requirements of the report.
+
+There are 2 types of reports in this iteration:
+1. **low stock** - lists all stocks that are below a specified threshold that the user provides
+2. **expiry** - lists all stocks that are within a week of expiring or has already expired
+
+Output will be printed to the terminal and each row will contain the name of each item.
+If the report type is **low stock**, the current quantity for each item would be listed and if the report type is 
+**expiry**, the expiry date for each item would be listed as well.
+
+Format: `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`
+- `r/` parameter that specifies the type of report. e.g. **low stock** or **expiry**
+- `t/` parameter that specifies the threshold value to be compared to for **low stock report**. 
+All items below the threshold value would be listed out.
+
+**Note**: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
+threshold value must be **excluded**.
+
+Example: `report r/low stock`
+```
+There are 3 items low on stocks!
+1. Name: orange
+   Current Quantity: 10
+2. Name: banana
+   Current Quantity: 30
+3. Name: apple
+   Current Quantity: 20
+```
+
+<br>
+
 ### Quit the program: `quit`
 Quits the program
 
@@ -213,12 +245,13 @@ with the file that contains the data of your previous SuperTracker inventory
 
 ## Command Summary
 
-Action | Format, Examples
---------|------------------
-**New** | `new n/NAME q/QUANTITY p/PRICE` <br> e.g. `new n/Milk q/100 p/5`
-**Delete**| `delete n/NAME` <br> e.g. `delete n/Milk`
-**Add**| `add n/NAME q/QUANTITY` <br> e.g. `add n/Milk q/10`
-**Remove**| `remove n/NAME q/QUANTITY` <br> e.g. `remove n/Milk q/10`
-**Update**| `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE]` <br> e.g. `update n/Milk q/200 p/10`
-**List**| `list [q/] [p/] [sq/] [sp/] [r/]` <br> e.g. `list q/ p/ sp/ r/`
-**Quit**| `quit`
+Action | Format | Examples
+--------|------------ |---------------
+**New** | `new n/NAME q/QUANTITY p/PRICE` | e.g. `new n/Milk q/100 p/5`
+**Delete**| `delete n/NAME` | e.g. `delete n/Milk`
+**Add**| `add n/NAME q/QUANTITY` | e.g. `add n/Milk q/10`
+**Remove**| `remove n/NAME q/QUANTITY` | e.g. `remove n/Milk q/10`
+**Update**| `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE]` | e.g. `update n/Milk q/200 p/10`
+**List**| `list [q/] [p/] [sq/] [sp/] [r/]` | e.g. `list q/ p/ sp/ r/`
+**Report**| `report r/REPORT_TYPE [t/THRESHOLD_VALUE]` | e.g. `report r/low stock t/10`
+**Quit**| `quit` | e.g. `quit`
