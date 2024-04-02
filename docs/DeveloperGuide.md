@@ -102,7 +102,7 @@ the line will be ignored and a new `Item` will not be added to the list.
 The parsing of string data to an `Item` object is handled by the method `FileManager-parseItemData()`.
 
 ### New Command
-The following is a class diagram of the NewCommand and its relevant dependencies
+The following is a class diagram of the NewCommand and its relevant dependencies<br>
 ![NewCommandClass](uml-diagrams/NewCommandClass.png)
 
 The `NewCommand` class implements the `Command` interface and is responsible for handling the creation of new items in the `Inventory`.
@@ -114,7 +114,7 @@ A NewCommand instance is created by the `parseNewCommand` method called by Parse
 - `Ui`: To notify the user about the successful execution of `NewCommand`
 - `FileManager`: To save the new item added onto the hard disk
 
-The following sequence diagram shows the execution of a NewCommand
+The following sequence diagram shows the execution of a NewCommand<br>
 ![NewCommandSequence](uml-diagrams/NewCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `NewCommand`
@@ -124,7 +124,7 @@ The following sequence diagram shows the execution of a NewCommand
 5. The `saveData` method of the `FileManager` class is called to save the new item added onto the hard disk
 
 ### Update Command
-The following is a class diagram of the UpdateCommand and its relevant dependencies
+The following is a class diagram of the UpdateCommand and its relevant dependencies<br>
 ![UpdateCommandClass](uml-diagrams/UpdateCommandClass.png)
 
 The `UpdateCommand` class implements the `Command` interface and is responsible for updating existing items in the 
@@ -137,7 +137,7 @@ of the aforementioned parameters must be provided.
 - `Inventory`: For updating the item in the inventory
 - `Ui`: To notify the user about the successful execution of `UpdateCommand`
 
-The following sequence diagram shows the execution of a UpdateCommand
+The following sequence diagram shows the execution of a UpdateCommand<br>
 ![UpdateCommandSequence](uml-diagrams/UpdateCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `UpdateCommand`
@@ -152,8 +152,8 @@ updated). If the condition holds true it retrieves the item's previous quantity.
 8. The `saveData` method of the `FileManager` class is called to save updated item onto the hard disk
 
 ### DeleteCommand
-The following is a class diagram of the DeleteCommand and its relevant dependencies
-*:(*
+The following is a class diagram of the DeleteCommand and its relevant dependencies<br>
+![DeleteCommandClass](uml-diagrams/DeleteCommandClass.png)
 
 The `DeleteCommand` class implements the `Command` interface and is responsible for deleting existing items in the
 inventory. A DeleteCommand instance is created when calling the `parseDeleteCommand` method called in Parser class.
@@ -165,10 +165,17 @@ the `saveData` method from `FileManager` class to save changes to the inventory.
 - `Inventory`: Checking and deleting item from inventory
 - `Ui`: To notify the user about the successful execution of `DeleteCommand`
 
-The following sequence diagram shows the execution of a DeleteCommand
+The following sequence diagram shows the execution of a DeleteCommand<br>
+![DeleteCommandSequence](uml-diagrams/DeleteCommandSequence.PNG)
+
+1. The `SuperTracker` class calls the `execute` method of `DeleteCommand`
+2. The `contains` method of `Inventory` to check if the item exists in the inventory
+3. If item exists, the `delete` method of `Inventory` is called to remove the item from inventory
+4. Subsequently, the `deleteCommandSuccess` method of `Ui` is called to print the delete message
+5. The `saveData` method of `FileManager` is called to save the change to the text file containing inventory information
 
 ### Find Command
-The following is a class diagram of the FindCommand and its relevant dependencies
+The following is a class diagram of the FindCommand and its relevant dependencies<br>
 ![FindCommandClass](uml-diagrams/FindCommandClass.png)
 
 The `FindCommand` class implements the `Command` interface and is responsible for searching for items in the inventory by name.
@@ -178,7 +185,7 @@ A FindCommand instance is created by the `parseFindCommand` method called by `Pa
 - `Inventory`: For getting the list of items in the inventory
 - `Ui`: To notify the user about the successful execution of `FindCommand`
 
-The following sequence diagram shows the execution of a FindCommand  
+The following sequence diagram shows the execution of a FindCommand<br>  
 ![FindCommandSequence](uml-diagrams/FindCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `FindCommand`
@@ -190,7 +197,7 @@ The following sequence diagram shows the execution of a FindCommand
 7. After the loop ends, if the `isFound` variable is still false, the `noItemFound` method of the Ui class is called to notify that no item has been found containing the word
 
 ### List Command
-The following is a class diagram of the FindCommand and its relevant dependencies
+The following is a class diagram of the FindCommand and its relevant dependencies<br>
 ![ListCommandClass](uml-diagrams/ListCommandClass.png)
 
 The `ListCommand` class implements the `Command` interface and is responsible for printing out a list of items in the inventory to the output.
@@ -232,7 +239,7 @@ There are 6 sorting modes in total
 5. `sortBy == "p"` and `isReverse == false`: Price ascending
 6. `sortBy == "p"` and `isReverse == true`: Price descending
 
-The following sequence diagram shows the execution of a ListCommand  
+The following sequence diagram shows the execution of a ListCommand<br>  
 ![ListCommandSequence](uml-diagrams/ListCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `ListCommand`
