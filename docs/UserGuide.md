@@ -50,7 +50,7 @@ optimized for use via a Command Line Interface (CLI).
 ### Create a new item: `new`
 Create a new item in the inventory
 
-Format: `new n/NAME q/QUANTITY p/PRICE`
+Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
 
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
@@ -61,12 +61,20 @@ Format: `new n/NAME q/QUANTITY p/PRICE`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
+- `EXPIRY_DATE` must be a valid non-negative date in the format of `dd-mm-yyyy`
+  - e.g. 05-10-2054, 16-07-2245
 
-Example: `new n/Milk q/100 p/5`
+Example: `new n/Milk q/100 p/5` `new n/Banana p/1.23 q/50 e/15-06-2113`
 ```
 Milk has been added to the inventory!
 Quantity: 100
 Price: $5.00
+```
+```
+Banana has been added to the inventory!
+Quantity: 50
+Price: $1.23
+Expiry Date: 15/06/2113
 ```
 
 <br>
@@ -126,7 +134,7 @@ Quantity: 90
 ### Update an item: `update`
 Update the quantity and/or price of an item
 
-Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE]`
+Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
@@ -136,13 +144,16 @@ Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `NEW_PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
+- `NEW_EXPIRY_DATE` must be a valid non-negative date in the format of `dd-mm-yyyy`
+  - e.g. 05-10-2054, 16-07-2245
 - At least one of the optional parameters must be present
 
-Example: `update n/Milk q/200 p/10`
+Example: `update n/Milk q/200 p/10 e/15-06-2113`
 ```
 Milk has been successfully updated!
 Quantity: 200
 Price: $10.00
+Expiry Date: 15/06/2113
 ```
 
 <br>
@@ -151,23 +162,25 @@ Price: $10.00
 List all unique items in the inventory.
 Output will be printed to the terminal and each row will contain the name of each item.
 
-Format: `list [q/] [p/] [sq/] [sp/] [r/]`
+Format: `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`
 - `q/` will list the quantity of each item in each row
 - `p/` will list the price of each item in each row
-- In each row, quantity and price will be printed in the same order as the flags
-  - e.g. if the command specifies `list p/ q/`, the price will be printed before the quantity
+- `e/` will list the expiry date of each item in each row if it contains a valid expiry date
+- In each row, quantity, price and expiry date will be printed in the same order as the flags
+  - e.g. if the command specifies `list p/ q/ e/`, the quantity will be printed first followed by price and lastly expiry date
 - `sq/` will list the items in order of ascending quantity
 - `sp/` will list the items in order of ascending price
+- `se/` will list the items in order of ascending date and items with no date are displayed at the bottom
 - If the command has multiple sorting parameters, the list will be sorted according to the first sorting parameter
-  - e.g. if the command specifies `list sq/ sp/`, list will be sorted in order of ascending quantity
+  - e.g. if the command specifies `list sq/ sp/ se/`, list will be sorted in order of ascending quantity
 - If the command has no sorting parameters, the list will be sorted in ascending alphabetical order (A-Z) by default
 - `r/` will reverse the order of the list
 
-Example: `list q/ p/ sp/ r/`
+Example: `list q/ p/ e/ sp/ r/`
 ```
 There are 3 unique items in your inventory:
 1. Name: Milk    Quantity: 100    Price: $5.00
-2. Name: Juice    Quantity: 300    Price: $4.00
+2. Name: Juice    Quantity: 300    Price: $4.00    Expiry Date: 12/03/2025
 3. Name: Cheese    Quantity: 200    Price: $3.00
 ```
 
@@ -192,7 +205,7 @@ All items below the threshold value would be listed out.
 **Note**: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
 threshold value must be **excluded**.
 
-Example: `report r/low stock`
+Example: `report r/low stock` `report r/expiry`
 ```
 There are 3 items low on stocks!
 1. Name: orange
@@ -201,6 +214,13 @@ There are 3 items low on stocks!
    Current Quantity: 30
 3. Name: apple
    Current Quantity: 20
+```
+```
+There are 2 items close to expiry!
+1. Name: orange
+  Expiry Date: 08-04-2024
+2. Name: apple
+  Expiry Date: 12-12-2016
 ```
 
 <br>
@@ -245,13 +265,13 @@ with the file that contains the data of your previous SuperTracker inventory
 
 ## Command Summary
 
-Action | Format | Examples
---------|------------ |---------------
-**New** | `new n/NAME q/QUANTITY p/PRICE` | e.g. `new n/Milk q/100 p/5`
-**Delete**| `delete n/NAME` | e.g. `delete n/Milk`
-**Add**| `add n/NAME q/QUANTITY` | e.g. `add n/Milk q/10`
-**Remove**| `remove n/NAME q/QUANTITY` | e.g. `remove n/Milk q/10`
-**Update**| `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE]` | e.g. `update n/Milk q/200 p/10`
-**List**| `list [q/] [p/] [sq/] [sp/] [r/]` | e.g. `list q/ p/ sp/ r/`
-**Report**| `report r/REPORT_TYPE [t/THRESHOLD_VALUE]` | e.g. `report r/low stock t/10`
-**Quit**| `quit` | e.g. `quit`
+Action | Format                                                             | Examples
+--------|--------------------------------------------------------------------|---------------
+**New** | `new n/NAME q/QUANTITY p/PRICE e/EXPIRY_DATE`                      | e.g. `new n/Milk q/100 p/5 e/05-12-2113`
+**Delete**| `delete n/NAME`                                                    | e.g. `delete n/Milk`
+**Add**| `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`
+**Remove**| `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`
+**Update**| `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113`
+**List**| `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`
+**Report**| `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`
+**Quit**| `quit`                                                             | e.g. `quit`
