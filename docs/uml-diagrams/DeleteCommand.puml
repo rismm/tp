@@ -60,7 +60,7 @@ activate DeleteCommand #cbf7f4
 
 DeleteCommand -> Inventory : contains(name: String)
 activate Inventory #d5eac2
-Inventory --> DeleteCommand : true
+Inventory --> DeleteCommand :
 deactivate Inventory
 
 DeleteCommand -> Inventory : delete(name: String)
@@ -77,6 +77,6 @@ DeleteCommand -> FileManager : saveData()
 activate FileManager #ffecb3
 FileManager --> DeleteCommand
 deactivate FileManager
-
+DeleteCommand --> SuperTracker
 deactivate DeleteCommand
 @enduml
