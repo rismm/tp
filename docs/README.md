@@ -1,6 +1,7 @@
-# Duke
+# SuperTracker
 
-{Give product intro here}
+SuperTracker is a desktop app for managing a supermarket’s inventory, 
+optimized for use via a Command Line Interface (CLI).
 
 Useful links:
 * [User Guide](UserGuide.md)
