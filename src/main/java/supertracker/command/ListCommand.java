@@ -80,7 +80,7 @@ public class ListCommand implements Command {
      * Checks if the provided string is valid.
      *
      * @param s The string to be validated.
-     * @return {@code true} if the string is equal to "q" or "p",
+     * @return {@code true} if the string is equal to "q" or "p" or "e",
      *         or if the string is empty; {@code false} otherwise.
      */
     private boolean isValid(String s) {

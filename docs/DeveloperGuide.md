@@ -96,7 +96,7 @@ Loading is performed at the start of the program in `SuperTracker-run()` where i
 `loadData()` looks for the save text file at `./data/items.txt` and reads the lines from the file `items.txt` exists. As indicated earlier,
 each line containing a single `Item`'s data will be in the format and order of `NAME,QUANTITY,PRICE,EXPIRY_DATE`. Each attribute will be parsed into its
 relevant data type, creating a new `Item` with the extracted attributes, which is then added to the item list in `Inventory`. In the event where the line
-of data read is not in the correct format, or the attributes are unable to be parsed into its relevant data type _(i.e. the string in the QUANTITY part reads "f1ve" instead of "5")_,
+of data read is not in the correct format, or the attributes are unable to be parsed into its relevant data type (i.e. the string in the QUANTITY part reads "f1ve" instead of "5")_,
 the line will be ignored and a new `Item` will not be added to the list.
 
 The parsing of string data to an `Item` object is handled by the method `FileManager-parseItemData()`.
@@ -208,36 +208,43 @@ A ListCommand instance is created by the `parseListCommand` method called by Par
 - `Inventory`: For getting the list of items in the inventory
 - `Ui`: To print the list of items in the inventory to the output
 
-The 5 parameters in the constructor `hasQuantity`, `hasPrice`, `firstParam`, `sortBy`, `isReverse` are used to determine how the list should be printed out.
+The 7 parameters in the constructor `hasQuantity`, `hasPrice`, `hasExpiry`, `firstParam`, `secondParam`, `sortBy`, `isReverse` are used to determine how the list should be printed out.
 - `hasQuantity`
-    - True if the user has input the quantity flag `q/`, false otherwise
-    - Quantity will be printed to the output if true
+  - True if the user has input the quantity flag `q/`, false otherwise
+  - Quantity will be printed to the output if true
 - `hasPrice`
-    - True if the user has input the price flag `p/`, false otherwise
-    - Price will be printed to the output if true
+  - True if the user has input the price flag `p/`, false otherwise
+  - Price will be printed to the output if true
+- `hasExpiry`
+  - True if the user has input the expiry flag `e/`, false otherwise
+  - Expiry date will be printed to the output if true
 - `firstParam`
-    - Can only take 3 possible values `"q"`,`"p"` or `""`. 
-    - `"q"` if the quantity flag comes before the price flag.
-    - `"p"` if the price flag comes before the quantity flag
-    - If both quantity and price flag do not exist, then `""` would be the default value (this variable would no longer be used in the execution of `ListCommand`)
-    - Quantity will be printed before price if `"q"`
-    - Price will be printed before quantity if `"p"`
+  - Can only take 4 possible values `"q"`,`"p"`,`"e"` or `""`. 
+  - Value corresponds to the flag that comes first in the command
+  - If the command has none of these flags (`q/`,`p/`,`e/`), then `""` would be the default value (this variable would no longer be used in the execution of `ListCommand`)
+- `secondParam`
+  - Can only take 4 possible values `"q"`,`"p"`,`"e"` or `""`.
+  - Value corresponds to the flag that comes second in the command
+  - If the command has less than 2 of these flags (`q/`,`p/`,`e/`), then `""` would be the default value (this variable would no longer be used in the execution of `ListCommand`)
 - `sortBy`
-    - Can only take 3 possible values `"q"`,`"p"` or `""`
-    - `"q"` if the user has input the sort by quantity flag `sq/`
-    - `"p"` if the user has input the sort by price flag `sp/`
-    - `""` would be the default value if the user did not input any sorting flag
-    - If multiple sorting flags are input by the user, `sortBy` will take the value corresponding to the first sorting flag
+  - Can only take 4 possible values `"q"`,`"p"`,`"e`, or `""`
+  - `"q"` if the user has input the sort by quantity flag `sq/`
+  - `"p"` if the user has input the sort by price flag `sp/`
+  - `"e"` if the user has input the sort by expiry flag `se/`
+  - `""` would be the default value if the user did not input any sorting flag
+  - If multiple sorting flags are input by the user, `sortBy` will take the value corresponding to the first sorting flag
 - `isReverse`
-    - True if the user has input the reverse flag `r/`, false otherwise.
+  - True if the user has input the reverse flag `r/`, false otherwise.
 
-There are 6 sorting modes in total
+There are 8 sorting modes in total
 1. `sortBy == ""` and `isReverse == false`: Alphabetical ascending (e.g. A-Z)
 2. `sortBy == ""` and `isReverse == true`: Alphabetical descending (e.g. Z-A)
 3. `sortBy == "q"` and `isReverse == false`: Quantity ascending
 4. `sortBy == "q"` and `isReverse == true`: Quantity descending
 5. `sortBy == "p"` and `isReverse == false`: Price ascending
 6. `sortBy == "p"` and `isReverse == true`: Price descending
+7. `sortBy == "e"` and `isReverse == false`: Expiry date ascending (e.g. 2024-2025)
+8. `sortBy == "e"` and `isReverse == true`: Expiry date descending (e.g. 2025-2024)
 
 The following sequence diagram shows the execution of a ListCommand<br>  
 ![ListCommandSequence](uml-diagrams/ListCommandSequence.png)
@@ -245,7 +252,7 @@ The following sequence diagram shows the execution of a ListCommand<br>
 1. The `SuperTracker` class calls the `execute` method of `ListCommand`
 2. The `getItems` method of the `Inventory` class is called to get an `ArrayList` of items in the inventory
 3. The `listIntro` method of the `Ui` class is called to print out the total number of items in the inventory
-4. Depending on the value of `sortBy`, either the `sortByQuantity`, `sortByPrice` or `sortByName` method of the `Item` class will be called.
+4. Depending on the value of `sortBy`, either the `sortByQuantity`, `sortByPrice`, `sortByExpiry` or `sortByName` method of the `Item` class will be called.
 A comparator used to sort the `ArrayList` of items is returned
 5. The `sort` method of the `ArrayList` of items is called with a comparator as an input parameter
 6. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
