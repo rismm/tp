@@ -1,5 +1,6 @@
 package supertracker.storage;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import supertracker.command.NewCommand;
@@ -54,5 +55,22 @@ public class FileManagerTest {
             assertEquals(item.getPrice(), loadedItem.getPrice());
             assertEquals(item.getExpiryDate(), loadedItem.getExpiryDate());
         }
+    }
+
+    @AfterAll
+    public static void reset() throws IOException {
+        Inventory.clear();
+
+        NewCommand[] newCommands = {
+            new NewCommand("Apple", 10, 2.00, UNDEFINED_DATE),
+            new NewCommand("Banana", 20, 3.00, CURR_DATE),
+            new NewCommand("Cake", 30, 4.00, UNDEFINED_DATE)
+        };
+
+        for (NewCommand newCommand : newCommands) {
+            newCommand.execute();
+        }
+
+        FileManager.saveData();
     }
 }

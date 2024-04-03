@@ -48,28 +48,35 @@ public class ListCommand implements Command {
         List<Item> items = Inventory.getItems();
         Ui.listIntro(items.size());
 
+        List<Item> itemsWithoutExpiry = new ArrayList<Item>();
+
         Comparator<Item> comparator;
 
-        if (!sortBy.equals(EX_DATE_FLAG)) {
-            switch (sortBy) {
-            case QUANTITY_FLAG:
-                comparator = Item.sortByQuantity();
-                break;
-            case PRICE_FLAG:
-                comparator = Item.sortByPrice();
-                break;
-            default:
-                comparator = Item.sortByName();
-                break;
-            }
+        switch (sortBy) {
+        case QUANTITY_FLAG:
+            comparator = Item.sortByQuantity();
+            break;
+        case PRICE_FLAG:
+            comparator = Item.sortByPrice();
+            break;
+        case EX_DATE_FLAG:
+            moveItemsWithoutExpiry(items, itemsWithoutExpiry);
+            itemsWithoutExpiry.sort(Item.sortByName());
+            comparator = Item.sortByExpiry();
+            break;
+        default:
+            comparator = Item.sortByName();
+            break;
+        }
 
-            items.sort(comparator);
+        items.sort(comparator);
 
-            if (isReverse) {
-                Collections.reverse(items);
-            }
-        } else {
-            items = sortByExpiry(items);
+        if (isReverse) {
+            Collections.reverse(items);
+        }
+
+        if (sortBy.equals(EX_DATE_FLAG)) {
+            items.addAll(itemsWithoutExpiry);
         }
 
         for (Item item : items) {
@@ -77,27 +84,15 @@ public class ListCommand implements Command {
             index++;
         }
     }
-    public List<Item> sortByExpiry(List<Item> items) throws NullPointerException {
-        Comparator<Item> nameComparator = Item.sortByName();
-        Comparator<Item> expiryComparator = Item.sortByExpiry();;
-        List<Item> itemsWithExpiry = new ArrayList<>();
-        List<Item> itemsWithoutExpiry = new ArrayList<>();
-        for (Item item: items) {
-            if(item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
+
+    private void moveItemsWithoutExpiry(List<Item> items, List<Item> itemsWithoutExpiry) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getExpiryDate().isEqual(UNDEFINED_DATE)) {
+                Item item = items.remove(i);
                 itemsWithoutExpiry.add(item);
-            } else {
-                itemsWithExpiry.add(item);
+                i--;
             }
         }
-
-        itemsWithExpiry.sort(expiryComparator);
-        itemsWithoutExpiry.sort(nameComparator);
-        if (isReverse) {
-            Collections.reverse(itemsWithExpiry);
-        }
-
-        itemsWithExpiry.addAll(itemsWithoutExpiry);
-        return itemsWithExpiry;
     }
 
     @Override
