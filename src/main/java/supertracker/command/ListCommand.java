@@ -4,9 +4,9 @@ import supertracker.ui.Ui;
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class ListCommand implements Command {
     private static final String QUANTITY_FLAG = "q";
@@ -19,6 +19,8 @@ public class ListCommand implements Command {
     private String secondParam;
     private String sortBy;
     private boolean isReverse;
+    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
     public ListCommand(boolean hasQuantity, boolean hasPrice, boolean hasExpiry,
             String firstParam, String secondParam, String sortBy, boolean isReverse) {
@@ -44,31 +46,55 @@ public class ListCommand implements Command {
 
         Comparator<Item> comparator;
 
-        switch (sortBy) {
-        case QUANTITY_FLAG:
-            comparator = Item.sortByQuantity();
-            break;
-        case PRICE_FLAG:
-            comparator = Item.sortByPrice();
-            break;
-        case EX_DATE_FLAG:
-            comparator = Item.sortByExpiry();
-            break;
-        default:
-            comparator = Item.sortByName();
-            break;
-        }
+        if (!sortBy.equals(EX_DATE_FLAG)) {
+            switch (sortBy) {
+            case QUANTITY_FLAG:
+                comparator = Item.sortByQuantity();
+                break;
+            case PRICE_FLAG:
+                comparator = Item.sortByPrice();
+                break;
+            default:
+                comparator = Item.sortByName();
+                break;
+            }
 
-        items.sort(comparator);
+            items.sort(comparator);
 
-        if (isReverse) {
-            Collections.reverse(items);
+            if (isReverse) {
+                Collections.reverse(items);
+            }
+        } else {
+            items = sortByExpiry(items);
         }
 
         for (Item item : items) {
             Ui.listItem(item, index, hasQuantity, hasPrice, hasExpiry, firstParam, secondParam);
             index++;
         }
+    }
+    public List<Item> sortByExpiry(List<Item> items) throws NullPointerException {
+        Comparator<Item> nameComparator, expiryComparator;
+        List<Item> itemsWithExpiry = new ArrayList<>();
+        List<Item> itemsWithoutExpiry = new ArrayList<>();
+        nameComparator = Item.sortByName();
+        expiryComparator = Item.sortByExpiry();
+        for (Item item: items) {
+            if(item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
+                itemsWithoutExpiry.add(item);
+            } else {
+                itemsWithExpiry.add(item);
+            }
+        }
+
+        itemsWithExpiry.sort(expiryComparator);
+        itemsWithoutExpiry.sort(nameComparator);
+        if (isReverse) {
+            Collections.reverse(itemsWithExpiry);
+        }
+
+        itemsWithExpiry.addAll(itemsWithoutExpiry);
+        return itemsWithExpiry;
     }
 
     @Override
