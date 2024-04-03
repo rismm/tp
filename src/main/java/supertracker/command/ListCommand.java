@@ -6,12 +6,17 @@ import supertracker.item.Item;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ListCommand implements Command {
     private static final String QUANTITY_FLAG = "q";
     private static final String PRICE_FLAG = "p";
     private static final String EX_DATE_FLAG = "e";
+    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private boolean hasQuantity;
     private boolean hasPrice;
     private boolean hasExpiry;
@@ -19,8 +24,7 @@ public class ListCommand implements Command {
     private String secondParam;
     private String sortBy;
     private boolean isReverse;
-    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+
 
     public ListCommand(boolean hasQuantity, boolean hasPrice, boolean hasExpiry,
             String firstParam, String secondParam, String sortBy, boolean isReverse) {
@@ -74,11 +78,10 @@ public class ListCommand implements Command {
         }
     }
     public List<Item> sortByExpiry(List<Item> items) throws NullPointerException {
-        Comparator<Item> nameComparator, expiryComparator;
+        Comparator<Item> nameComparator = Item.sortByName();
+        Comparator<Item> expiryComparator = Item.sortByExpiry();;
         List<Item> itemsWithExpiry = new ArrayList<>();
         List<Item> itemsWithoutExpiry = new ArrayList<>();
-        nameComparator = Item.sortByName();
-        expiryComparator = Item.sortByExpiry();
         for (Item item: items) {
             if(item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
                 itemsWithoutExpiry.add(item);
