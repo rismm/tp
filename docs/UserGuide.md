@@ -144,22 +144,18 @@ Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `NEW_PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
-- `NEW_EXPIRY_DATE` must be a valid non-negative date in the format of `dd-mm-yyyy` or `nil` if you intend on removing the expiry date
-  - e.g. 05-10-2054, 16-07-2245, nil
+- `NEW_EXPIRY_DATE` must be a valid non-negative date in the format of `dd-mm-yyyy`
+  - e.g. 05-10-2054, 16-07-2245
 - At least one of the optional parameters must be present
 
-Example: `update n/Milk q/200 p/10 e/15-06-2113` `update n/Milk q/170 p/9.99 e/nil`
+Example: `update n/Milk q/200 p/10 e/15-06-2113`
 ```
 Milk has been successfully updated!
 Quantity: 200
 Price: $10.00
 Expiry Date: 15/06/2113
 ```
-```
-Milk has been successfully updated!
-Quantity: 170
-Price: $9.99
-```
+
 <br>
 
 ### List all items: `list`
