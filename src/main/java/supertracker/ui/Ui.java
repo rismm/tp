@@ -21,9 +21,8 @@ public class Ui {
     private static final String FIND_OPENING_MESSAGE = "Here are your found items:";
     private static final String REPORT_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
     private static final DateTimeFormatter DATE_FORMAT_PRINT  = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter VALID_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -80,7 +79,7 @@ public class Ui {
     }
 
     private static String reportExpiryDateMessage(Item reportItem) {
-        return "   Expiry Date: " + reportItem.getExpiryDate().format(VALID_DATE_FORMAT);
+        return "   Expiry Date: " + reportItem.getExpiryDate().format(DATE_FORMAT_PRINT);
     }
 
     public static void printIndent(String string) {
@@ -110,7 +109,7 @@ public class Ui {
         printIndent(getQuantityMessage(item));
         printIndent(getPriceMessage(item));
         try {
-            if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
+            if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
                 printIndent(expiryDateMessage(item));
             }
         } catch (NullPointerException e) {
@@ -122,7 +121,7 @@ public class Ui {
         printIndent(updateItemOpening(item));
         printIndent(getQuantityMessage(item));
         printIndent(getPriceMessage(item));
-        if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
+        if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
             printIndent(expiryDateMessage(item));
         }
     }
@@ -196,7 +195,7 @@ public class Ui {
         String quantityString = "    Quantity: " + item.getQuantity();
         String priceString = "    Price: " + item.getPriceString();
         String expiryString;
-        if (!item.getExpiryDate().isEqual(DATE_NOT_EXIST)) {
+        if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
             expiryString = "    Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT);
         } else {
             expiryString = "";
@@ -276,11 +275,14 @@ public class Ui {
 
     public static void printFoundItem(Item item, int index) {
         String stringToPrint = index + ". Name: " + item.getName();
-        String quantityString = "    Quantity: " + item.getQuantity();
-        String priceString = "    Price: " + item.getPriceString();
-
-        stringToPrint += (priceString + quantityString);
         printIndent(stringToPrint);
+        String quantityString = "    Quantity: " + item.getQuantity();
+        printIndent(quantityString);
+        String priceString = "    Price: " + item.getPriceString();
+        printIndent(priceString);
+        if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
+            printIndent("    Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT));
+        }
     }
 
     public static void printNoItemFound(String name) {
