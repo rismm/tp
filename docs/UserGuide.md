@@ -194,7 +194,7 @@ Format: `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`
 - `p/` will list the price of each item in each row
 - `e/` will list the expiry date of each item in each row if it contains a valid expiry date
 - In each row, quantity, price and expiry date will be printed in the same order as the flags
-  - e.g. if the command specifies `list p/ q/ e/`, the quantity will be printed first followed by price and lastly expiry date
+  - e.g. if the command specifies `list p/ q/ e/`, the quantity will be printed first followed by price and expiry date
 - `sq/` will list the items in order of ascending quantity
 - `sp/` will list the items in order of ascending price
 - `se/` will list the items in order of ascending date and items with no date are displayed at the bottom
