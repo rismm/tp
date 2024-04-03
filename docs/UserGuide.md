@@ -13,6 +13,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Decrease quantity: `remove`](#decrease-quantity-remove)
   - [Update an item: `update`](#update-an-item-update)
   - [List all items: `list`](#list-all-items-list)
+  - [Prints report: `report`](#Prints report)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
