@@ -14,7 +14,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Update an item: `update`](#update-an-item-update)
   - [Find an item: `find`](#find-an-item-find)
   - [List all items: `list`](#list-all-items-list)
-  - [Prints report: `report`](#Prints-report-report)
+  - [Print report: `report`](#print-report-report)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
@@ -63,17 +63,18 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
-- `EXPIRY_DATE` must be a valid non-negative date in the format of `dd-mm-yyyy`
+- `EXPIRY_DATE` must be a valid date in the format of `dd-mm-yyyy`
   - e.g. 05-10-2054, 16-07-2245
 
-Example: `new n/Milk q/100 p/5` `new n/Banana p/1.23 q/50 e/15-06-2113`
+Example: `new n/Milk q/100 p/5`
 ```
 Milk has been added to the inventory!
 Quantity: 100
 Price: $5.00
 ```
+Example: `new n/Cheese q/50 p/1.23 e/15-06-2113`
 ```
-Banana has been added to the inventory!
+Cheese has been added to the inventory!
 Quantity: 50
 Price: $1.23
 Expiry Date: 15/06/2113
@@ -134,22 +135,22 @@ Quantity: 90
 <br>
 
 ### Find an item: `find`
-Find the item/items that contains the same name
+Find the item/items that contain the same name
 
 Format: `find n/NAME`
 - `NAME` is case-insensitive
-  - e.g. `Apple` will be interpreted as `apple`
-- If `Apple` does not exist in the inventory, a message would be thrown to inform user that no item has been found
+  - e.g. `Cheese` will be interpreted as `cheese`
+- If no items containing the same name are found, an error would be thrown
 
-Example: `find n/apple` 
+Example: `find n/Cheese` 
 ```
-     Here are your found items:
-     1. Name: apple pie
-         Quantity: 100
-         Price: $1.00
-     2. Name: apple
-         Quantity: 100
-         Price: $1.00
+Here are your found items:
+1. Name: Cheese cake
+    Quantity: 100
+    Price: $1.00
+2. Name: Cheese
+    Quantity: 100
+    Price: $1.00
 ```
 <br>
 
@@ -166,20 +167,21 @@ Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `NEW_PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
-- `NEW_EXPIRY_DATE` must be a valid non-negative date in the format of `dd-mm-yyyy` or `nil` if expiry date is to be removed
+- `NEW_EXPIRY_DATE` must be a valid date in the format of `dd-mm-yyyy` or `nil` if expiry date is to be removed
   - e.g. 05-10-2054, 16-07-2245
 - At least one of the optional parameters must be present
 
-Example: `update n/Milk q/200 p/10 e/15-06-2113` `update n/Milk q/170 p/9.99 e/nil`
+Example: `update n/Milk q/200 p/10 e/15-06-2113`
 ```
 Milk has been successfully updated!
 Quantity: 200
 Price: $10.00
 Expiry Date: 15/06/2113
 ```
+Example: `update n/Milk q/50 p/9.99 e/nil`
 ```
 Milk has been successfully updated!
-Quantity: 170
+Quantity: 50
 Price: $9.99
 ```
 
@@ -197,7 +199,7 @@ Format: `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`
   - e.g. if the command specifies `list p/ q/ e/`, the quantity will be printed first followed by price and lastly expiry date
 - `sq/` will list the items in order of ascending quantity
 - `sp/` will list the items in order of ascending price
-- `se/` will list the items in order of ascending date and items with no date are displayed at the bottom
+- `se/` will list the items in order of ascending date, items with no date will be displayed at the bottom of the list and sorted in ascending alphabetical order (A-Z) by default
 - If the command has multiple sorting parameters, the list will be sorted according to the first sorting parameter
   - e.g. if the command specifies `list sq/ sp/ se/`, list will be sorted in order of ascending quantity
 - If the command has no sorting parameters, the list will be sorted in ascending alphabetical order (A-Z) by default
@@ -213,41 +215,46 @@ There are 3 unique items in your inventory:
 
 <br>
 
-### Prints report: `report`
-Lists all items that match the requirements of the report.
+### Print report: `report`
+List all items that match the requirements of the report
 
-There are 2 types of reports in this iteration:
-1. **low stock** - lists all stocks that are below a specified threshold that the user provides
-2. **expiry** - lists all stocks that are within a week of expiring or has already expired
+There are 2 types of reports:
+1. **low stock** - list all items that are below a specified threshold provided by the user
+2. **expiry** - list all items that are within a week of expiring or have already expired
 
-Output will be printed to the terminal and each row will contain the name of each item.
-If the report type is **low stock**, the current quantity for each item would be listed and if the report type is 
-**expiry**, the expiry date for each item would be listed as well.
+The report will be printed to the terminal and will contain the name of each item
+- If the report type is **low stock**: 
+  - The quantity of each item would be listed
+  - The report would be sorted in order of ascending quantity
+- If the report type is **expiry**:
+  - The expiry date of each item would be listed
+  - The report would be sorted in order of ascending expiry date
 
 Format: `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`
 - `r/` parameter that specifies the type of report. e.g. **low stock** or **expiry**
 - `t/` parameter that specifies the threshold value to be compared to for **low stock report**. 
 All items below the threshold value would be listed out.
 
-**Note**: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
+> Note: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
 threshold value must be **excluded**.
 
-Example: `report r/low stock` `report r/expiry`
+Example: `report r/low stock`
 ```
 There are 3 items low on stocks!
-1. Name: orange
-   Current Quantity: 10
-2. Name: banana
-   Current Quantity: 30
-3. Name: apple
-   Current Quantity: 20
+1. Name: Orange
+   Quantity: 10
+2. Name: Banana
+   Quantity: 20
+3. Name: Apple
+   Quantity: 30
 ```
+Example: `report r/expiry`
 ```
 There are 2 items close to expiry!
-1. Name: orange
-  Expiry Date: 08-04-2024
-2. Name: apple
-  Expiry Date: 12-12-2016
+1. Name: Orange
+   Expiry Date: 08/04/2024
+2. Name: Apple
+   Expiry Date: 09/05/2024
 ```
 
 <br>
@@ -257,7 +264,7 @@ Quits the program
 
 Format: `quit`
 
-<br>
+--------------------------------------------------------------------------------------------------------------------
 
 ### Saving inventory data
 Inventory data in the program is saved to the hard disk in the file path `./data/` in the same directory that

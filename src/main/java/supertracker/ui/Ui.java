@@ -75,7 +75,7 @@ public class Ui {
     }
 
     private static String reportQuantityMessage(Item reportItem) {
-        return "   Current Quantity: " + reportItem.getQuantity();
+        return "   Quantity: " + reportItem.getQuantity();
     }
 
     private static String reportExpiryDateMessage(Item reportItem) {

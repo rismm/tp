@@ -37,6 +37,7 @@ public class ReportCommand implements Command{
                 reportItems.add(item);
             }
         }
+        reportItems.sort(Item.sortByExpiry());
     }
 
     private void createLowStockReport(List<Item> items, List<Item> reportItems) {
@@ -45,6 +46,7 @@ public class ReportCommand implements Command{
                 reportItems.add(item);
             }
         }
+        reportItems.sort(Item.sortByQuantity());
     }
 
     @Override
