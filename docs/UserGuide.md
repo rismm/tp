@@ -235,7 +235,7 @@ Format: `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`
 - `t/` parameter that specifies the threshold value to be compared to for **low stock report**. 
 All items below the threshold value would be listed out.
 
-**Note**: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
+> Note: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
 threshold value must be **excluded**.
 
 Example: `report r/low stock`
