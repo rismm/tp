@@ -21,7 +21,6 @@ public class Ui {
     private static final String FIND_OPENING_MESSAGE = "Here are your found items:";
     private static final String REPORT_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
     private static final DateTimeFormatter DATE_FORMAT_PRINT  = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter VALID_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
@@ -80,7 +79,7 @@ public class Ui {
     }
 
     private static String reportExpiryDateMessage(Item reportItem) {
-        return "   Expiry Date: " + reportItem.getExpiryDate().format(VALID_DATE_FORMAT);
+        return "   Expiry Date: " + reportItem.getExpiryDate().format(DATE_FORMAT_PRINT);
     }
 
     public static void printIndent(String string) {
