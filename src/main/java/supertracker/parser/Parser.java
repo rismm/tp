@@ -45,7 +45,7 @@ public class Parser {
     private static final String PRICE_GROUP = "price";
     private static final String EX_DATE_GROUP = "expiry";
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate DATE_NOT_EXIST = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final String EX_DATE_FORMAT = "dd-MM-yyyy";
     private static final String SORT_QUANTITY_FLAG = "sq";
     private static final String SORT_PRICE_FLAG = "sp";
@@ -251,7 +251,7 @@ public class Parser {
     }
 
     private static LocalDate parseExpiryDate(String dateString) throws TrackerException {
-        LocalDate expiryDate = DATE_NOT_EXIST;
+        LocalDate expiryDate = UNDEFINED_DATE;
         try {
             if (!dateString.isEmpty()) {
                 expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
@@ -267,7 +267,7 @@ public class Parser {
         try {
             if (!dateString.isEmpty()) {
                 if (dateString.equals("nil")) {
-                    expiryDate = DATE_NOT_EXIST;
+                    expiryDate = UNDEFINED_DATE;
                 } else {
                     expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
                 }
