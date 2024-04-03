@@ -227,7 +227,7 @@ The 7 parameters in the constructor `hasQuantity`, `hasPrice`, `hasExpiry`, `fir
   - Value corresponds to the flag that comes second in the command
   - If the command has less than 2 of these flags (`q/`,`p/`,`e/`), then `""` would be the default value (this variable would no longer be used in the execution of `ListCommand`)
 - `sortBy`
-  - Can only take 4 possible values `"q"`,`"p"`,`"e`, or `""`
+  - Can only take 4 possible values `"q"`,`"p"`,`"e"`, or `""`
   - `"q"` if the user has input the sort by quantity flag `sq/`
   - `"p"` if the user has input the sort by price flag `sp/`
   - `"e"` if the user has input the sort by expiry flag `se/`
