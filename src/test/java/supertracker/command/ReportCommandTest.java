@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ReportCommandTest {
     private static final String INVALID_EX_DATE_FORMAT = "dd-MM-yyyyy";
-    private static final DateTimeFormatter VALID_EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter VALID_EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String INVALID_EX_DATE = "01-01-99999";
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
