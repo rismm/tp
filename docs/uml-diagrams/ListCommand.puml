@@ -27,6 +27,7 @@ class ListCommand {
     -secondParam:String
     -sortBy:String
     -isReverse:boolean
+    -moveItemsWithoutExpiry(items:List<Item>, itemsWithoutExpiry:List<Item>)
     +ListCommand(hasQuantity:boolean, hasPrice:boolean, hasExpiry:boolean,
     firstParam:String, secondParam:String, sortBy:String, isReverse:boolean)
     +execute():void
@@ -45,7 +46,7 @@ class Inventory {
 }
 
 class Ui {
-     {static}+listIntro(size:int):void
+    {static}+listIntro(size:int):void
     {static}+listItem(item:Item, index:int, hasQuantity:boolean, hasPrice:boolean,
     {static}hasExpiry:boolean, firstParam:String, secondParam:String):void
 }
@@ -64,6 +65,7 @@ participant "Item" as Item <<class>> #fbffb2
 participant "Collections" as Collections <<class>> #ffcdd6
 participant "Ui" as Ui <<class>> #e5c2ea
 participant ":ArrayList<Item>" as ArrayList #bcf7cf
+participant ":ArrayList<Item>" as ArrayList2 #dfe6ff
 
 SuperTracker -> ListCommand : execute()
 activate ListCommand #cbf7f4
@@ -84,6 +86,11 @@ activate Ui #e5c2ea
 Ui --> ListCommand
 deactivate Ui
 
+ListCommand -> ArrayList2 ** : new ArrayList<Item>()
+activate ArrayList2 #dfe6ff
+ArrayList2 --> ListCommand : itemsWithoutExpiry:ArrayList<Item>
+deactivate ArrayList2
+
 alt sortBy == "q"
 
 ListCommand -> Item : sortByQuantity()
@@ -100,11 +107,25 @@ deactivate Item
 
 else sortBy == "e"
 
-ListCommand -> Item : sortByExpiry()
+ListCommand -> ListCommand : moveItemsWithoutExpiry(items:ArrayList<Item>, itemsWithoutExpiry:ArrayList<Item>)
+activate ListCommand #cbf7f4
+ListCommand --> ListCommand
+deactivate ListCommand
+
+ListCommand -> Item : sortByName()
 activate Item #fbffb2
 Item --> ListCommand : comparator:Comparator<Item>
 deactivate Item
 
+ListCommand -> ArrayList2 : sort(comparator:Comparator<Item>)
+activate ArrayList2 #dfe6ff
+ArrayList2 --> ListCommand
+deactivate ArrayList2
+
+ListCommand -> Item : sortByExpiry()
+activate Item #fbffb2
+Item --> ListCommand : comparator:Comparator<Item>
+deactivate Item
 
 else else
 
@@ -112,8 +133,6 @@ ListCommand -> Item : sortByName()
 activate Item #fbffb2
 Item --> ListCommand : comparator:Comparator<Item>
 deactivate Item
-
-
 
 end
 
@@ -128,6 +147,15 @@ ListCommand -> Collections : reverse(items:ArrayList<Item>)
 activate Collections #ffcdd6
 Collections --> ListCommand
 deactivate Collections
+
+end
+
+opt sortBy == "e"
+
+ListCommand -> ArrayList : addAll(itemsWithoutExpiry:ArrayList<List>)
+activate ArrayList #bcf7cf
+ArrayList --> ListCommand
+deactivate
 
 end
 

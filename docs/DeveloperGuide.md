@@ -252,11 +252,15 @@ The following sequence diagram shows the execution of a ListCommand<br>
 1. The `SuperTracker` class calls the `execute` method of `ListCommand`
 2. The `getItems` method of the `Inventory` class is called to get an `ArrayList` of items in the inventory
 3. The `listIntro` method of the `Ui` class is called to print out the total number of items in the inventory
-4. Depending on the value of `sortBy`, either the `sortByQuantity`, `sortByPrice`, `sortByExpiry` or `sortByName` method of the `Item` class will be called.
-A comparator used to sort the `ArrayList` of items is returned
-5. The `sort` method of the `ArrayList` of items is called with a comparator as an input parameter
-6. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
-7. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
+4. A new `ArrayList` to store the items without an expiry date is created
+5. Depending on the value of `sortBy`, either the `sortByQuantity`, `sortByPrice`, `sortByExpiry` or `sortByName` method of the `Item` class will be called.
+A comparator used to sort the `ArrayList` of items is returned. 
+> For the specific case where `sortBy == "e"`, the private method `moveItemsWithoutExpiry` is called.
+Items without an expiry date are removed from the original `ArrayList` of items and added to the `ArrayList` created in step 4. This `ArrayList` is then sorted in ascending alphabetical order.
+6. The `sort` method of the `ArrayList` of items is called with a comparator as an input parameter
+7. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
+8. If `sortBy == "e"`, the items without an expiry date are added back to the original `ArrayList` by calling the `addAll` method
+9. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
 
 ## Product scope
 ### Target user profile
