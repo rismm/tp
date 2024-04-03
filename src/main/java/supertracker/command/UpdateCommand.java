@@ -44,7 +44,7 @@ public class UpdateCommand implements Command {
         assert newPrice >= 0;
         assert !newExpiryDate.isEqual(invalidDate);
 
-        Item newItem = new Item(name, newQuantity, newPrice, newExpiryDate);
+        Item newItem = new Item(oldItem.getName(), newQuantity, newPrice, newExpiryDate);
         Inventory.put(name, newItem);
         Ui.updateCommandSuccess(newItem);
 

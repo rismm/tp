@@ -24,7 +24,7 @@ public class AddCommand implements Command {
 
         Item oldItem = Inventory.get(name);
         int newQuantity = oldItem.getQuantity() + quantity;
-        Item newItem = new Item(name, newQuantity, oldItem.getPrice(), oldItem.getExpiryDate());
+        Item newItem = new Item(oldItem.getName(), newQuantity, oldItem.getPrice(), oldItem.getExpiryDate());
         Inventory.put(name, newItem);
         Ui.addCommandSuccess(newItem, quantity);
 
