@@ -12,8 +12,9 @@ optimized for use via a Command Line Interface (CLI).
   - [Increase quantity: `add`](#increase-quantity-add)
   - [Decrease quantity: `remove`](#decrease-quantity-remove)
   - [Update an item: `update`](#update-an-item-update)
+  - [Find an item: `find`](#find-an-item-find)
   - [List all items: `list`](#list-all-items-list)
-  - [Prints report: `report`](#Prints report)
+  - [Prints report: `report`](#Prints-report-report)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
@@ -130,6 +131,26 @@ Example: `remove n/Milk q/10`
 Quantity: 90
 ```
 
+<br>
+
+### Find an item: `find`
+Find the item/items that contains the same name
+
+Format: `find n/NAME`
+- `NAME` is case-insensitive
+  - e.g. `Apple` will be interpreted as `apple`
+- If `Apple` does not exist in the inventory, a message would be thrown to inform user that no item has been found
+
+Example: `find n/apple` 
+```
+     Here are your found items:
+     1. Name: apple pie
+         Quantity: 100
+         Price: $1.00
+     2. Name: apple
+         Quantity: 100
+         Price: $1.00
+```
 <br>
 
 ### Update an item: `update`
@@ -278,6 +299,7 @@ Action | Format                                                             | Ex
 **Add**| `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`
 **Remove**| `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`
 **Update**| `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113`
+**Find**| `find n/NAME`                                                      | e.g. `find n/apple`
 **List**| `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`
 **Report**| `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`
 **Quit**| `quit`                                                             | e.g. `quit`
