@@ -6,7 +6,7 @@ SuperTracker is a desktop app for managing a supermarket's inventory,
 optimized for use via a Command Line Interface (CLI).
 
 - [Quick Start](#quick-start)
-- [Features](#features-)
+- [Features](#features)
   - [Create a new item: `new`](#create-a-new-item-new)
   - [Delete an item: `delete`](#delete-an-item-delete)
   - [Increase quantity: `add`](#increase-quantity-add)
@@ -28,11 +28,11 @@ optimized for use via a Command Line Interface (CLI).
 2. Download the latest `SuperTracker.jar` from [here](https://github.com/AY2324S2-CS2113-T13-4/tp/releases).
 3. Open a command terminal, cd into the folder you put the jar file in, and use the `java -jar SuperTracker.jar` command to run the application.
 4. Type the command in the command box and press Enter to execute it.
-5. Refer to the [Features](#features-) below for details of each command and its format.
+5. Refer to the [Features](#features) below for details of each command and its format.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Features 
+## Features
 
 > Notes about the command format:
 > - Words in uppercase are parameters to be specified by the user
