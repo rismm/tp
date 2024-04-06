@@ -12,6 +12,7 @@ public class Ui {
     private static final String QUANTITY_FLAG = "q";
     private static final String PRICE_FLAG = "p";
     private static final String EX_DATE_FLAG = "e";
+    private static final String EMPTY_STRING = "";
     private static final String EMPTY_LIST_MESSAGE = "Nothing to list! No items in inventory!";
     private static final String SINGLE_ITEM_LIST_MESSAGE= "There is 1 unique item in your inventory:";
     private static final String INVALID_COMMAND_MESSAGE = "Sorry! Invalid command!";
@@ -39,8 +40,11 @@ public class Ui {
         return item.getName() + " has been added to the inventory!";
     }
 
-    private static String expiryDateMessage(Item item) {
-        return "Expiry Date: " + item.getExpiryDateString();
+    private static String getExpiryDateMessage(Item item) {
+        if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
+            return "Expiry Date: " + item.getExpiryDateString();
+        }
+        return EMPTY_STRING;
     }
 
     private static String updateItemOpening(Item item) {
@@ -107,22 +111,14 @@ public class Ui {
         printIndent(getNewItemOpening(item));
         printIndent(getQuantityMessage(item));
         printIndent(getPriceMessage(item));
-        try {
-            if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
-                printIndent(expiryDateMessage(item));
-            }
-        } catch (NullPointerException e) {
-            assert (item.getExpiryDate().isEqual(null));
-        }
+        printIndent(getExpiryDateMessage(item));
     }
 
     public static void updateCommandSuccess(Item item) {
         printIndent(updateItemOpening(item));
         printIndent(getQuantityMessage(item));
         printIndent(getPriceMessage(item));
-        if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
-            printIndent(expiryDateMessage(item));
-        }
+        printIndent(getExpiryDateMessage(item));
     }
 
     public static void deleteCommandSuccess(String name) {
@@ -195,7 +191,7 @@ public class Ui {
         if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
             expiryString = "    Expiry Date: " + item.getExpiryDateString();
         } else {
-            expiryString = "";
+            expiryString = EMPTY_STRING;
         }
         String itemString = getItemString(firstParam, secondParam, thirdParam, nameString, quantityString, priceString, expiryString);
         printIndent(itemString);
