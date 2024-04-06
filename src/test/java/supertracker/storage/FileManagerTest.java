@@ -27,7 +27,10 @@ public class FileManagerTest {
             new NewCommand("orange", 10, 2.00, CURR_DATE),
             new NewCommand("6969", 50, 15.9, UNDEFINED_DATE),
             new NewCommand("a1@   lol  qwe^^%qw)e", 9431, 21.57, UNDEFINED_DATE),
-            new NewCommand("1_+$%$_)00", 9999999, 20.90, CURR_DATE)
+            new NewCommand("1_+$%$_)00", 9999999, 20.90, CURR_DATE),
+            new NewCommand("cheese,,,p/,,,,", 9, 7.00, UNDEFINED_DATE),
+            new NewCommand("cheese*&_yoyo*&_ ,,,q/-120,,", 9, 0, CURR_DATE),
+            new NewCommand("p ,,, l", 40, 0, UNDEFINED_DATE)
         };
 
         for (NewCommand newItem : newItems) {
@@ -45,7 +48,10 @@ public class FileManagerTest {
             new Item("orange", 10, 2.00, CURR_DATE),
             new Item("6969", 50, 15.9, UNDEFINED_DATE),
             new Item("a1@   lol  qwe^^%qw)e", 9431, 21.57, UNDEFINED_DATE),
-            new Item("1_+$%$_)00", 9999999, 20.90, CURR_DATE)
+            new Item("1_+$%$_)00", 9999999, 20.90, CURR_DATE),
+            new Item("cheese,,,p/,,,,", 9, 7.00, UNDEFINED_DATE),
+            new Item("cheese*&_yoyo*&_ ,,,q/-120,,", 9, 0, CURR_DATE),
+            new Item("p ,,, l", 40, 0, UNDEFINED_DATE)
         };
 
         for (Item item : items) {
