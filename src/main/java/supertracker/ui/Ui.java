@@ -86,6 +86,9 @@ public class Ui {
     }
 
     public static void printIndent(String string) {
+        if (string.isEmpty()) {
+            return;
+        }
         System.out.println("     " + string);
     }
 
