@@ -256,7 +256,7 @@ Example: `report r/expiry`
 ```
 There are 2 items close to expiry!
 1. Name: Orange
-   Expiry Date: 08/04/2024 
+   Expiry Date: 08/04/2024
 2. Name: Apple
    Expiry Date: 09/04/2024
 ```
