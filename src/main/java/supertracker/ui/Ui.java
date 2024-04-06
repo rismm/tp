@@ -193,11 +193,18 @@ public class Ui {
         } else {
             expiryString = EMPTY_STRING;
         }
-        String itemString = getItemString(firstParam, secondParam, thirdParam, nameString, quantityString, priceString, expiryString);
+        String itemString = getItemString(firstParam, secondParam, thirdParam,
+                nameString, quantityString, priceString, expiryString);
         printIndent(itemString);
     }
 
-    private static String buildItemString(String param, String itemString, String quantityString, String priceString, String expiryString) {
+    private static String buildItemString(
+        String param,
+        String itemString,
+        String quantityString,
+        String priceString,
+        String expiryString
+    ) {
         switch (param) {
         case QUANTITY_FLAG:
             itemString += quantityString;
@@ -215,7 +222,15 @@ public class Ui {
         return itemString;
     }
 
-    private static String getItemString(String firstParam, String secondParam, String thirdParam, String nameString, String quantityString, String priceString, String expiryString) {
+    private static String getItemString(
+        String firstParam,
+        String secondParam,
+        String thirdParam,
+        String nameString,
+        String quantityString,
+        String priceString,
+        String expiryString
+    ) {
         String itemString = nameString;
         itemString = buildItemString(firstParam, itemString, quantityString, priceString, expiryString);
         itemString = buildItemString(secondParam, itemString, quantityString, priceString, expiryString);

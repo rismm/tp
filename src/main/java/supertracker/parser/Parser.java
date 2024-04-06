@@ -454,17 +454,20 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
+        ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
+                QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
         String secondParam = extractParam(input, paramOrder, 1, false);
         String thirdParam = extractParam(input, paramOrder, 2, false);
 
-        ArrayList<Integer> sortParamOrder = getParamPositions(input, hasSortQuantity, hasSortPrice, hasSortExpiry, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, SORT_EX_DATE_FLAG);
+        ArrayList<Integer> sortParamOrder = getParamPositions(input, hasSortQuantity, hasSortPrice, hasSortExpiry,
+                SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, SORT_EX_DATE_FLAG);
         String firstSortParam = extractParam(input, sortParamOrder, 0, true);
         String secondSortParam = extractParam(input, sortParamOrder, 1, true);
         String thirdSortParam = extractParam(input, sortParamOrder, 2, true);
 
-        return new ListCommand(firstParam, secondParam, thirdParam, firstSortParam, secondSortParam, thirdSortParam, isReverse);
+        return new ListCommand(firstParam, secondParam, thirdParam,
+                firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
 
     //@@vimalapugazhan

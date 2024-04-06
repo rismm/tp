@@ -21,8 +21,15 @@ public class ListCommand implements Command {
     private String thirdSortParam;
     private boolean isReverse;
 
-    public ListCommand(String firstParam, String secondParam, String thirdParam, String firstSortParam, String secondSortParam, String thirdSortParam, boolean isReverse) {
-
+    public ListCommand(
+        String firstParam,
+        String secondParam,
+        String thirdParam,
+        String firstSortParam,
+        String secondSortParam,
+        String thirdSortParam,
+        boolean isReverse
+    ) {
         this.firstParam = firstParam;
         this.secondParam = secondParam;
         this.thirdParam = thirdParam;
