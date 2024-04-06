@@ -19,7 +19,7 @@ public class FileManager {
     protected static final String DATA_PATH = "./data/";
     protected static final String FILE_NAME = "items.txt";
     protected static final String SAVE_FILE_PATH = DATA_PATH + FILE_NAME;
-    protected static final String SEPARATOR = ",,,";
+    protected static final String SEPARATOR = " ,,, ";
     protected static final String PLACEHOLDER = "*&_";
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     protected static final String NO_DATE = "no date";
@@ -101,7 +101,7 @@ public class FileManager {
 
     private static String getItemData(Item item) {
         String name = item.getName();
-        String excess = "";
+        String excess = "w";
         if (name.contains(SEPARATOR)) {
             excess = "e";
             name = name.replace(SEPARATOR, PLACEHOLDER);
