@@ -238,7 +238,7 @@ All items below the threshold value would be listed out.
 > Note: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
 threshold value must be **excluded**.
 
-Example: `report r/low stock`
+Example: `report r/low stock t/31`
 ```
 There are 3 items low on stocks!
 1. Name: Orange
