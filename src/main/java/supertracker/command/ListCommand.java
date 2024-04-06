@@ -4,9 +4,6 @@ import supertracker.ui.Ui;
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,26 +12,30 @@ public class ListCommand implements Command {
     private static final String QUANTITY_FLAG = "q";
     private static final String PRICE_FLAG = "p";
     private static final String EX_DATE_FLAG = "e";
-    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
-    private boolean hasQuantity;
-    private boolean hasPrice;
-    private boolean hasExpiry;
+    private static final String ALPHABET = "";
     private String firstParam;
     private String secondParam;
-    private String sortBy;
+    private String thirdParam;
+    private String firstSortParam;
+    private String secondSortParam;
+    private String thirdSortParam;
     private boolean isReverse;
 
-
-    public ListCommand(boolean hasQuantity, boolean hasPrice, boolean hasExpiry,
-            String firstParam, String secondParam, String sortBy, boolean isReverse) {
-
-        this.hasQuantity = hasQuantity;
-        this.hasPrice = hasPrice;
-        this.hasExpiry = hasExpiry;
+    public ListCommand(
+        String firstParam,
+        String secondParam,
+        String thirdParam,
+        String firstSortParam,
+        String secondSortParam,
+        String thirdSortParam,
+        boolean isReverse
+    ) {
         this.firstParam = firstParam;
         this.secondParam = secondParam;
-        this.sortBy = sortBy;
+        this.thirdParam = thirdParam;
+        this.firstSortParam = firstSortParam;
+        this.secondSortParam = secondSortParam;
+        this.thirdSortParam = thirdSortParam;
         this.isReverse = isReverse;
     }
 
@@ -42,17 +43,34 @@ public class ListCommand implements Command {
     public void execute() {
         assert isValid(firstParam);
         assert isValid(secondParam);
-        assert isValid(sortBy);
+        assert isValid(thirdParam);
+        assert isValid(firstSortParam);
+        assert isValid(secondSortParam);
+        assert isValid(thirdSortParam);
 
-        int index = 1;
         List<Item> items = Inventory.getItems();
         Ui.listIntro(items.size());
 
-        List<Item> itemsWithoutExpiry = new ArrayList<Item>();
+        sortBy(ALPHABET, items);
+        sortBy(thirdSortParam, items);
+        sortBy(secondSortParam, items);
+        sortBy(firstSortParam, items);
 
+        if (isReverse) {
+            Collections.reverse(items);
+        }
+
+        int index = 1;
+        for (Item item : items) {
+            Ui.listItem(item, index, firstParam, secondParam, thirdParam);
+            index++;
+        }
+    }
+
+    private void sortBy(String sortParam, List<Item> items) {
         Comparator<Item> comparator;
 
-        switch (sortBy) {
+        switch (sortParam) {
         case QUANTITY_FLAG:
             comparator = Item.sortByQuantity();
             break;
@@ -60,8 +78,6 @@ public class ListCommand implements Command {
             comparator = Item.sortByPrice();
             break;
         case EX_DATE_FLAG:
-            moveItemsWithoutExpiry(items, itemsWithoutExpiry);
-            itemsWithoutExpiry.sort(Item.sortByName());
             comparator = Item.sortByExpiry();
             break;
         default:
@@ -70,29 +86,6 @@ public class ListCommand implements Command {
         }
 
         items.sort(comparator);
-
-        if (isReverse) {
-            Collections.reverse(items);
-        }
-
-        if (sortBy.equals(EX_DATE_FLAG)) {
-            items.addAll(itemsWithoutExpiry);
-        }
-
-        for (Item item : items) {
-            Ui.listItem(item, index, hasQuantity, hasPrice, hasExpiry, firstParam, secondParam);
-            index++;
-        }
-    }
-
-    private void moveItemsWithoutExpiry(List<Item> items, List<Item> itemsWithoutExpiry) {
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getExpiryDate().isEqual(UNDEFINED_DATE)) {
-                Item item = items.remove(i);
-                itemsWithoutExpiry.add(item);
-                i--;
-            }
-        }
     }
 
     @Override

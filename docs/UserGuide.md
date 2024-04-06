@@ -146,11 +146,11 @@ Example: `find n/Cheese`
 ```
 Here are your found items:
 1. Name: Cheese cake
-    Quantity: 100
-    Price: $1.00
+   Quantity: 100
+   Price: $1.00
 2. Name: Cheese
-    Quantity: 100
-    Price: $1.00
+   Quantity: 100
+   Price: $1.00
 ```
 <br>
 
