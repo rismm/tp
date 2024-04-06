@@ -303,14 +303,14 @@ with the file that contains the data of your previous SuperTracker inventory
 
 ## Command Summary
 
-Action | Format                                                             | Examples
---------|--------------------------------------------------------------------|---------------
-**New** | `new n/NAME q/QUANTITY p/PRICE e/EXPIRY_DATE`                      | e.g. `new n/Milk q/100 p/5 e/05-12-2113`
-**Delete**| `delete n/NAME`                                                    | e.g. `delete n/Milk`
-**Add**| `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`
-**Remove**| `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`
-**Update**| `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113`
-**Find**| `find n/NAME`                                                      | e.g. `find n/apple`
-**List**| `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`
-**Report**| `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`
-**Quit**| `quit`                                                             | e.g. `quit`
+| Action     | Format                                                             | Examples                                     |
+|------------|--------------------------------------------------------------------|----------------------------------------------|
+| **New**    | `new n/NAME q/QUANTITY p/PRICE e/EXPIRY_DATE`                      | e.g. `new n/Milk q/100 p/5 e/05-12-2113`     |
+| **Delete** | `delete n/NAME`                                                    | e.g. `delete n/Milk`                         |
+| **Add**    | `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`                       |
+| **Remove** | `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`                    |
+| **Update** | `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113` |
+| **Find**   | `find n/NAME`                                                      | e.g. `find n/apple`                          |
+| **List**   | `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`                     |
+| **Report** | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
+| **Quit**   | `quit`                                                             | e.g. `quit`                                  |
