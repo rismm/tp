@@ -155,7 +155,7 @@ Here are your found items:
 <br>
 
 ### Update an item: `update`
-Update the quantity and/or price of an item
+Update the quantity ,price and/or expiry of an item
 
 Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
 - `NAME` is case-insensitive
@@ -238,7 +238,7 @@ All items below the threshold value would be listed out.
 > Note: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
 threshold value must be **excluded**.
 
-Example: `report r/low stock`
+Example: `report r/low stock t/35`
 ```
 There are 3 items low on stocks!
 1. Name: Orange
@@ -249,12 +249,14 @@ There are 3 items low on stocks!
    Quantity: 30
 ```
 Example: `report r/expiry`
+
+[//]: # (updates dates to be valid for PE day)
 ```
 There are 2 items close to expiry!
 1. Name: Orange
-   Expiry Date: 08/04/2024
+   Expiry Date: 08/04/2024 
 2. Name: Apple
-   Expiry Date: 09/05/2024
+   Expiry Date: 09/04/2024
 ```
 
 <br>
