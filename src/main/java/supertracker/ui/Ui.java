@@ -231,12 +231,12 @@ public class Ui {
     public static void printFoundItem(Item item, int index) {
         String stringToPrint = index + ". Name: " + item.getName();
         printIndent(stringToPrint);
-        String quantityString = "    Quantity: " + item.getQuantity();
+        String quantityString = "   Quantity: " + item.getQuantity();
         printIndent(quantityString);
-        String priceString = "    Price: " + item.getPriceString();
+        String priceString = "   Price: " + item.getPriceString();
         printIndent(priceString);
         if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
-            printIndent("    Expiry Date: " + item.getExpiryDateString());
+            printIndent("   Expiry Date: " + item.getExpiryDateString());
         }
     }
 
