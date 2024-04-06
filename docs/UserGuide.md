@@ -297,7 +297,12 @@ if they would like to do so.
 **Q**: How do I transfer my data to another computer? 
 
 **A**: Install the app in the other computer and overwrite the empty data file it creates 
-with the file that contains the data of your previous SuperTracker inventory
+with the file that contains the data of your previous SuperTracker inventory.
+
+**Q**: What if I want multiple items with the same name?
+
+**A**: Simply add a unique identifier after the item name when creating a new item. 
+e.g. `n/Milk-1`,`n/Milk-2`. The format of the unique identifier is completely up to the user's discretion.
 
 --------------------------------------------------------------------------------------------------------------------
 
