@@ -13,6 +13,7 @@ import supertracker.command.RemoveCommand;
 import supertracker.command.ReportCommand;
 import supertracker.command.UpdateCommand;
 import supertracker.item.Inventory;
+import supertracker.item.Item;
 import supertracker.ui.ErrorMessage;
 
 import java.time.format.DateTimeFormatter;
@@ -386,6 +387,15 @@ public class Parser {
         }
     }
 
+    private static void validateNoIntegerOverflow(String name, int quantityToAdd) throws TrackerException {
+        Item item = Inventory.get(name);
+        int currentQuantity = item.getQuantity();
+        int maximumPossibleAddQuantity = Integer.MAX_VALUE - currentQuantity;
+        if (quantityToAdd > maximumPossibleAddQuantity) {
+            throw new TrackerException(ErrorMessage.INTEGER_OVERFLOW);
+        }
+    }
+
     private static Command parseNewCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
         Matcher matcher = getPatternMatcher(NEW_COMMAND_REGEX, input, flags);
@@ -512,6 +522,7 @@ public class Parser {
 
         int quantity = parseQuantity(quantityString);
         validateNonNegativeQuantity(quantityString, quantity);
+        validateNoIntegerOverflow(name, quantity);
 
         return new AddCommand(name,quantity);
     }

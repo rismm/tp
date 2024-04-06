@@ -19,20 +19,24 @@ public class RemoveCommandTest {
     @BeforeEach
     public void setUp() {
         Inventory.clear();
+
+        String name = "Milk";
+        int quantity = 100;
+        double price = 5.00;
+        LocalDate date = LocalDate.parse("22-08-2013", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        Command newCommand = new NewCommand(name, quantity, price, date);
+        newCommand.execute();
     }
 
     @Test
     public void removeCommand_validData_correctlyConstructed(){
         String name = "Milk";
         int quantity = 100;
-        double price = 5.00;
 
         int quantityToRemove = 50;
         int newQuantity = quantity - quantityToRemove;
 
-        LocalDate date = LocalDate.parse("22-08-2013", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        Command newCommand = new NewCommand(name, quantity, price, date);
-        newCommand.execute();
         Command removeCommand = new RemoveCommand(name, quantityToRemove);
         removeCommand.execute();
 
@@ -57,28 +61,23 @@ public class RemoveCommandTest {
 
     @Test
     public void removeCommand_itemNotInList() {
-        String userInput = "remove n/Milk q/50";
+        String userInput = "remove n/Cake /50";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
     @Test
     public void removeCommand_quantityLessThanZero() {
-        String userInput = "new n/Milk q/-50";
+        String userInput = "remove n/Milk q/-50";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
     @Test
     public void removeCommand_exceedCurrentQuantity() {
         String name = "Milk";
-        int quantity = 50;
-        double price = 5.00;
 
         int quantityToRemove = 100;
         int newQuantity = 0;
-        LocalDate date = LocalDate.parse("22/08/2033", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        Command newCommand = new NewCommand(name, quantity, price, date);
-        newCommand.execute();
         Command removeCommand = new RemoveCommand(name, quantityToRemove);
         removeCommand.execute();
 
