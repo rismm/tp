@@ -19,20 +19,24 @@ public class AddCommandTest {
     @BeforeEach
     public void setUp() {
         Inventory.clear();
+
+        String name = "Milk";
+        int quantity = 100;
+        double price = 5.00;
+        LocalDate date = LocalDate.parse("01-01-2113", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        Command newCommand = new NewCommand(name, quantity, price, date);
+        newCommand.execute();
     }
 
     @Test
     public void addCommand_validData_correctlyConstructed(){
         String name = "Milk";
         int quantity = 100;
-        double price = 5.00;
-        LocalDate date = LocalDate.parse("01-01-2113", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         int quantityToAdd = 50;
         int newQuantity = quantity + quantityToAdd;
 
-        Command newCommand = new NewCommand(name, quantity, price, date);
-        newCommand.execute();
         Command addCommand = new AddCommand(name, quantityToAdd);
         addCommand.execute();
 
@@ -57,13 +61,19 @@ public class AddCommandTest {
 
     @Test
     public void addCommand_itemNotInList() {
-        String userInput = "add n/Milk q/100";
+        String userInput = "add n/Cake q/100";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
     @Test
-    public void newCommand_quantityLessThanZero() {
-        String userInput = "new n/Milk q/-100";
+    public void addCommand_quantityLessThanZero() {
+        String userInput = "add n/Milk q/-100";
+        assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
+    }
+
+    @Test
+    public void addCommand_integerOverflow() {
+        String userInput = "add n/Milk q/2147483647";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 }
