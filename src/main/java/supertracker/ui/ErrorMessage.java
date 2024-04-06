@@ -35,4 +35,6 @@ public class ErrorMessage {
     public static final String FILE_LOAD_ERROR = "Oops! Unable to load your previous data due to an I/O error!";
     public static final String FILE_CORRUPTED_ERROR =
             "Oops! Unable to load some of your previous data as the data in the save file has been corrupted!";
+    public static final String INTEGER_OVERFLOW = "Unable to add your specified number of items. " +
+            "Why do you need more than 2147483647 items anyway?";
 }
