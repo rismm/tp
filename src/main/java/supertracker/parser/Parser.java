@@ -251,17 +251,28 @@ public class Parser {
         }
     }
 
+    //@@vimalapugazhan
+    private static void validateDate(LocalDate expiryDate, String dateString) throws TrackerException {
+        if (!expiryDate.format(DateTimeFormatter.ofPattern(EX_DATE_FORMAT)).equals(dateString)) {
+            throw new TrackerException(ErrorMessage.INVALID_DATE);
+        }
+    }
+
+    //@@vimalapugazhan
     private static LocalDate parseExpiryDate(String dateString) throws TrackerException {
         LocalDate expiryDate = UNDEFINED_DATE;
         try {
             if (!dateString.isEmpty()) {
                 expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+                validateDate(expiryDate, dateString);
             }
             return expiryDate;
         } catch (DateTimeParseException e) {
             throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
         }
     }
+
+    //@@vimalapugazhan
     private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
         LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
 
@@ -271,6 +282,7 @@ public class Parser {
                     expiryDate = UNDEFINED_DATE;
                 } else {
                     expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+                    validateDate(expiryDate, dateString);
                 }
             }
         } catch (NumberFormatException e) {
@@ -440,6 +452,7 @@ public class Parser {
             SORT_EX_DATE_FLAG,
             REVERSE_FLAG
         };
+
         Matcher matcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
@@ -454,6 +467,7 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
+        //@@vimalapugazhan
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
