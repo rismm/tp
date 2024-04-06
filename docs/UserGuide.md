@@ -155,7 +155,7 @@ Here are your found items:
 <br>
 
 ### Update an item: `update`
-Update the quantity ,price and/or expiry of an item
+Update the quantity, price and/or expiry date of an item
 
 Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
 - `NAME` is case-insensitive
