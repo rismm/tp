@@ -278,7 +278,7 @@ the `SuperTracker.jar` file is in. Data will be saved automatically after any co
 
 ### Loading inventory data
 Data that has been saved to the hard disk will be loaded and read by the program each time it is launched. 
-If there is no data file, the program will the loading process.
+If there is no data file, the program will the skip loading process.
 
 <br>
 
