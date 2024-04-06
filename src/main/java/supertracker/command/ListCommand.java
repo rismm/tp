@@ -4,10 +4,6 @@ import supertracker.ui.Ui;
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -17,27 +13,19 @@ public class ListCommand implements Command {
     private static final String PRICE_FLAG = "p";
     private static final String EX_DATE_FLAG = "e";
     private static final String ALPHABET = "";
-    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
-    private boolean hasQuantity;
-    private boolean hasPrice;
-    private boolean hasExpiry;
     private String firstParam;
     private String secondParam;
+    private String thirdParam;
     private String firstSortParam;
     private String secondSortParam;
     private String thirdSortParam;
     private boolean isReverse;
 
+    public ListCommand(String firstParam, String secondParam, String thirdParam, String firstSortParam, String secondSortParam, String thirdSortParam, boolean isReverse) {
 
-    public ListCommand(boolean hasQuantity, boolean hasPrice, boolean hasExpiry,
-            String firstParam, String secondParam, String firstSortParam, String secondSortParam, String thirdSortParam, boolean isReverse) {
-
-        this.hasQuantity = hasQuantity;
-        this.hasPrice = hasPrice;
-        this.hasExpiry = hasExpiry;
         this.firstParam = firstParam;
         this.secondParam = secondParam;
+        this.thirdParam = thirdParam;
         this.firstSortParam = firstSortParam;
         this.secondSortParam = secondSortParam;
         this.thirdSortParam = thirdSortParam;
@@ -48,11 +36,11 @@ public class ListCommand implements Command {
     public void execute() {
         assert isValid(firstParam);
         assert isValid(secondParam);
+        assert isValid(thirdParam);
         assert isValid(firstSortParam);
         assert isValid(secondSortParam);
         assert isValid(thirdSortParam);
 
-        int index = 1;
         List<Item> items = Inventory.getItems();
         Ui.listIntro(items.size());
 
@@ -65,8 +53,9 @@ public class ListCommand implements Command {
             Collections.reverse(items);
         }
 
+        int index = 1;
         for (Item item : items) {
-            Ui.listItem(item, index, hasQuantity, hasPrice, hasExpiry, firstParam, secondParam);
+            Ui.listItem(item, index, firstParam, secondParam, thirdParam);
             index++;
         }
     }

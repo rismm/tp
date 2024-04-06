@@ -2,9 +2,11 @@ package supertracker.item;
 
 import java.time.LocalDate;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 public class Item {
+    private static final DateTimeFormatter DATE_FORMAT_PRINT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private String name;
     private int quantity;
     private double price;
@@ -35,6 +37,10 @@ public class Item {
 
     public String getPriceString() {
         return "$" + String.format("%.2f", price);
+    }
+
+    public String getExpiryDateString() {
+        return expiryDate.format(DATE_FORMAT_PRINT);
     }
 
     public static Comparator<Item> sortByName() {

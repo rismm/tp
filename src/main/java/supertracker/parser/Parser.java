@@ -331,41 +331,21 @@ public class Parser {
         }
 
         Collections.sort(paramPositions);
+        assert paramPositions.size() <= 3;
 
         return paramPositions;
     }
 
-    private static String getSortBy(String input, boolean hasSortQuantity, boolean hasSortPrice,
-            boolean hasSortExpiry) {
-        String sortBy;
-        int sortQuantityPosition;
-        int sortPricePosition;
-        int sortExpiryPosition;
-        ArrayList<Integer> sortParamPos = new ArrayList<>();
-
-        if (hasSortQuantity) {
-            sortQuantityPosition = input.indexOf(SORT_QUANTITY_FLAG + BASE_FLAG);
-            sortParamPos.add(sortQuantityPosition);
+    private static String extractParam(String input, ArrayList<Integer> paramOrder, int index, boolean isSort) {
+        try {
+            int paramPos = paramOrder.get(index);
+            if (isSort) {
+                return input.substring(paramPos + 1, paramPos + 2);
+            }
+            return input.substring(paramPos, paramPos + 1);
+        } catch (IndexOutOfBoundsException | NullPointerException ignored) {
+            return "";
         }
-        if (hasSortPrice) {
-            sortPricePosition = input.indexOf(SORT_PRICE_FLAG + BASE_FLAG);
-            sortParamPos.add(sortPricePosition);
-        }
-        if (hasSortExpiry) {
-            sortExpiryPosition = input.indexOf(SORT_EX_DATE_FLAG + BASE_FLAG);
-            sortParamPos.add(sortExpiryPosition);
-        }
-
-        Collections.sort(sortParamPos);
-        int sortByPos;
-
-        if (hasSortExpiry || hasSortPrice || hasSortQuantity) {
-            sortByPos = sortParamPos.get(0);
-            sortBy = input.substring(sortByPos + 1, sortByPos + 2);
-        } else {
-            sortBy = "";
-        }
-        return sortBy;
     }
 
     private static void validateNonEmptyParamsReport(String reportType, String thresholdString)
@@ -440,7 +420,6 @@ public class Parser {
         validateNonEmptyParamsUpdate(name, quantityString, priceString, dateString);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_UPDATE);
 
-
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
         LocalDate expiryDate = parseExpiryDateUpdate(dateString);
@@ -452,8 +431,15 @@ public class Parser {
     }
 
     private static Command parseListCommand(String input) throws TrackerException {
-        String[] flags = {QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG,
-            SORT_EX_DATE_FLAG, REVERSE_FLAG};
+        String[] flags = {
+            QUANTITY_FLAG,
+            PRICE_FLAG,
+            EX_DATE_FLAG,
+            SORT_QUANTITY_FLAG,
+            SORT_PRICE_FLAG,
+            SORT_EX_DATE_FLAG,
+            REVERSE_FLAG
+        };
         Matcher matcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
@@ -469,38 +455,16 @@ public class Parser {
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
-        String firstParam = "";
-        String secondParam = "";
-
-        try {
-            int firstParamPos = paramOrder.get(0);
-            int secondParamPos = paramOrder.get(1);
-            firstParam = input.substring(firstParamPos, firstParamPos + 1);
-            secondParam = input.substring(secondParamPos, secondParamPos + 1);
-        } catch (NullPointerException | IndexOutOfBoundsException ignored) {
-            assert (paramOrder.size() < 2);
-        }
+        String firstParam = extractParam(input, paramOrder, 0, false);
+        String secondParam = extractParam(input, paramOrder, 1, false);
+        String thirdParam = extractParam(input, paramOrder, 2, false);
 
         ArrayList<Integer> sortParamOrder = getParamPositions(input, hasSortQuantity, hasSortPrice, hasSortExpiry, SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, SORT_EX_DATE_FLAG);
-        String firstSortParam = "";
-        String secondSortParam = "";
-        String thirdSortParam = "";
-        try {
-            int firstSortParamPos = sortParamOrder.get(0);
-            firstSortParam = input.substring(firstSortParamPos + 1, firstSortParamPos + 2);
-            int secondSortParamPos = sortParamOrder.get(1);
-            secondSortParam = input.substring(secondSortParamPos + 1, secondSortParamPos + 2);
-            int thirdSortParamPos = sortParamOrder.get(2);
-            thirdSortParam = input.substring(thirdSortParamPos + 1, thirdSortParamPos + 2);
-        } catch (NullPointerException | IndexOutOfBoundsException ignored) {
-            assert (sortParamOrder.size() < 3);
-        }
+        String firstSortParam = extractParam(input, sortParamOrder, 0, true);
+        String secondSortParam = extractParam(input, sortParamOrder, 1, true);
+        String thirdSortParam = extractParam(input, sortParamOrder, 2, true);
 
-        // sort by whichever sorting method comes first
-        // if sorting method is unspecified then sort by alphabet
-        // String sortBy = getSortBy(input, hasSortQuantity, hasSortPrice, hasSortExpiry);
-
-        return new ListCommand(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam, firstSortParam, secondSortParam, thirdSortParam, isReverse);
+        return new ListCommand(firstParam, secondParam, thirdParam, firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
 
     //@@vimalapugazhan

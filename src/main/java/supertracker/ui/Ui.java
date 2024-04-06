@@ -20,7 +20,6 @@ public class Ui {
     private static final String BASIC_ERROR_MESSAGE = "Oh no! An error has occurred in your input";
     private static final String FIND_OPENING_MESSAGE = "Here are your found items:";
     private static final String REPORT_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
-    private static final DateTimeFormatter DATE_FORMAT_PRINT  = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
@@ -41,7 +40,7 @@ public class Ui {
     }
 
     private static String expiryDateMessage(Item item) {
-        return "Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT);
+        return "Expiry Date: " + item.getExpiryDateString();
     }
 
     private static String updateItemOpening(Item item) {
@@ -79,7 +78,7 @@ public class Ui {
     }
 
     private static String reportExpiryDateMessage(Item reportItem) {
-        return "   Expiry Date: " + reportItem.getExpiryDate().format(DATE_FORMAT_PRINT);
+        return "   Expiry Date: " + reportItem.getExpiryDateString();
     }
 
     public static void printIndent(String string) {
@@ -188,84 +187,44 @@ public class Ui {
         printIndent(FIND_OPENING_MESSAGE);
     }
 
-    public static void listItem(Item item, int index, boolean hasQuantity, boolean hasPrice,
-            boolean hasExpiry, String firstParam, String secondParam) {
-
-        String stringToPrint = index + ". Name: " + item.getName();
+    public static void listItem(Item item, int index, String firstParam, String secondParam, String thirdParam) {
+        String nameString = index + ". Name: " + item.getName();
         String quantityString = "    Quantity: " + item.getQuantity();
         String priceString = "    Price: " + item.getPriceString();
         String expiryString;
         if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
-            expiryString = "    Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT);
+            expiryString = "    Expiry Date: " + item.getExpiryDateString();
         } else {
             expiryString = "";
         }
-        stringToPrint = getStringToPrint(hasQuantity, hasPrice, hasExpiry, firstParam, secondParam,
-                stringToPrint, quantityString, priceString, expiryString);
-        printIndent(stringToPrint);
+        String itemString = getItemString(firstParam, secondParam, thirdParam, nameString, quantityString, priceString, expiryString);
+        printIndent(itemString);
     }
 
-    private static String getStringToPrint(boolean hasQuantity, boolean hasPrice, boolean hasExpiry, String firstParam,
-            String secondParam, String stringToPrint, String quantityString, String priceString, String expiryString) {
-
-        if (hasQuantity && hasPrice && hasExpiry) {
-            stringToPrint = getStringThreeInput (firstParam, secondParam, stringToPrint,
-                quantityString, priceString, expiryString);
-        } else if (hasQuantity && hasPrice) {
-            if (firstParam.equals(QUANTITY_FLAG)) {
-                stringToPrint += (quantityString + priceString);
-            } else {
-                stringToPrint += (priceString + quantityString);
-            }
-        } else if (hasQuantity && hasExpiry) {
-            if (firstParam.equals(QUANTITY_FLAG)) {
-                stringToPrint += (quantityString + expiryString);
-            } else {
-                stringToPrint += (expiryString + quantityString);
-            }
-        } else if (hasPrice && hasExpiry) {
-            if (firstParam.equals(PRICE_FLAG)) {
-                stringToPrint += (priceString + expiryString);
-            } else {
-                stringToPrint += (expiryString + priceString);
-            }
-        } else if (hasQuantity) {
-            stringToPrint += quantityString;
-        } else if (hasPrice) {
-            stringToPrint += priceString;
-        } else if (hasExpiry) {
-            stringToPrint += expiryString;
-        }
-        return stringToPrint;
-    }
-
-    private static String getStringThreeInput (String firstParam, String secondParam, String stringToPrint,
-        String quantityString, String priceString, String expiryString) {
-        switch (firstParam) {
+    private static String buildItemString(String param, String itemString, String quantityString, String priceString, String expiryString) {
+        switch (param) {
         case QUANTITY_FLAG:
-            if (secondParam.equals(PRICE_FLAG)) {
-                stringToPrint += (quantityString + priceString + expiryString);
-            } else {
-                stringToPrint += (quantityString + expiryString + priceString);
-            }
+            itemString += quantityString;
             break;
         case PRICE_FLAG:
-            if (secondParam.equals(QUANTITY_FLAG)) {
-                stringToPrint += (priceString + quantityString + expiryString);
-            } else {
-                stringToPrint += (priceString + expiryString + quantityString);
-            }
+            itemString += priceString;
             break;
         case EX_DATE_FLAG:
-            if (secondParam.equals(QUANTITY_FLAG)) {
-                stringToPrint += (expiryString + quantityString + priceString);
-            } else {
-                stringToPrint += (expiryString + priceString + quantityString);
-            }
+            itemString += expiryString;
             break;
-        default: return null;
+        default:
+            assert param.isEmpty();
+            break;
         }
-        return stringToPrint;
+        return itemString;
+    }
+
+    private static String getItemString(String firstParam, String secondParam, String thirdParam, String nameString, String quantityString, String priceString, String expiryString) {
+        String itemString = nameString;
+        itemString = buildItemString(firstParam, itemString, quantityString, priceString, expiryString);
+        itemString = buildItemString(secondParam, itemString, quantityString, priceString, expiryString);
+        itemString = buildItemString(thirdParam, itemString, quantityString, priceString, expiryString);
+        return itemString;
     }
 
     public static void printError(String errorMessage) {
@@ -281,7 +240,7 @@ public class Ui {
         String priceString = "    Price: " + item.getPriceString();
         printIndent(priceString);
         if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
-            printIndent("    Expiry Date: " + item.getExpiryDate().format(DATE_FORMAT_PRINT));
+            printIndent("    Expiry Date: " + item.getExpiryDateString());
         }
     }
 
