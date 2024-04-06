@@ -227,15 +227,32 @@ public class Parser {
         }
     }
 
+    private static void validateContainsOnlyDigits(String string) throws TrackerException {
+        String regex = "\\d+";
+        Pattern pattern = Pattern.compile(regex);
+        if (!pattern.matcher(string).matches()) {
+            throw new TrackerException(ErrorMessage.QUANTITY_NOT_INTEGER);
+        }
+    }
+
+    private static void validateNotTooLarge(String string) throws TrackerException {
+        String maxIntString = String.valueOf(Integer.MAX_VALUE);
+        if (string.length() > 10 || (string.length() == 10 && string.compareTo(maxIntString) > 0)) {
+            throw new TrackerException(ErrorMessage.QUANTITY_TOO_LARGE);
+        }
+    }
+
     private static int parseQuantity(String quantityString) throws TrackerException {
         int quantity = -1;
         try {
             if (!quantityString.isEmpty()) {
+                validateContainsOnlyDigits(quantityString);
+                validateNotTooLarge(quantityString);
                 quantity = Integer.parseInt(quantityString);
             }
             return quantity;
         } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+            throw new TrackerException(ErrorMessage.INVALID_QUANTITY_FORMAT);
         }
     }
 
@@ -245,9 +262,12 @@ public class Parser {
             if (!priceString.isEmpty()) {
                 price = roundTo2Dp(Double.parseDouble(priceString));
             }
+            if (price > Integer.MAX_VALUE) {
+                throw new TrackerException(ErrorMessage.PRICE_TOO_LARGE);
+            }
             return price;
         } catch (NumberFormatException e) {
-            throw new TrackerException(ErrorMessage.INVALID_NUMBER_FORMAT);
+            throw new TrackerException(ErrorMessage.INVALID_PRICE_FORMAT);
         }
     }
 

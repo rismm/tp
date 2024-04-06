@@ -57,9 +57,9 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` already exists in the inventory, use the [update](#update-an-item-update) command instead
-- `QUANTITY` must be a non-negative integer and less than 2147483648
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
-- `PRICE` must be a non-negative integer or decimal number and less than 2147483648
+- `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
@@ -104,7 +104,7 @@ Format: `add n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than 2147483648
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If the new quantity of the item exceeds 2147483647, an error would be thrown
 
@@ -123,7 +123,7 @@ Format: `remove n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than 2147483648
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
 
@@ -162,9 +162,9 @@ Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `NEW_QUANTITY` must be a non-negative integer and less than 2147483648
+- `NEW_QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
-- `NEW_PRICE` must be a non-negative integer or decimal number and less than 2147483648
+- `NEW_PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `NEW_PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
