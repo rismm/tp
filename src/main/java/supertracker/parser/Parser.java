@@ -319,14 +319,14 @@ public class Parser {
         }
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static void validateDate(LocalDate expiryDate, String dateString) throws TrackerException {
         if (!expiryDate.format(EX_DATE_FORMAT).equals(dateString)) {
             throw new TrackerException(ErrorMessage.INVALID_DATE);
         }
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static LocalDate parseDate(String dateString) throws TrackerException {
         LocalDate date = UNDEFINED_DATE;
         try {
@@ -340,7 +340,7 @@ public class Parser {
         }
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
         LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
 
@@ -542,7 +542,7 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        //@@vimalapugazhan
+        //@@author vimalapugazhan
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
@@ -559,7 +559,7 @@ public class Parser {
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static Command parseDeleteCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG};
         Matcher matcher = getPatternMatcher(DELETE_COMMAND_REGEX, input, flags);
@@ -733,7 +733,7 @@ public class Parser {
         return new ExpenditureCommand(type, from, to);
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd)
             throws TrackerException {
         switch (taskType) {
@@ -762,7 +762,7 @@ public class Parser {
         }
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static Command parseRevenueCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
         Matcher matcher = getPatternMatcher(REV_COMMAND_REGEX, input, flags);

@@ -223,7 +223,7 @@ public class Ui {
         }
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     public static void printRevenueExpenditure(String task, double amount, LocalDate startDate, LocalDate endDate,
                                                String financeType, ArrayList<Transaction> filteredList) {
         amount = roundTo2Dp(amount);

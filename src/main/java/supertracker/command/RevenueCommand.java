@@ -17,14 +17,14 @@ public class RevenueCommand implements Command {
     private double revenue;
 
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     public RevenueCommand (String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     @Override
     public void execute() {
         ArrayList<Transaction> filteredList = new ArrayList<>();
