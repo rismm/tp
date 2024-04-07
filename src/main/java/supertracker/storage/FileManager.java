@@ -19,6 +19,7 @@ public class FileManager {
     protected static final String DATA_PATH = "./data/";
     protected static final String FILE_NAME = "items.txt";
     protected static final String SAVE_FILE_PATH = DATA_PATH + FILE_NAME;
+    // Do note that the separator should also follow the file delimiter constant in the Parser class accordingly
     protected static final String SEPARATOR = " ,,, ";
     protected static final String PLACEHOLDER = "*&_";
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -95,15 +96,18 @@ public class FileManager {
         }
         if (corruptedData != 0) {
             Ui.printError(ErrorMessage.FILE_CORRUPTED_ERROR);
+            saveData();
         }
         fileScanner.close();
     }
 
     private static String getItemData(Item item) {
         String name = item.getName();
-        String excess = "w";
+        String excess = "end";
+        // The item name should not contain the separator, but we perform another check
+        // as an additional means of security.
         if (name.contains(SEPARATOR)) {
-            excess = "e";
+            excess = "bad end";
             name = name.replace(SEPARATOR, PLACEHOLDER);
         }
 
@@ -116,7 +120,8 @@ public class FileManager {
             date = exDate.format(DATE_FORMAT);
         }
 
-        return name + SEPARATOR + quantity + SEPARATOR + price + SEPARATOR + date + SEPARATOR + excess + "\n";
+        return name + SEPARATOR + quantity + SEPARATOR + price + SEPARATOR
+                + date + SEPARATOR + excess + System.lineSeparator();
     }
 
     private static Item parseItemData(String itemData) throws Exception {
@@ -128,7 +133,7 @@ public class FileManager {
         assert data.length == MAX_NUMBER_OF_PARAMS;
 
         String name = data[NAME_INDEX].trim();
-        if (data[EXTRA_INDEX].equals("e")) {
+        if (data[EXTRA_INDEX].equals("bad end")) {
             name = name.replace(PLACEHOLDER, SEPARATOR);
         }
 
