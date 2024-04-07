@@ -23,6 +23,8 @@ public class Ui {
     private static final String REPORT_LOW_STOCK_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
     private static final String REPORT_EXPIRY_NO_ITEMS_OPENING = "There are no items close to expiry!";
     private static final String REPORT_EXPIRED_NO_ITEMS_OPENING = "There are no items that are expired!";
+    private static final String REPORT_INVENTORY_NO_ITEMS = "There are no items in the inventory, " +
+            "please consider adding some in!";
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
@@ -147,6 +149,10 @@ public class Ui {
         assert quantityRemoved >= 0;
         printIndent(removeItemOpening(item, quantityRemoved));
         printIndent(getQuantityMessage(item));
+    }
+
+    public static void reportNoItems() {
+        printIndent(REPORT_INVENTORY_NO_ITEMS);
     }
 
     public static void reportCommandSuccess(List<Item> reportItems, String reportType) {

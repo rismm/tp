@@ -19,6 +19,14 @@ public class ReportCommand implements Command{
     @Override
     public void execute() {
         List<Item> items = Inventory.getItems();
+        if (items.isEmpty()) {
+            Ui.reportNoItems();
+        } else {
+            reportHasItemsExecute(items);
+        }
+    }
+
+    private void reportHasItemsExecute(List<Item> items) {
         LocalDate currDate = LocalDate.now();
         LocalDate expiryThresholdDate = currDate.plusWeeks(1);
         LocalDate dayBeforeCurrDay = currDate.minusDays(1);
