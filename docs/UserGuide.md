@@ -304,6 +304,40 @@ Today's expenditure is $94.5
 ```
 <br>
 
+### Print revenue `rev`
+There are 4 types of revenue:
+1. **today** - lists the revenue earned today
+2. **total** - lists the revenue earned in total
+3. **day** - lists the revenue that earned on the specified day
+4. **range** - lists the revenue earned in the specified range of dates
+   not inclusive of the start and end dates
+
+The cumulative revenue would be first printed to the terminal.
+Afterwords, each sell order will be printed to the terminal and will contain the name,
+quantity and price of each purchase.
+All orders would be listed according to alphabetical order.
+
+Format: `rev type/revenueType [from/startDate] [to/endDate]`
+
+> Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled.
+> If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
+> If the type is **range**, both startDate and endDate are compulsory.
+
+Example: `rev type/today`
+
+```
+Today's revenue is $39.8
+1. Name: apple
+  Quantity: 20
+  Price: 0.99
+  Transaction Date: 19/04/2024
+2. Name: ball
+  Quantity: 10
+  Price: 2.0
+  Transaction Date: 19/04/2024
+```
+<br>
+
 ### Quit the program: `quit`
 Quits the program
 
