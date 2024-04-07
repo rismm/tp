@@ -263,11 +263,55 @@ Example: `report r/expiry` or `report r/expiry t/`
 
 ```
 There is 1 item close to expiry!
- 1. Name: apple
+ 1. Name: Apple
     Expiry Date: 20/04/2024
  There is 1 item that is expired!
- 1. Name: orange
+ 1. Name: Orange
     Expiry Date: 29/03/2024
+```
+
+<br>
+
+### Buy items: `buy`
+Buy items from suppliers and add them to the inventory. 
+This buy transaction will create a new entry in the transaction list.
+
+Format: `buy n/NAME q/QUANTITY p/PRICE`
+- `NAME` is case-insensitive
+  - e.g. `Cheese` will be interpreted as `cheese`
+- If `NAME` does not exist in the inventory, an error would be thrown
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+  - e.g. 1, 10, 100
+- If the new quantity of the item exceeds 2147483647, an error would be thrown
+- `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
+  - e.g. 1, 0.20, 12.3, 12.345
+- If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
+  - e.g. 12.345 ≈ 12.35
+
+Example: `buy n/Milk q/10 p/3`
+```
+10 Milk bought at $3.00 each for $30.00 in total
+Quantity: 110
+```
+
+<br>
+
+### Sell items: `sell`
+Sell items to customers and remove them from the inventory.
+This sell transaction will create a new entry in the transaction list.
+
+Format: `sell n/NAME q/QUANTITY`
+- `NAME` is case-insensitive
+  - e.g. `Cheese` will be interpreted as `cheese`
+- If `NAME` does not exist in the inventory, an error would be thrown
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+  - e.g. 1, 10, 100
+- If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
+
+Example: `sell n/Milk q/10`
+```
+10 Milk sold at $5.00 each for $50.00 in total
+Quantity: 90
 ```
 
 <br>
@@ -382,6 +426,13 @@ What if I want different batches of the same item with different expiry dates?
 **A**: Simply add a unique identifier after the item name when creating a new item. 
 e.g. `n/Milk-1`,`n/Milk-2`. The format of the unique identifier is completely up to the user's discretion.
 
+**Q**: Why can't I add new items to the inventory using the buy command?
+
+**A**: The buy command should mainly be used when you want to replenish the stock of an existing item.
+If you wish to add a newly bought item to the inventory, 
+first create a new item in the inventory with its quantity set to 0 using the [new](#create-a-new-item-new) command,
+then use the buy command to increase its quantity.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command Summary
@@ -396,4 +447,6 @@ e.g. `n/Milk-1`,`n/Milk-2`. The format of the unique identifier is completely up
 | **Find**   | `find n/NAME`                                                      | e.g. `find n/apple`                          |
 | **List**   | `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`                     |
 | **Report** | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
+| **Buy**    | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |
+| **Sell**   | `sell n/NAME q/QUANTITY`                                           | e.g. `sell n/Milk q/10`                      |
 | **Quit**   | `quit`                                                             | e.g. `quit`                                  |
