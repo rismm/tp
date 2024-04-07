@@ -81,7 +81,7 @@ public class Ui {
     private static String reportExpiredHasItemsOpening(int quantity) {
         String isOrAre = quantity == 1 ? "is " : "are ";
         String itemOrItems = quantity == 1 ? " item " : "items ";
-        return "There " + isOrAre + quantity + itemOrItems +"that " + isOrAre + "expired!";
+        return "There " + isOrAre + quantity + itemOrItems +" that " + isOrAre + "expired!";
     }
 
     private static String reportNameMessage(Item reportItem, int count) {
