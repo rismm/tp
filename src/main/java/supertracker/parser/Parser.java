@@ -39,6 +39,7 @@ public class Parser {
     private static final String REPORT_COMMAND = "report";
     private static final String BUY_COMMAND = "buy";
     private static final String SELL_COMMAND = "sell";
+    private static final String EXPENDITURE_COMMAND = "expenditure";
     private static final double ROUNDING_FACTOR = 100.0;
     private static final String BASE_FLAG = "/";
     private static final String NAME_FLAG = "n";
@@ -64,6 +65,12 @@ public class Parser {
     private static final String REPORT_TYPE_GROUP = "reportType";
     private static final String THRESHOLD_FLAG = "t";
     private static final String THRESHOLD_GROUP = "threshold";
+    private static final String TYPE_FLAG = "type";
+    private static final String TYPE_GROUP = "type";
+    private static final String TO_FLAG = "to";
+    private static final String TO_GROUP = "to";
+    private static final String FROM_FLAG = "from";
+    private static final String FROM_GROUP = "from";
 
     //To be used in getPatternMatcher to split the input into its respective parameter groups
     private static final String NEW_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
@@ -95,6 +102,10 @@ public class Parser {
             + PRICE_FLAG + BASE_FLAG + "(?<" + PRICE_GROUP + ">.*) ";
     private static final String SELL_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) ";
+
+    private static final String EXPENDITURE_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
+            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
+            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
 
     /**
      * Returns the command word specified in the user input string
@@ -668,5 +679,22 @@ public class Parser {
         LocalDate currentDate = LocalDate.now();
 
         return new SellCommand(name, quantity, price, currentDate);
+    }
+
+    private static Command parseExpenditureCommand(String input) throws TrackerException {
+        String[] flags = {TYPE_FLAG, FROM_FLAG, TO_FLAG};
+        Matcher matcher = getPatternMatcher(EXPENDITURE_COMMAND_REGEX, input, flags);
+
+        if (!matcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_EXPENDITURE_FORMAT);
+        }
+
+        String type = matcher.group(TYPE_GROUP).trim();
+        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
+        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
+
+        validateNonEmptyParam(type);
+        LocalDate to = parseExpiryDate(toString);
+        LocalDate from = parseExpiryDate(fromString);
     }
 }

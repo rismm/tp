@@ -13,6 +13,8 @@ public class ErrorMessage {
     public static final String INVALID_SELL_FORMAT = "Invalid sell command format!";
     public static final String INVALID_REPORT_FORMAT = "Invalid report command format! Follow 'report r/{report type}" +
             " t/{threshold}";
+    public static final String INVALID_EXPENDITURE_FORMAT = "Invalid expenditure command format! Follow " +
+            "'expenditure t/{task type} to/{startDate} from/{endDate}";
     public static final String INVALID_REPORT_TYPE = "Please select a valid report type. Only 'low stock' and " +
             "'expiry' are available.";
     public static final String INVALID_EXPIRY_REPORT_FORMAT = "If report type is 'expiry' threshold should not be " +
