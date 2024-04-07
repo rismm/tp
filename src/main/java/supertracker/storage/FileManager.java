@@ -19,6 +19,7 @@ public class FileManager {
     protected static final String DATA_PATH = "./data/";
     protected static final String FILE_NAME = "items.txt";
     protected static final String SAVE_FILE_PATH = DATA_PATH + FILE_NAME;
+    // Do note that the separator should also follow the file delimiter constant in the Parser class accordingly
     protected static final String SEPARATOR = " ,,, ";
     protected static final String PLACEHOLDER = "*&_";
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -119,7 +120,8 @@ public class FileManager {
             date = exDate.format(DATE_FORMAT);
         }
 
-        return name + SEPARATOR + quantity + SEPARATOR + price + SEPARATOR + date + SEPARATOR + excess + "\n";
+        return name + SEPARATOR + quantity + SEPARATOR + price + SEPARATOR
+                + date + SEPARATOR + excess + System.lineSeparator();
     }
 
     private static Item parseItemData(String itemData) throws Exception {
