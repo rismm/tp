@@ -26,7 +26,12 @@ public class Ui {
     private static final String REPORT_INVENTORY_NO_ITEMS = "There are no items in the inventory, " +
             "please consider adding some in!";
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final DateTimeFormatter DATE_FORMAT_PRINT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final String TODAY = "today";
+    private static final String TOTAL = "total";
+    private static final String DAY = "day";
+    private static final String RANGE = "range";
 
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -212,6 +217,27 @@ public class Ui {
             printIndent(reportNameMessage(item, count));
             printIndent(reportQuantityMessage(item));
             count += 1;
+        }
+    }
+
+    //@@vimalapugazhan
+    public static void printRevenue(String task, double revenue, LocalDate startDate, LocalDate endDate) {
+        switch (task) {
+        case TODAY:
+            printIndent("Today's revenue is $" + revenue);
+            break;
+        case TOTAL:
+            printIndent("Total revenue is $" + revenue);
+            break;
+        case DAY:
+            printIndent("Revenue on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + revenue);
+            break;
+        case RANGE:
+            printIndent("Revenue between " + startDate.format(DATE_FORMAT_PRINT) + " and "
+                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + revenue);
+            break;
+        default: assert task.isEmpty();
+            break;
         }
     }
 
