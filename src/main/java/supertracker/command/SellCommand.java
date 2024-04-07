@@ -19,7 +19,7 @@ public class SellCommand extends RemoveCommand {
     @Override
     public void execute() {
         super.execute();
-        Transaction transaction = new Transaction(name, quantity, price, currentDate, SELL_FLAG, currentDate);
+        Transaction transaction = new Transaction(name, quantity, price, currentDate, SELL_FLAG);
         TransactionList.add(transaction);
     }
 }

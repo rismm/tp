@@ -19,7 +19,7 @@ public class BuyCommand extends AddCommand {
     @Override
     public void execute() {
         super.execute();
-        Transaction transaction = new Transaction(name, quantity, price, currentDate, BUY_FLAG, currentDate);
+        Transaction transaction = new Transaction(name, quantity, price, currentDate, BUY_FLAG);
         TransactionList.add(transaction);
     }
 }
