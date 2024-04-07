@@ -15,6 +15,8 @@ optimized for use via a Command Line Interface (CLI).
   - [Find an item: `find`](#find-an-item-find)
   - [List all items: `list`](#list-all-items-list)
   - [Print report: `report`](#print-report-report)
+  - [Buy items: `buy`](#buy-items-buy)
+  - [Sell items: `sell`](#sell-items-sell)
   - [Print expenditure: `exp`](#print-expenditure-exp)
   - [Print revenue: `rev`](#print-revenue-rev)
   - [Quit the program: `quit`](#quit-the-program-quit)
