@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 
+// @@ author dtaywd
 public class ExpenditureCommand implements Command {
     private static final String BUY_FLAG = "b";
     private LocalDate startDate;

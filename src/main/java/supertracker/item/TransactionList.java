@@ -56,6 +56,7 @@ public class TransactionList {
         return totalAmount;
     }
 
+    // @@ author dtaywd
     public static ArrayList<Transaction> getFilteredTransactionList(String type, LocalDate start, LocalDate end,
                                                                  String flag) {
         ArrayList<Transaction> filteredList= new ArrayList<>();
@@ -80,6 +81,7 @@ public class TransactionList {
         return filteredList;
     }
 
+    // @@ author dtaywd
     private static void getTotalTransactionList(String flag, ArrayList<Transaction> filteredList) {
         for (Transaction transaction : transactionList) {
             String transactionType = transaction.getType();
@@ -89,6 +91,7 @@ public class TransactionList {
         }
     }
 
+    // @@ author dtaywd
     private static void getDayTransactionList(LocalDate start, String flag, ArrayList<Transaction> filteredList) {
         for (Transaction transaction : transactionList) {
             LocalDate transactionDate = transaction.getTransactionDate();
@@ -99,6 +102,7 @@ public class TransactionList {
         }
     }
 
+    // @@ author dtaywd
     private static void getRangeTransactionList(LocalDate start, LocalDate end, String flag,
                                                 ArrayList<Transaction> filteredList) {
         for (Transaction transaction : transactionList) {

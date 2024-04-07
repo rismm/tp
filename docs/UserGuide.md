@@ -275,7 +275,8 @@ There are 4 types of expenditures:
 1. **today** - lists all expenditures that occurred today
 2. **total** - lists all expenditures in total
 3. **day** - lists all expenditures that occurred during the specified day
-4. **range** - lists all expenditures that occurred in the specified range of dates
+4. **range** - lists all expenditures that occurred in the specified range of dates 
+not inclusive of the start and end dates
 
 The cumulative expenditures would be first printed to the terminal. 
 Afterwords, the expenditures will be printed to the terminal and will contain the name, 
