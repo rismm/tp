@@ -1,7 +1,6 @@
 package supertracker.ui;
 
 import supertracker.item.Item;
-import supertracker.item.TransactionList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

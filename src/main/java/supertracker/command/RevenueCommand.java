@@ -7,12 +7,12 @@ import supertracker.ui.Ui;
 
 
 public class RevenueCommand implements Command {
+    private static final String SELL_FLAG = "s";
     private String task;
-
     private LocalDate startDate;
     private LocalDate endDate;
     private double revenue;
-    private static final String SELL_FLAG = "s";
+
 
     //@@vimalapugazhan
     public RevenueCommand (String task, LocalDate startDate, LocalDate endDate) {
