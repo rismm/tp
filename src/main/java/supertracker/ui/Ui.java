@@ -316,7 +316,8 @@ public class Ui {
         printIndent("It appears that the input item name, " + nameOutputString);
         printIndent("contains the program's file delimiter, " + delimiterOutputString);
         printIndent("Unfortunately due to system limitations, " + nameOutputString);
-        printIndent("will be renamed and saved as " + newNameOutputString + System.lineSeparator());
+        printIndent("will be renamed and saved as " + newNameOutputString);
+        printIndent("Please avoid using the file delimiter in your item names" + System.lineSeparator());
     }
 
     private static String padStringWithQuotes(String name, boolean hasComma) {

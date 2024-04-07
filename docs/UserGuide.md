@@ -57,6 +57,8 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` already exists in the inventory, use the [update](#update-an-item-update) command instead
+- If `NAME` contains the character sequence `" ,,, "`, it will be passed without the character sequence
+  - e.g. `"Ba ,,, ll"` will be passed as `"Ball"` instead
 - `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
@@ -291,7 +293,7 @@ Inventory data of the `SuperTracker` program is stored in a text file `items.txt
 the directory the `SuperTracker.jar` file is in. Users can edit and update the inventory data directly through the data file
 if they would like to do so.
 > Note: Edit the data file at your own caution. If the changes made to the data file are in an invalid format, the program
-> will ignore those changes on its next load. The changes will be erased on the next automatic save, so do keep a backup of the data 
+> will ignore those changes on its next load. The corrupted changes will be erased, so do keep a backup of the data 
 > file before editing.
 
 --------------------------------------------------------------------------------------------------------------------
