@@ -223,26 +223,26 @@ public class Ui {
         }
     }
 
-    //@@vimalapugazhan
     public static void printRevenueExpenditure(String task, double amount, LocalDate startDate, LocalDate endDate,
                                                String financeType, ArrayList<Transaction> filteredList) {
         amount = roundTo2Dp(amount);
+        String amountString = String.format("%.2f", amount);
         switch (task) {
         case TODAY:
-            printIndent("Today's " + financeType + " is $" + amount);
+            printIndent("Today's " + financeType + " is $" + amountString);
             printFilteredList(filteredList);
             break;
         case TOTAL:
-            printIndent("Total  " + financeType + "  is $" + amount);
+            printIndent("Total  " + financeType + "  is $" + amountString);
             printFilteredList(filteredList);
             break;
         case DAY:
-            printIndent(financeType + " on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+            printIndent(financeType + " on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + amountString);
             printFilteredList(filteredList);
             break;
         case RANGE:
             printIndent( financeType + " between " + startDate.format(DATE_FORMAT_PRINT) + " and "
-                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + amountString);
             printFilteredList(filteredList);
             break;
         default: assert task.isEmpty();
@@ -262,6 +262,7 @@ public class Ui {
             count += 1;
         }
     }
+    //@@author
 
     public static void listIntro(int size) {
         assert size >= 0;

@@ -18,7 +18,7 @@ public class TransactionList {
         transactionList.add(transaction);
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     public static double calculateRange(LocalDate start, LocalDate end, String flag) {
         double totalAmount = 0;
         for (Transaction transaction : transactionList) {
@@ -31,7 +31,6 @@ public class TransactionList {
         return totalAmount;
     }
 
-    //@@vimalapugazhan
     public static double calculateDay(LocalDate day, String flag) {
         double totalAmount = 0;
         for (Transaction transaction : transactionList) {
@@ -44,7 +43,6 @@ public class TransactionList {
         return totalAmount;
     }
 
-    //@@vimalapugazhan
     public static double calculateTotal(String flag) {
         double totalAmount = 0;
         for (Transaction transaction : transactionList) {
@@ -55,6 +53,7 @@ public class TransactionList {
         }
         return totalAmount;
     }
+    //@@author
 
     // @@ author dtaywd
     public static ArrayList<Transaction> getFilteredTransactionList(String type, LocalDate start, LocalDate end,
