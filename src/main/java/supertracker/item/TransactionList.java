@@ -18,13 +18,13 @@ public class TransactionList {
     //@@vimalapugazhan
     public static double calculateRangeRevenue(LocalDate start, LocalDate end) {
         double revenue = 0;
-        int totalItemsSold = 0;
+//        int totalItemsSold = 0;
         for (Transaction transaction : transactionList) {
             LocalDate transactionDate = transaction.expiryDate;
             String transactionType = transaction.getType();
             if (transactionType.equals(SELL_FLAG) && transactionDate.isBefore(end) && transactionDate.isAfter(start)) {
                 revenue += transaction.getPrice() * transaction.getQuantity();
-                totalItemsSold += transaction.getQuantity();
+//                totalItemsSold += transaction.getQuantity();
             }
         }
         return revenue;
@@ -33,13 +33,13 @@ public class TransactionList {
     //@@vimalapugazhan
     public static double calculateDayRevenue(LocalDate day) {
         double revenue = 0;
-        int totalItemsSold = 0;
+//        int totalItemsSold = 0;
         for (Transaction transaction : transactionList) {
             LocalDate transactionDate = transaction.expiryDate;
             String transactionType = transaction.getType();
             if (transactionType.equals(SELL_FLAG) && transactionDate.isEqual(day)) {
                 revenue = transaction.getPrice() * transaction.getQuantity();
-                totalItemsSold += transaction.getQuantity();
+//                totalItemsSold += transaction.getQuantity();
             }
         }
         return revenue;
@@ -48,13 +48,13 @@ public class TransactionList {
     //@@vimalapugazhan
     public static double calculateTotalRevenue() {
         double revenue = 0;
-        int totalItemsSold = 0;
+//        int totalItemsSold = 0;
         for (Transaction transaction : transactionList) {
             LocalDate transactionDate = transaction.expiryDate;
             String transactionType = transaction.getType();
             if (transactionType.equals(SELL_FLAG)) {
                 revenue = transaction.getPrice() * transaction.getQuantity();
-                totalItemsSold += transaction.getQuantity();
+//                totalItemsSold += transaction.getQuantity();
             }
         }
         return revenue;
