@@ -179,6 +179,9 @@ public class Ui {
                 expiredSuccess(reportItems, numReportItems);
             }
             break;
+        default:
+            assert reportType.isEmpty();
+            break;
         }
     }
 
