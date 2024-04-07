@@ -1,22 +1,11 @@
 package supertracker.parser;
 
 import supertracker.TrackerException;
-import supertracker.command.AddCommand;
-import supertracker.command.BuyCommand;
-import supertracker.command.Command;
-import supertracker.command.DeleteCommand;
-import supertracker.command.FindCommand;
-import supertracker.command.InvalidCommand;
-import supertracker.command.ListCommand;
-import supertracker.command.NewCommand;
-import supertracker.command.QuitCommand;
-import supertracker.command.RemoveCommand;
-import supertracker.command.ReportCommand;
-import supertracker.command.SellCommand;
-import supertracker.command.UpdateCommand;
+import supertracker.command.*;
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 import supertracker.ui.ErrorMessage;
+import supertracker.ui.Ui;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -71,6 +60,8 @@ public class Parser {
     private static final String TO_GROUP = "to";
     private static final String FROM_FLAG = "from";
     private static final String FROM_GROUP = "from";
+    // Do note that the file delimiter constant needs to follow the separator constant in the FileManager class
+    private static final String FILE_DELIMITER = " ,,, ";
 
     //To be used in getPatternMatcher to split the input into its respective parameter groups
     private static final String NEW_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
@@ -304,7 +295,7 @@ public class Parser {
     }
 
     //@@vimalapugazhan
-    private static LocalDate parseExpiryDate(String dateString) throws TrackerException {
+    private static LocalDate parseDate(String dateString) throws TrackerException {
         LocalDate expiryDate = UNDEFINED_DATE;
         try {
             if (!dateString.isEmpty()) {
@@ -345,10 +336,17 @@ public class Parser {
         }
     }
 
-    private static void validateItemNotInInventory(String name) throws TrackerException {
-        if (Inventory.contains(name)) {
-            throw new TrackerException(name + ErrorMessage.ITEM_IN_LIST_NEW);
+    private static String validateItemNotInInventory(String name) throws TrackerException {
+        String itemName = name;
+        if (name.contains(FILE_DELIMITER)) {
+            itemName = name.replace(FILE_DELIMITER, "");
+            Ui.printItemNameLimitation(name, FILE_DELIMITER, itemName);
         }
+
+        if (Inventory.contains(itemName)) {
+            throw new TrackerException(itemName + ErrorMessage.ITEM_IN_LIST_NEW);
+        }
+        return itemName;
     }
 
     private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString,
@@ -441,19 +439,19 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_NEW_ITEM_FORMAT);
         }
 
-        String name = matcher.group(NAME_GROUP).trim();
+        String nameInput = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).trim();
         String priceString = matcher.group(PRICE_GROUP).trim();
         String dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
 
-        validateNonEmptyParam(name);
+        validateNonEmptyParam(nameInput);
         validateNonEmptyParam(quantityString);
         validateNonEmptyParam(priceString);
-        validateItemNotInInventory(name);
+        String name = validateItemNotInInventory(nameInput);
 
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
-        LocalDate expiryDate = parseExpiryDate(dateString);
+        LocalDate expiryDate = parseDate(dateString);
 
         validateNonNegativeQuantity(quantityString, quantity);
         validateNonNegativePrice(priceString, price);
@@ -694,7 +692,8 @@ public class Parser {
         String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
 
         validateNonEmptyParam(type);
-        LocalDate to = parseExpiryDate(toString);
-        LocalDate from = parseExpiryDate(fromString);
+        LocalDate to = parseDate(toString);
+        LocalDate from = parseDate(fromString);
+        return new ExpenditureCommand(type, to, from);
     }
 }
