@@ -1,7 +1,10 @@
 package supertracker.command;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
+import supertracker.item.Item;
+import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
 import supertracker.ui.Ui;
 
@@ -24,6 +27,7 @@ public class RevenueCommand implements Command {
     //@@vimalapugazhan
     @Override
     public void execute() {
+        ArrayList<Transaction> filteredList = new ArrayList<>();
         switch (task) {
         case "today":
             revenue = TransactionList.calculateDay(LocalDate.now(), SELL_FLAG);
@@ -40,7 +44,9 @@ public class RevenueCommand implements Command {
         default: assert task.isEmpty();
             break;
         }
-        Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue");
+        filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, SELL_FLAG);
+        filteredList.sort(Item.sortByName());
+        Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue", filteredList);
     }
 
     @Override

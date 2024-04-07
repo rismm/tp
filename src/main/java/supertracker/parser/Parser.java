@@ -730,7 +730,7 @@ public class Parser {
         validateRevExpFormat(type, hasStart, hasEnd);
         LocalDate to = parseDate(toString);
         LocalDate from = parseDate(fromString);
-        return new ExpenditureCommand(type, to, from);
+        return new ExpenditureCommand(type, from, to);
     }
 
     //@@vimalapugazhan

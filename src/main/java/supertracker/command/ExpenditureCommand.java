@@ -1,28 +1,31 @@
 package supertracker.command;
 
+import supertracker.item.Item;
+import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
 import supertracker.ui.Ui;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 
 public class ExpenditureCommand implements Command {
     private static final String BUY_FLAG = "b";
-    private LocalDate from;
-    private LocalDate to;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String task;
 
     private double expenditure;
 
     public ExpenditureCommand(String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
-        this.from = startDate;
-        this.to = endDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     @Override
     public void execute() {
-
+        ArrayList<Transaction> filteredList = new ArrayList<>();
         switch (task) {
         case "today":
             LocalDate currDate = LocalDate.now();
@@ -34,18 +37,20 @@ public class ExpenditureCommand implements Command {
             break;
 
         case "day":
-            expenditure = TransactionList.calculateDay(from, BUY_FLAG);
+            expenditure = TransactionList.calculateDay(startDate, BUY_FLAG);
             break;
 
         case "range":
-            expenditure = TransactionList.calculateRange(to, from, BUY_FLAG);
+            expenditure = TransactionList.calculateRange(startDate, endDate, BUY_FLAG);
             break;
 
         default:
             assert task.isEmpty();
             break;
         }
-        Ui.printRevenueExpenditure(task, expenditure, to, from, "expenditure");
+        filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, BUY_FLAG);
+        filteredList.sort(Item.sortByName());
+        Ui.printRevenueExpenditure(task, expenditure, startDate, endDate, "expenditure", filteredList);
     }
 
     @Override

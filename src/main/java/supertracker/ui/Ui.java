@@ -1,10 +1,12 @@
 package supertracker.ui;
 
 import supertracker.item.Item;
+import supertracker.item.Transaction;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ui {
@@ -223,24 +225,40 @@ public class Ui {
 
     //@@vimalapugazhan
     public static void printRevenueExpenditure(String task, double amount, LocalDate startDate, LocalDate endDate,
-                                               String financeType) {
+                                               String financeType, ArrayList<Transaction> filteredList) {
         amount = roundTo2Dp(amount);
         switch (task) {
         case TODAY:
             printIndent("Today's " + financeType + " is $" + amount);
+            printFilteredList(filteredList);
             break;
         case TOTAL:
             printIndent("Total  " + financeType + "  is $" + amount);
+            printFilteredList(filteredList);
             break;
         case DAY:
             printIndent(financeType + " on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+            printFilteredList(filteredList);
             break;
         case RANGE:
             printIndent( financeType + " between " + startDate.format(DATE_FORMAT_PRINT) + " and "
                     + endDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+            printFilteredList(filteredList);
             break;
         default: assert task.isEmpty();
             break;
+        }
+    }
+
+    private static void printFilteredList(ArrayList<Transaction> filteredList) {
+        int count = 1;
+        for (Transaction transaction: filteredList) {
+            String formattedTransactionDate = transaction.getTransactionDate().format(DATE_FORMAT_PRINT);
+            printIndent(count + ". Name: " + transaction.getName());
+            printIndent("   Quantity: " + transaction.getQuantity());
+            printIndent("   Price: " + transaction.getPrice());
+            printIndent("   Transaction Date: " + formattedTransactionDate);
+            count += 1;
         }
     }
 
