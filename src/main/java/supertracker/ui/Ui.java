@@ -18,7 +18,7 @@ public class Ui {
     private static final String INVALID_COMMAND_MESSAGE = "Sorry! Invalid command!";
     private static final String WELCOME_MESSAGE = "Hello, welcome to SuperTracker, how may I help you?";
     private static final String FAREWELL_MESSAGE = "Goodbye!";
-    private static final String BASIC_ERROR_MESSAGE = "Oh no! An error has occurred in your input";
+    private static final String BASIC_ERROR_MESSAGE = "Oh no! An error has occurred";
     private static final String FIND_OPENING_MESSAGE = "Here are your found items:";
     private static final String REPORT_LOW_STOCK_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
     private static final String REPORT_EXPIRY_NO_ITEMS_OPENING = "There are no items close to expiry!";
@@ -307,5 +307,21 @@ public class Ui {
     public static void printNoItemFound(String name) {
         String stringToPrint = "So sorry, Your item: " + name + " could not be found.";
         printIndent(stringToPrint);
+    }
+
+    public static void printItemNameLimitation(String name, String delimiter, String newName) {
+        String nameOutputString = padStringWithQuotes(name, true);
+        String delimiterOutputString = padStringWithQuotes(delimiter, false);
+        String newNameOutputString = padStringWithQuotes(newName, false);
+        printIndent("It appears that the input item name, " + nameOutputString);
+        printIndent("contains the program's file delimiter, " + delimiterOutputString);
+        printIndent("Unfortunately due to system limitations, " + nameOutputString);
+        printIndent("will be renamed and saved as " + newNameOutputString);
+        printIndent("Please avoid using the file delimiter in your item names" + System.lineSeparator());
+    }
+
+    private static String padStringWithQuotes(String name, boolean hasComma) {
+        String end = hasComma ? "\"," : "\"";
+        return "\"" + name + end;
     }
 }

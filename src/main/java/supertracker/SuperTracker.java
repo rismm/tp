@@ -40,7 +40,7 @@ public class SuperTracker {
         try {
             FileManager.loadData();
         } catch (IOException e) {
-            Ui.printError(ErrorMessage.FILE_CORRUPTED_ERROR);
+            Ui.printError(ErrorMessage.FILE_LOAD_ERROR);
         }
 
         Ui.greetUser();

@@ -17,6 +17,7 @@ import supertracker.command.UpdateCommand;
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 import supertracker.ui.ErrorMessage;
+import supertracker.ui.Ui;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -64,6 +65,8 @@ public class Parser {
     private static final String REPORT_TYPE_GROUP = "reportType";
     private static final String THRESHOLD_FLAG = "t";
     private static final String THRESHOLD_GROUP = "threshold";
+    // Do note that the file delimiter constant needs to follow the separator constant in the FileManager class
+    private static final String FILE_DELIMITER = " ,,, ";
 
     //To be used in getPatternMatcher to split the input into its respective parameter groups
     private static final String NEW_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
@@ -334,10 +337,17 @@ public class Parser {
         }
     }
 
-    private static void validateItemNotInInventory(String name) throws TrackerException {
-        if (Inventory.contains(name)) {
-            throw new TrackerException(name + ErrorMessage.ITEM_IN_LIST_NEW);
+    private static String validateItemNotInInventory(String name) throws TrackerException {
+        String itemName = name;
+        if (name.contains(FILE_DELIMITER)) {
+            itemName = name.replace(FILE_DELIMITER, "");
+            Ui.printItemNameLimitation(name, FILE_DELIMITER, itemName);
         }
+
+        if (Inventory.contains(itemName)) {
+            throw new TrackerException(itemName + ErrorMessage.ITEM_IN_LIST_NEW);
+        }
+        return itemName;
     }
 
     private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString,
@@ -430,15 +440,15 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_NEW_ITEM_FORMAT);
         }
 
-        String name = matcher.group(NAME_GROUP).trim();
+        String nameInput = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).trim();
         String priceString = matcher.group(PRICE_GROUP).trim();
         String dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
 
-        validateNonEmptyParam(name);
+        validateNonEmptyParam(nameInput);
         validateNonEmptyParam(quantityString);
         validateNonEmptyParam(priceString);
-        validateItemNotInInventory(name);
+        String name = validateItemNotInInventory(nameInput);
 
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
