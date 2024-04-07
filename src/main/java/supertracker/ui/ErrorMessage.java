@@ -52,4 +52,12 @@ public class ErrorMessage {
             "Oops! Unable to load some of your previous data as the data in the save file has been corrupted!";
     public static final String INTEGER_OVERFLOW = "Unable to add your specified number of items. " +
             "Why do you need more than 2147483647 items anyway?";
+    public static final String INVALID_REV_FORMAT = "Invalid revenue command format. " +
+            "rev task/taskType [from/startDate] [to/endDate]";
+    public static final String INVALID_REV_TODAY_FORMAT = "Invalid revenue command format. \"rev task/today\"";
+
+    public static final String INVALID_REV_TOTAL_FORMAT = "Invalid revenue command format. \"rev task/total\"";
+    public static final String INVALID_REV_DAY_FORMAT = "Invalid revenue command format. \"rev task/day from/DATE\"";
+    public static final String INVALID_REV_RANGE_FORMAT = "Invalid revenue command format. "
+            + "\"rev task/range from/START_DATE to/END_DATE\"";
 }
