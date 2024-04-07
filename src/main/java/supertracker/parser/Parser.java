@@ -44,7 +44,7 @@ public class Parser {
     private static final String REPORT_COMMAND = "report";
     private static final String BUY_COMMAND = "buy";
     private static final String SELL_COMMAND = "sell";
-    private static final String EXPENDITURE_COMMAND = "expenditure";
+    private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
     private static final double ROUNDING_FACTOR = 100.0;
     private static final String BASE_FLAG = "/";
@@ -197,6 +197,9 @@ public class Parser {
             break;
         case REVENUE_COMMAND:
             command = parseRevenueCommand(params);
+            break;
+        case EXPENDITURE_COMMAND:
+            command = parseExpenditureCommand(params);
             break;
         default:
             command = new InvalidCommand();
@@ -721,8 +724,8 @@ public class Parser {
         boolean hasEnd = !matcher.group(TO_GROUP).isEmpty();
 
         String type = matcher.group(TYPE_GROUP).trim();
-        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
         String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
+        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
 
         validateRevExpFormat(type, hasStart, hasEnd);
         LocalDate to = parseDate(toString);
@@ -731,7 +734,8 @@ public class Parser {
     }
 
     //@@vimalapugazhan
-    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd) throws TrackerException {
+    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd)
+            throws TrackerException {
         switch (taskType) {
         case TODAY:
             if (hasStart || hasEnd) {

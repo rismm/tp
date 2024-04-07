@@ -40,7 +40,7 @@ public class RevenueCommand implements Command {
         default: assert task.isEmpty();
             break;
         }
-        Ui.printRevenue(task, revenue, startDate, endDate);
+        Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue");
     }
 
     @Override

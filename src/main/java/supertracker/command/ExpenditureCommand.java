@@ -1,7 +1,7 @@
 package supertracker.command;
 
-import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
+import supertracker.ui.Ui;
 
 import java.time.LocalDate;
 
@@ -12,6 +12,8 @@ public class ExpenditureCommand implements Command {
     private LocalDate to;
     private String task;
 
+    private double expenditure;
+
     public ExpenditureCommand(String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
         this.from = startDate;
@@ -20,46 +22,30 @@ public class ExpenditureCommand implements Command {
 
     @Override
     public void execute() {
+
         switch (task) {
         case "today":
-            todayExpenditure();
+            LocalDate currDate = LocalDate.now();
+            expenditure = TransactionList.calculateDay(currDate, BUY_FLAG);
             break;
 
         case "total":
-            totalExpenditure();
+            expenditure = TransactionList.calculateTotal(BUY_FLAG);
             break;
 
         case "day":
-            dayExpenditure(to);
+            expenditure = TransactionList.calculateDay(from, BUY_FLAG);
             break;
 
         case "range":
-            rangeExpenditure(to, from);
+            expenditure = TransactionList.calculateRange(to, from, BUY_FLAG);
             break;
 
         default:
             assert task.isEmpty();
             break;
         }
-    }
-
-    private void todayExpenditure() {
-        LocalDate currDate = LocalDate.now();
-        double expenditure = TransactionList.calculateDay(currDate, BUY_FLAG);
-
-    }
-
-    private void totalExpenditure() {
-        double expenditure = TransactionList.calculateTotal(BUY_FLAG);
-    }
-
-    private void dayExpenditure(LocalDate day) {
-        double expenditure = TransactionList.calculateDay(day, BUY_FLAG);
-
-    }
-
-    private void rangeExpenditure(LocalDate to, LocalDate from) {
-        double expenditure = TransactionList.calculateRange(to, from, BUY_FLAG);
+        Ui.printRevenueExpenditure(task, expenditure, to, from, "expenditure");
     }
 
     @Override
