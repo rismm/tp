@@ -1,6 +1,6 @@
 package supertracker.command;
 
-public class Expenditure implements Command{
+public class ExpenditureCommand implements Command {
     @Override
     public void execute() {
 
