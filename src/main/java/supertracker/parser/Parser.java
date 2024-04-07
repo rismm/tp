@@ -325,6 +325,7 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_DATE);
         }
     }
+    //@@author
 
     //@@author vimalapugazhan
     private static LocalDate parseDate(String dateString) throws TrackerException {
@@ -339,6 +340,7 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
         }
     }
+    //@@author
 
     //@@author vimalapugazhan
     private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
@@ -360,6 +362,7 @@ public class Parser {
         }
         return expiryDate;
     }
+    //@@author
 
 
     private static void validateItemExistsInInventory(String name, String errorMessage) throws TrackerException {
@@ -558,6 +561,7 @@ public class Parser {
         return new ListCommand(firstParam, secondParam, thirdParam,
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
+    //@@author
 
     //@@author vimalapugazhan
     private static Command parseDeleteCommand(String input) throws TrackerException {
@@ -575,6 +579,7 @@ public class Parser {
 
         return new DeleteCommand(name);
     }
+    //@@author
 
     private static Command parseAddCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG, QUANTITY_FLAG};
@@ -761,6 +766,7 @@ public class Parser {
             break;
         }
     }
+    //@@author
 
     //@@author vimalapugazhan
     private static Command parseRevenueCommand(String input) throws TrackerException {
@@ -784,4 +790,5 @@ public class Parser {
 
         return new RevenueCommand(taskType, startDate, endDate);
     }
+    //@@author
 }

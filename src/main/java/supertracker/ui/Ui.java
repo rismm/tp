@@ -249,6 +249,7 @@ public class Ui {
             break;
         }
     }
+    //@@author
 
     // author dtaywd
     private static void printFilteredList(ArrayList<Transaction> filteredList) {
@@ -262,6 +263,7 @@ public class Ui {
             count += 1;
         }
     }
+    //@@author
 
     public static void listIntro(int size) {
         assert size >= 0;

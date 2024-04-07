@@ -1,3 +1,4 @@
+//@@author vimalapugazhan
 package supertracker.command;
 
 import java.time.LocalDate;
@@ -8,7 +9,6 @@ import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
 import supertracker.ui.Ui;
 
-
 public class RevenueCommand implements Command {
     private static final String SELL_FLAG = "s";
     private String task;
@@ -16,15 +16,12 @@ public class RevenueCommand implements Command {
     private LocalDate endDate;
     private double revenue;
 
-
-    //@@author vimalapugazhan
     public RevenueCommand (String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    //@@author vimalapugazhan
     @Override
     public void execute() {
         ArrayList<Transaction> filteredList = new ArrayList<>();
