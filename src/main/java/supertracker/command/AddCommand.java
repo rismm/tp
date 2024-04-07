@@ -9,8 +9,8 @@ import supertracker.ui.Ui;
 import java.io.IOException;
 
 public class AddCommand implements Command {
-    private String name;
-    private int quantity;
+    protected String name;
+    protected int quantity;
 
     public AddCommand(String name, int quantity) {
         this.name = name;

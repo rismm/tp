@@ -9,6 +9,8 @@ public class ErrorMessage {
     public static final String INVALID_NEW_ITEM_FORMAT = "Invalid new command format!";
     public static final String INVALID_ADD_FORMAT = "Invalid add command format!";
     public static final String INVALID_REMOVE_FORMAT = "Invalid remove command format!";
+    public static final String INVALID_BUY_FORMAT = "Invalid buy command format!";
+    public static final String INVALID_SELL_FORMAT = "Invalid sell command format!";
     public static final String INVALID_REPORT_FORMAT = "Invalid report command format! Follow 'report r/{report type}" +
             " t/{threshold}";
     public static final String INVALID_REPORT_TYPE = "Please select a valid report type. Only 'low stock' and " +
@@ -23,6 +25,10 @@ public class ErrorMessage {
             " does not exist in inventory. Unable to increase its quantity. =(";
     public static final String ITEM_NOT_IN_LIST_REMOVE =
             " does not exist in inventory. Unable to decrease its quantity. =(";
+    public static final String ITEM_NOT_IN_LIST_BUY =
+            " does not exist in inventory. Unable to buy. =(";
+    public static final String ITEM_NOT_IN_LIST_SELL =
+            " does not exist in inventory. Unable to sell. =(";
     public static final String ITEM_IN_LIST_NEW = " already exists in inventory. Use the update command instead.";
     public static final String QUANTITY_NOT_INTEGER = "Quantity should be a non-negative integer";
 

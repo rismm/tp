@@ -2,6 +2,7 @@ package supertracker.parser;
 
 import supertracker.TrackerException;
 import supertracker.command.AddCommand;
+import supertracker.command.BuyCommand;
 import supertracker.command.Command;
 import supertracker.command.DeleteCommand;
 import supertracker.command.FindCommand;
@@ -11,6 +12,7 @@ import supertracker.command.NewCommand;
 import supertracker.command.QuitCommand;
 import supertracker.command.RemoveCommand;
 import supertracker.command.ReportCommand;
+import supertracker.command.SellCommand;
 import supertracker.command.UpdateCommand;
 import supertracker.item.Inventory;
 import supertracker.item.Item;
@@ -35,6 +37,8 @@ public class Parser {
     private static final String REMOVE_COMMAND = "remove";
     private static final String FIND_COMMAND = "find";
     private static final String REPORT_COMMAND = "report";
+    private static final String BUY_COMMAND = "buy";
+    private static final String SELL_COMMAND = "sell";
     private static final double ROUNDING_FACTOR = 100.0;
     private static final String BASE_FLAG = "/";
     private static final String NAME_FLAG = "n";
@@ -47,7 +51,7 @@ public class Parser {
     private static final String EX_DATE_GROUP = "expiry";
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
-    private static final String EX_DATE_FORMAT = "dd-MM-yyyy";
+    private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final String SORT_QUANTITY_FLAG = "sq";
     private static final String SORT_PRICE_FLAG = "sp";
     private static final String SORT_EX_DATE_FLAG = "se";
@@ -86,7 +90,11 @@ public class Parser {
 
     private static final String REPORT_COMMAND_REGEX = REPORT_TYPE_FLAG + BASE_FLAG + "(?<" + REPORT_TYPE_GROUP +
             ">.*) " + "(?<" + THRESHOLD_GROUP + ">(?:" + THRESHOLD_FLAG + BASE_FLAG + ".*)?) ";
-
+    private static final String BUY_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
+            + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) "
+            + PRICE_FLAG + BASE_FLAG + "(?<" + PRICE_GROUP + ">.*) ";
+    private static final String SELL_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
+            + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) ";
 
     /**
      * Returns the command word specified in the user input string
@@ -152,6 +160,12 @@ public class Parser {
             break;
         case REPORT_COMMAND:
             command = parseReportCommand(params);
+            break;
+        case BUY_COMMAND:
+            command = parseBuyCommand(params);
+            break;
+        case SELL_COMMAND:
+            command = parseSellCommand(params);
             break;
         default:
             command = new InvalidCommand();
@@ -273,7 +287,7 @@ public class Parser {
 
     //@@vimalapugazhan
     private static void validateDate(LocalDate expiryDate, String dateString) throws TrackerException {
-        if (!expiryDate.format(DateTimeFormatter.ofPattern(EX_DATE_FORMAT)).equals(dateString)) {
+        if (!expiryDate.format(EX_DATE_FORMAT).equals(dateString)) {
             throw new TrackerException(ErrorMessage.INVALID_DATE);
         }
     }
@@ -283,7 +297,7 @@ public class Parser {
         LocalDate expiryDate = UNDEFINED_DATE;
         try {
             if (!dateString.isEmpty()) {
-                expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+                expiryDate = LocalDate.parse(dateString, EX_DATE_FORMAT);
                 validateDate(expiryDate, dateString);
             }
             return expiryDate;
@@ -301,7 +315,7 @@ public class Parser {
                 if (dateString.equals("nil")) {
                     expiryDate = UNDEFINED_DATE;
                 } else {
-                    expiryDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(EX_DATE_FORMAT));
+                    expiryDate = LocalDate.parse(dateString, EX_DATE_FORMAT);
                     validateDate(expiryDate, dateString);
                 }
             }
@@ -601,5 +615,58 @@ public class Parser {
             validateNonNegativeQuantity(thresholdString, threshold);
         }
         return new ReportCommand(reportType, threshold);
+    }
+
+    private static Command parseBuyCommand(String input) throws TrackerException {
+        String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG};
+        Matcher matcher = getPatternMatcher(BUY_COMMAND_REGEX, input, flags);
+
+        if (!matcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_BUY_FORMAT);
+        }
+
+        String name = matcher.group(NAME_GROUP).trim();
+        String quantityString = matcher.group(QUANTITY_GROUP).trim();
+        String priceString = matcher.group(PRICE_GROUP).trim();
+
+        validateNonEmptyParam(name);
+        validateNonEmptyParam(quantityString);
+        validateNonEmptyParam(priceString);
+        validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_BUY);
+
+        int quantity = parseQuantity(quantityString);
+        double price = parsePrice(priceString);
+
+        validateNonNegativeQuantity(quantityString, quantity);
+        validateNonNegativePrice(priceString, price);
+        validateNoIntegerOverflow(name, quantity);
+
+        LocalDate currentDate = LocalDate.now();
+
+        return new BuyCommand(name, quantity, price, currentDate);
+    }
+
+    private static Command parseSellCommand(String input) throws TrackerException {
+        String[] flags = {NAME_FLAG, QUANTITY_FLAG};
+        Matcher matcher = getPatternMatcher(SELL_COMMAND_REGEX, input, flags);
+
+        if (!matcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_SELL_FORMAT);
+        }
+
+        String name = matcher.group(NAME_GROUP).trim();
+        String quantityString = matcher.group(QUANTITY_GROUP).trim();
+
+        validateNonEmptyParam(name);
+        validateNonEmptyParam(quantityString);
+        validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_SELL);
+
+        int quantity = parseQuantity(quantityString);
+        validateNonNegativeQuantity(quantityString, quantity);
+
+        double price = Inventory.get(name).getPrice();
+        LocalDate currentDate = LocalDate.now();
+
+        return new SellCommand(name, quantity, price, currentDate);
     }
 }
