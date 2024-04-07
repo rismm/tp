@@ -16,6 +16,7 @@ import supertracker.command.ReportCommand;
 import supertracker.command.RevenueCommand;
 import supertracker.command.SellCommand;
 import supertracker.command.UpdateCommand;
+import supertracker.command.ExpenditureCommand;
 
 import supertracker.item.Inventory;
 import supertracker.item.Item;
@@ -43,6 +44,7 @@ public class Parser {
     private static final String REPORT_COMMAND = "report";
     private static final String BUY_COMMAND = "buy";
     private static final String SELL_COMMAND = "sell";
+    private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
     private static final double ROUNDING_FACTOR = 100.0;
     private static final String BASE_FLAG = "/";
@@ -118,6 +120,10 @@ public class Parser {
             "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) ";
 
 
+    private static final String EXPENDITURE_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
+            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
+            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
+
     /**
      * Returns the command word specified in the user input string
      *
@@ -191,6 +197,9 @@ public class Parser {
             break;
         case REVENUE_COMMAND:
             command = parseRevenueCommand(params);
+            break;
+        case EXPENDITURE_COMMAND:
+            command = parseExpenditureCommand(params);
             break;
         default:
             command = new InvalidCommand();
@@ -702,8 +711,31 @@ public class Parser {
         return new SellCommand(name, quantity, price, currentDate);
     }
 
+    // @@ author dtaywd
+    private static Command parseExpenditureCommand(String input) throws TrackerException {
+        String[] flags = {TYPE_FLAG, FROM_FLAG, TO_FLAG};
+        Matcher matcher = getPatternMatcher(EXPENDITURE_COMMAND_REGEX, input, flags);
+
+        if (!matcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_EXPENDITURE_FORMAT);
+        }
+
+        boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
+        boolean hasEnd = !matcher.group(TO_GROUP).isEmpty();
+
+        String type = matcher.group(TYPE_GROUP).trim();
+        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
+        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
+
+        validateRevExpFormat(type, hasStart, hasEnd);
+        LocalDate to = parseDate(toString);
+        LocalDate from = parseDate(fromString);
+        return new ExpenditureCommand(type, from, to);
+    }
+
     //@@vimalapugazhan
-    private static void validateRevFormat(String taskType, boolean hasStart, boolean hasEnd) throws TrackerException {
+    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd)
+            throws TrackerException {
         switch (taskType) {
         case TODAY:
             if (hasStart || hasEnd) {
@@ -746,7 +778,7 @@ public class Parser {
         String startDateString = matcher.group(FROM_GROUP).replace(FROM_GROUP + BASE_FLAG, "").trim();
         String endDateString = matcher.group(TO_GROUP).replace(TO_GROUP + BASE_FLAG, "").trim();
 
-        validateRevFormat(taskType, hasStart, hasEnd);
+        validateRevExpFormat(taskType, hasStart, hasEnd);
         LocalDate startDate = parseDate(startDateString);
         LocalDate endDate = parseDate(endDateString);
 

@@ -235,6 +235,7 @@ The report will be printed to the terminal and will contain the name of each ite
   - The report would be sorted in order of ascending expiry date
 
 Format (low stock):`report r/REPORT_TYPE t/THRESHOLD_VALUE`
+
 Format (expiry):`report r/REPORT_TYPE [t/THRESHOLD_VALUE]`
 
 - `r/` parameter that specifies the type of report. e.g. **low stock** or **expiry**
@@ -267,6 +268,40 @@ There is 1 item close to expiry!
     Expiry Date: 29/03/2024
 ```
 
+<br>
+
+### Print expenditure `exp`
+There are 4 types of expenditures:
+1. **today** - lists all expenditures that occurred today
+2. **total** - lists all expenditures in total
+3. **day** - lists all expenditures that occurred during the specified day
+4. **range** - lists all expenditures that occurred in the specified range of dates 
+not inclusive of the start and end dates
+
+The cumulative expenditures would be first printed to the terminal. 
+Afterwords, the expenditures will be printed to the terminal and will contain the name, 
+quantity and price of each purchase. 
+All expenditures would be listed according to alphabetical order.
+
+Format: `exp type/expenditureType [from/startDate] [to/endDate]`
+
+> Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled. 
+> If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
+> If the type is **range**, both startDate and endDate are compulsory.
+
+Example: `exp type/today`
+
+```
+Today's expenditure is $94.5
+1. Name: apple
+   Quantity: 30
+   Price: 2.15
+   Transaction Date: 19/04/2024
+2. Name: banana
+   Quantity: 10
+   Price: 3.0
+   Transaction Date: 19/04/2024
+```
 <br>
 
 ### Quit the program: `quit`

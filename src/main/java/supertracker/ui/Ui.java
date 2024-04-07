@@ -1,10 +1,12 @@
 package supertracker.ui;
 
 import supertracker.item.Item;
+import supertracker.item.Transaction;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ui {
@@ -32,6 +34,7 @@ public class Ui {
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
+    private static final double ROUNDING_FACTOR = 100.0;
 
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -221,23 +224,42 @@ public class Ui {
     }
 
     //@@vimalapugazhan
-    public static void printRevenue(String task, double revenue, LocalDate startDate, LocalDate endDate) {
+    public static void printRevenueExpenditure(String task, double amount, LocalDate startDate, LocalDate endDate,
+                                               String financeType, ArrayList<Transaction> filteredList) {
+        amount = roundTo2Dp(amount);
         switch (task) {
         case TODAY:
-            printIndent("Today's revenue is $" + revenue);
+            printIndent("Today's " + financeType + " is $" + amount);
+            printFilteredList(filteredList);
             break;
         case TOTAL:
-            printIndent("Total revenue is $" + revenue);
+            printIndent("Total  " + financeType + "  is $" + amount);
+            printFilteredList(filteredList);
             break;
         case DAY:
-            printIndent("Revenue on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + revenue);
+            printIndent(financeType + " on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+            printFilteredList(filteredList);
             break;
         case RANGE:
-            printIndent("Revenue between " + startDate.format(DATE_FORMAT_PRINT) + " and "
-                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + revenue);
+            printIndent( financeType + " between " + startDate.format(DATE_FORMAT_PRINT) + " and "
+                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+            printFilteredList(filteredList);
             break;
         default: assert task.isEmpty();
             break;
+        }
+    }
+
+    // author dtaywd
+    private static void printFilteredList(ArrayList<Transaction> filteredList) {
+        int count = 1;
+        for (Transaction transaction: filteredList) {
+            String formattedTransactionDate = transaction.getTransactionDate().format(DATE_FORMAT_PRINT);
+            printIndent(count + ". Name: " + transaction.getName());
+            printIndent("   Quantity: " + transaction.getQuantity());
+            printIndent("   Price: " + transaction.getPrice());
+            printIndent("   Transaction Date: " + formattedTransactionDate);
+            count += 1;
         }
     }
 
@@ -349,5 +371,9 @@ public class Ui {
     private static String padStringWithQuotes(String name, boolean hasComma) {
         String end = hasComma ? "\"," : "\"";
         return "\"" + name + end;
+    }
+
+    private static double roundTo2Dp(double unroundedValue) {
+        return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 }
