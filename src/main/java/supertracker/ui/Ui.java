@@ -20,7 +20,9 @@ public class Ui {
     private static final String FAREWELL_MESSAGE = "Goodbye!";
     private static final String BASIC_ERROR_MESSAGE = "Oh no! An error has occurred in your input";
     private static final String FIND_OPENING_MESSAGE = "Here are your found items:";
-    private static final String REPORT_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
+    private static final String REPORT_LOW_STOCK_NO_ITEMS_OPENING = "There are no items that fit the criteria!";
+    private static final String REPORT_EXPIRY_NO_ITEMS_OPENING = "There are no items close to expiry!";
+    private static final String REPORT_EXPIRED_NO_ITEMS_OPENING = "There are no items that are expired!";
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
@@ -68,11 +70,18 @@ public class Ui {
         String isOrAre = quantity == 1 ? "is " : "are ";
         return "There " + isOrAre + quantity + " items low on stocks!";
     }
-    private static String reportExpiryOpening(int quantity) {
-        assert quantity >= 0;
+    private static String reportExpiryHasItemsOpening(int quantity) {
         String isOrAre = quantity == 1 ? "is " : "are ";
-        return "There " + isOrAre + quantity + " items close to expiry!";
+        String itemOrItems = quantity == 1 ? " item " : "items ";
+        return "There " + isOrAre + quantity + itemOrItems +"close to expiry!";
     }
+
+    private static String reportExpiredHasItemsOpening(int quantity) {
+        String isOrAre = quantity == 1 ? "is " : "are ";
+        String itemOrItems = quantity == 1 ? " item " : "items ";
+        return "There " + isOrAre + quantity + itemOrItems +"that " + isOrAre + "expired!";
+    }
+
     private static String reportNameMessage(Item reportItem, int count) {
         return count + ". Name: " + reportItem.getName();
     }
@@ -141,18 +150,35 @@ public class Ui {
     }
 
     public static void reportCommandSuccess(List<Item> reportItems, String reportType) {
-        int count = 1;
-        if (reportItems.isEmpty()) {
-            printIndent(REPORT_NO_ITEMS_OPENING);
-        } else if (reportType.equals("low stock")) {
-            lowStockSuccess(reportItems, count);
-        } else if (reportType.equals("expiry")) {
-            expirySuccess(reportItems, count);
+        int numReportItems = reportItems.size();
+        switch (reportType) {
+        case "low stock":
+            if (reportItems.isEmpty()) {
+                printIndent(REPORT_LOW_STOCK_NO_ITEMS_OPENING);
+            } else {
+                lowStockSuccess(reportItems, numReportItems);
+            }
+            break;
+        case "expiry":
+            if (reportItems.isEmpty()) {
+                printIndent(REPORT_EXPIRY_NO_ITEMS_OPENING);
+            } else {
+                expirySuccess(reportItems, numReportItems);
+            }
+            break;
+        case "expired":
+            if (reportItems.isEmpty()) {
+                printIndent(REPORT_EXPIRED_NO_ITEMS_OPENING);
+            } else {
+                expiredSuccess(reportItems, numReportItems);
+            }
+            break;
         }
     }
 
-    private static void expirySuccess(List<Item> reportItems, int count) {
-        printIndent(reportExpiryOpening(reportItems.size()));
+    private static void expirySuccess(List<Item> reportItems, int numReportItems) {
+        int count = 1;
+        printIndent(reportExpiryHasItemsOpening(numReportItems));
         for (Item item : reportItems) {
             printIndent(reportNameMessage(item, count));
             printIndent(reportExpiryDateMessage(item));
@@ -160,8 +186,19 @@ public class Ui {
         }
     }
 
-    private static void lowStockSuccess(List<Item> reportItems, int count) {
-        printIndent(reportLowStockOpening(reportItems.size()));
+    private static void expiredSuccess(List<Item> reportItems, int numReportItems) {
+        int count = 1;
+        printIndent(reportExpiredHasItemsOpening(numReportItems));
+        for (Item item : reportItems) {
+            printIndent(reportNameMessage(item, count));
+            printIndent(reportExpiryDateMessage(item));
+            count += 1;
+        }
+    }
+
+    private static void lowStockSuccess(List<Item> reportItems, int numReportItems) {
+        int count = 1;
+        printIndent(reportLowStockOpening(numReportItems));
         for (Item item : reportItems) {
             printIndent(reportNameMessage(item, count));
             printIndent(reportQuantityMessage(item));

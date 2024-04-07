@@ -19,34 +19,44 @@ public class ReportCommand implements Command{
     @Override
     public void execute() {
         List<Item> items = Inventory.getItems();
-        List<Item> reportItems = new ArrayList<>();
         LocalDate currDate = LocalDate.now();
         LocalDate expiryThresholdDate = currDate.plusWeeks(1);
+        LocalDate dayBeforeCurrDay = currDate.minusDays(1);
         if (reportType.equals("low stock")) {
-            createLowStockReport(items, reportItems);
+            createLowStockReport(items);
         } else if (reportType.equals("expiry")) {
-            createExpiryReport(items, expiryThresholdDate, reportItems);
+            createExpiryReport(items, expiryThresholdDate, currDate, dayBeforeCurrDay);
         }
-        Ui.reportCommandSuccess(reportItems, reportType);
     }
 
-    private void createExpiryReport(List<Item> items, LocalDate expiryThresholdDate, List<Item> reportItems) {
+    private void createExpiryReport(List<Item> items, LocalDate expiryThresholdDate, LocalDate currDate,
+                                    LocalDate dayBeforeCurrDay) {
         assert threshold == -1;
+        List<Item> reportExpiryItems = new ArrayList<>();
+        List<Item> reportExpiredItems = new ArrayList<>();
         for (Item item : items) {
-            if (item.getExpiryDate().isBefore(expiryThresholdDate)) {
-                reportItems.add(item);
+            if (item.getExpiryDate().isBefore(expiryThresholdDate) && item.getExpiryDate().isAfter(dayBeforeCurrDay)) {
+                reportExpiryItems.add(item);
+            }
+            if (item.getExpiryDate().isBefore(currDate)) {
+                reportExpiredItems.add(item);
             }
         }
-        reportItems.sort(Item.sortByExpiry());
+        reportExpiryItems.sort(Item.sortByExpiry());
+        reportExpiredItems.sort(Item.sortByExpiry());
+        Ui.reportCommandSuccess(reportExpiryItems, reportType);
+        Ui.reportCommandSuccess(reportExpiredItems, "expired");
     }
 
-    private void createLowStockReport(List<Item> items, List<Item> reportItems) {
+    private void createLowStockReport(List<Item> items) {
+        List<Item> reportLowStockItems = new ArrayList<>();
         for (Item item : items) {
             if (item.getQuantity() < threshold) {
-                reportItems.add(item);
+                reportLowStockItems.add(item);
             }
         }
-        reportItems.sort(Item.sortByQuantity());
+        reportLowStockItems.sort(Item.sortByQuantity());
+        Ui.reportCommandSuccess(reportLowStockItems, reportType);
     }
 
     @Override
