@@ -95,15 +95,18 @@ public class FileManager {
         }
         if (corruptedData != 0) {
             Ui.printError(ErrorMessage.FILE_CORRUPTED_ERROR);
+            saveData();
         }
         fileScanner.close();
     }
 
     private static String getItemData(Item item) {
         String name = item.getName();
-        String excess = "w";
+        String excess = "end";
+        // The item name should not contain the separator, but we perform another check
+        // as an additional means of security.
         if (name.contains(SEPARATOR)) {
-            excess = "e";
+            excess = "bad end";
             name = name.replace(SEPARATOR, PLACEHOLDER);
         }
 
@@ -128,7 +131,7 @@ public class FileManager {
         assert data.length == MAX_NUMBER_OF_PARAMS;
 
         String name = data[NAME_INDEX].trim();
-        if (data[EXTRA_INDEX].equals("e")) {
+        if (data[EXTRA_INDEX].equals("bad end")) {
             name = name.replace(PLACEHOLDER, SEPARATOR);
         }
 
