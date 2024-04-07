@@ -17,4 +17,9 @@ public class Transaction extends Item {
     public LocalDate getTransactionDate() {
         return getExpiryDate();
     }
+
+    public String getTotalPriceString() {
+        double totalPrice = quantity * price;
+        return "$" + String.format("%.2f", totalPrice);
+    }
 }

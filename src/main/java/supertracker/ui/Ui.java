@@ -75,6 +75,18 @@ public class Ui {
         return quantityRemoved + " " + item.getName() + " removed from inventory!";
     }
 
+    private static String buyItemOpening(Transaction transaction) {
+        return transaction.getQuantity() + " " + transaction.getName() + " bought at "
+                + transaction.getPriceString() + " each for "
+                + transaction.getTotalPriceString() + " in total";
+    }
+
+    private static String sellItemOpening(Transaction transaction) {
+        return transaction.getQuantity() + " " + transaction.getName() + " sold at "
+                + transaction.getPriceString() + " each for "
+                + transaction.getTotalPriceString() + " in total";
+    }
+
     private static String reportLowStockOpening(int quantity) {
         assert quantity >= 0;
         String isOrAre = quantity == 1 ? "is " : "are ";
@@ -156,6 +168,16 @@ public class Ui {
     public static void removeCommandSuccess(Item item, int quantityRemoved) {
         assert quantityRemoved >= 0;
         printIndent(removeItemOpening(item, quantityRemoved));
+        printIndent(getQuantityMessage(item));
+    }
+
+    public static void buyCommandSuccess(Item item, Transaction transaction) {
+        printIndent(buyItemOpening(transaction));
+        printIndent(getQuantityMessage(item));
+    }
+
+    public static void sellCommandSuccess(Item item, Transaction transaction) {
+        printIndent(sellItemOpening(transaction));
         printIndent(getQuantityMessage(item));
     }
 
