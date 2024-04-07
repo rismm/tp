@@ -70,11 +70,12 @@ public class ReportCommandTest {
         String dateToday = currDate.format(VALID_EX_DATE_FORMAT);
         String dateTwoWeeksAgo = currDate.minusWeeks(2).format(VALID_EX_DATE_FORMAT);
 
-        String expected = "     There are 2 items close to expiry!" + LINE_SEPARATOR +
+        String expected = "     There is 1 item close to expiry!" + LINE_SEPARATOR +
+                "     1. Name: orange" + LINE_SEPARATOR +
+                "        Expiry Date: " + dateToday + LINE_SEPARATOR +
+                "     There is 1 item that is expired!" + LINE_SEPARATOR +
                 "     1. Name: banana" + LINE_SEPARATOR +
-                "        Expiry Date: " + dateTwoWeeksAgo + LINE_SEPARATOR +
-                "     2. Name: orange" + LINE_SEPARATOR +
-                "        Expiry Date: " + dateToday + LINE_SEPARATOR;
+                "        Expiry Date: " + dateTwoWeeksAgo + LINE_SEPARATOR;
         String actual = outContent.toString();
         assertEquals(expected, actual);
     }

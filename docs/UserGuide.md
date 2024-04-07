@@ -232,13 +232,15 @@ The report will be printed to the terminal and will contain the name of each ite
   - The expiry date of each item would be listed
   - The report would be sorted in order of ascending expiry date
 
-Format: `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`
+Format (low stock):`report r/REPORT_TYPE t/THRESHOLD_VALUE`
+Format (expiry):`report r/REPORT_TYPE [t/THRESHOLD_VALUE]`
+
 - `r/` parameter that specifies the type of report. e.g. **low stock** or **expiry**
 - `t/` parameter that specifies the threshold value to be compared to for **low stock report**. 
 All items below the threshold value would be listed out.
 
 > Note: If report type is **low stock** threshold value must be **included**. However, if report type is **expiry** 
-threshold value must be **excluded**.
+threshold value must be **excluded** or left **empty**.
 
 
 Example: `report r/low stock t/35`
@@ -252,15 +254,15 @@ There are 3 items low on stocks!
 3. Name: Apple
    Quantity: 30
 ```
-Example: `report r/expiry`
+Example: `report r/expiry` or `report r/expiry t/`
 
-[//]: # (updates dates to be valid for PE day)
 ```
-There are 2 items close to expiry!
-1. Name: Orange
-   Expiry Date: 08/04/2024
-2. Name: Apple
-   Expiry Date: 09/04/2024
+There is 1 item close to expiry!
+ 1. Name: apple
+    Expiry Date: 20/04/2024
+ There is 1 item that is expired!
+ 1. Name: orange
+    Expiry Date: 29/03/2024
 ```
 
 <br>
