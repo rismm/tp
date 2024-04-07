@@ -3,13 +3,13 @@ package supertracker.item;
 import java.util.ArrayList;
 
 public class TransactionList {
-    private static ArrayList<Item> transactionList = new ArrayList<>();
+    private static ArrayList<Transaction> transactionList = new ArrayList<>();
 
     public static Item get(int index) {
         return transactionList.get(index);
     }
 
-    public static void add(Item item) {
-        transactionList.add(item);
+    public static void add(Transaction transaction) {
+        transactionList.add(transaction);
     }
 }
