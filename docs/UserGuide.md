@@ -15,6 +15,8 @@ optimized for use via a Command Line Interface (CLI).
   - [Find an item: `find`](#find-an-item-find)
   - [List all items: `list`](#list-all-items-list)
   - [Print report: `report`](#print-report-report)
+  - [Print expenditure: `exp`](#print-expenditure-exp)
+  - [Print revenue: `rev`](#print-revenue-rev)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
@@ -270,7 +272,7 @@ There is 1 item close to expiry!
 
 <br>
 
-### Print expenditure `exp`
+### Print expenditure: `exp`
 There are 4 types of expenditures:
 1. **today** - lists all expenditures that occurred today
 2. **total** - lists all expenditures in total
@@ -304,7 +306,7 @@ Today's expenditure is $94.5
 ```
 <br>
 
-### Print revenue `rev`
+### Print revenue: `rev`
 There are 4 types of revenue:
 1. **today** - lists the revenue earned today
 2. **total** - lists the revenue earned in total
