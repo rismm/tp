@@ -24,11 +24,17 @@ public class ErrorMessage {
     public static final String ITEM_NOT_IN_LIST_REMOVE =
             " does not exist in inventory. Unable to decrease its quantity. =(";
     public static final String ITEM_IN_LIST_NEW = " already exists in inventory. Use the update command instead.";
+    public static final String QUANTITY_NOT_INTEGER = "Quantity should be a non-negative integer";
+
     public static final String INVALID_NUMBER_FORMAT = "Invalid values for price/quantity";
+    public static final String INVALID_QUANTITY_FORMAT = "Invalid value for quantity";
+    public static final String INVALID_PRICE_FORMAT = "Invalid value for price";
     public static final String INVALID_DATE_FORMAT = "Invalid date. Follow \"dd-mm-yyyy\" format";
     public static final String INVALID_DATE = "This date is cannot exist";
-    public static final String QUANTITY_TOO_SMALL = "Quantity should be more than equal to 0";
-    public static final String PRICE_TOO_SMALL = "Price should be more than 0";
+    public static final String QUANTITY_TOO_SMALL = "Quantity should be more than or equal to 0";
+    public static final String PRICE_TOO_SMALL = "Price should be more than or equal to 0";
+    public static final String QUANTITY_TOO_LARGE = "Quantity should be less than or equal to 2147483647";
+    public static final String PRICE_TOO_LARGE = "Price should be less than or equal to 2147483647";
     public static final String FILE_HANDLER_ERROR = "Error setting up file handler";
     public static final String INVALID_FIND_FORMAT =
             "Please ensure the name of the item you are looking for is correct";

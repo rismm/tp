@@ -56,10 +56,10 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
 
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
-- If `NAME` already exists in the inventory, use the **update** command instead
-- `QUANTITY` must be a non-negative integer
+- If `NAME` already exists in the inventory, use the [update](#update-an-item-update) command instead
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
-- `PRICE` must be a non-negative integer or decimal number
+- `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
@@ -104,8 +104,9 @@ Format: `add n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
+- If the new quantity of the item exceeds 2147483647, an error would be thrown
 
 Example: `add n/Milk q/10`
 ```
@@ -122,7 +123,7 @@ Format: `remove n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
 
@@ -161,9 +162,9 @@ Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `NEW_QUANTITY` must be a non-negative integer
+- `NEW_QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
-- `NEW_PRICE` must be a non-negative integer or decimal number
+- `NEW_PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `NEW_PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
@@ -199,10 +200,11 @@ Format: `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`
   - e.g. if the command specifies `list q/ p/ e/`, the quantity will be printed first followed by price and expiry date
 - `sq/` will list the items in order of ascending quantity
 - `sp/` will list the items in order of ascending price
-- `se/` will list the items in order of ascending date, items with no date will be displayed at the bottom of the list and sorted in ascending alphabetical order (A-Z) by default
-- If the command has multiple sorting parameters, the list will be sorted according to the first sorting parameter
-  - e.g. if the command specifies `list sq/ sp/ se/`, list will be sorted in order of ascending quantity
+- `se/` will list the items in order of ascending date
 - If the command has no sorting parameters, the list will be sorted in ascending alphabetical order (A-Z) by default
+- If the command has multiple sorting parameters, the list will be sorted in the same order as the sorting flags
+  - e.g. if the command specifies `list sq/ sp/ se/`, list will be sorted in order of ascending quantity. 
+  Ties will be sorted in order of ascending price, then ascending date, followed by ascending alphabetical order (A-Z)
 - `r/` will reverse the order of the list
 
 Example: `list q/ p/ e/ sp/ r/`
@@ -297,20 +299,26 @@ if they would like to do so.
 **Q**: How do I transfer my data to another computer? 
 
 **A**: Install the app in the other computer and overwrite the empty data file it creates 
-with the file that contains the data of your previous SuperTracker inventory
+with the file that contains the data of your previous SuperTracker inventory.
+
+**Q**: What if I want multiple items with the same name? 
+What if I want different batches of the same item with different expiry dates?
+
+**A**: Simply add a unique identifier after the item name when creating a new item. 
+e.g. `n/Milk-1`,`n/Milk-2`. The format of the unique identifier is completely up to the user's discretion.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command Summary
 
-Action | Format                                                             | Examples
---------|--------------------------------------------------------------------|---------------
-**New** | `new n/NAME q/QUANTITY p/PRICE e/EXPIRY_DATE`                      | e.g. `new n/Milk q/100 p/5 e/05-12-2113`
-**Delete**| `delete n/NAME`                                                    | e.g. `delete n/Milk`
-**Add**| `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`
-**Remove**| `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`
-**Update**| `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113`
-**Find**| `find n/NAME`                                                      | e.g. `find n/apple`
-**List**| `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`
-**Report**| `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`
-**Quit**| `quit`                                                             | e.g. `quit`
+| Action     | Format                                                             | Examples                                     |
+|------------|--------------------------------------------------------------------|----------------------------------------------|
+| **New**    | `new n/NAME q/QUANTITY p/PRICE e/EXPIRY_DATE`                      | e.g. `new n/Milk q/100 p/5 e/05-12-2113`     |
+| **Delete** | `delete n/NAME`                                                    | e.g. `delete n/Milk`                         |
+| **Add**    | `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`                       |
+| **Remove** | `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`                    |
+| **Update** | `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113` |
+| **Find**   | `find n/NAME`                                                      | e.g. `find n/apple`                          |
+| **List**   | `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`                     |
+| **Report** | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
+| **Quit**   | `quit`                                                             | e.g. `quit`                                  |
