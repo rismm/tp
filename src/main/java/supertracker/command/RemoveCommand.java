@@ -9,8 +9,8 @@ import supertracker.ui.Ui;
 import java.io.IOException;
 
 public class RemoveCommand implements Command {
-    private String name;
-    private int quantity;
+    protected String name;
+    protected int quantity;
 
     public RemoveCommand(String name, int quantity) {
         this.name = name;

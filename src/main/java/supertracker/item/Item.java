@@ -7,10 +7,10 @@ import java.util.Comparator;
 
 public class Item {
     private static final DateTimeFormatter DATE_FORMAT_PRINT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private String name;
-    private int quantity;
-    private double price;
-    private LocalDate expiryDate;
+    protected String name;
+    protected int quantity;
+    protected double price;
+    protected LocalDate expiryDate;
 
     public Item(String name, int quantity, double price, LocalDate expiryDate) {
         this.name = name;
