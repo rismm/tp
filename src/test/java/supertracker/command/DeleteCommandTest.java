@@ -45,13 +45,13 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void addCommand_emptyParamInput() {
+    public void deleteCommand_emptyParamInput() {
         String userInput = "delete n/";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
     @Test
-    public void addCommand_itemNotInList() {
+    public void deleteCommand_itemNotInList() {
         String userInput = "delete n/cake";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
