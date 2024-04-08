@@ -1,7 +1,6 @@
 package supertracker.ui;
 
 public class ErrorMessage {
-
     public static final String INVALID_UPDATE_FORMAT = "Invalid update command format!";
     public static final String EMPTY_PARAM_INPUT = "Parameters cannot be left empty!";
     public static final String INVALID_DELETE_FORMAT = "Invalid delete command format!";
@@ -11,10 +10,12 @@ public class ErrorMessage {
     public static final String INVALID_REMOVE_FORMAT = "Invalid remove command format!";
     public static final String INVALID_BUY_FORMAT = "Invalid buy command format!";
     public static final String INVALID_SELL_FORMAT = "Invalid sell command format!";
-    public static final String INVALID_REPORT_FORMAT = "Invalid report command format! Follow 'report r/{report type}" +
-            " t/{threshold}";
-    public static final String INVALID_EXPENDITURE_FORMAT = "Invalid expenditure command format! Follow " +
-            "'expenditure t/{task type} to/{startDate} from/{endDate}";
+    public static final String INVALID_REPORT_FORMAT = "Invalid report command format! " +
+            "Follow 'report r/REPORT_TYPE [t/THRESHOLD_VALUE]'";
+    public static final String INVALID_EXP_FORMAT = "Invalid expenditure command format! " +
+            "Follow 'exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]'";
+    public static final String INVALID_REV_FORMAT = "Invalid revenue command format! " +
+            "Follow 'rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]'";
     public static final String INVALID_REPORT_TYPE = "Please select a valid report type. Only 'low stock' and " +
             "'expiry' are available.";
     public static final String INVALID_EXPIRY_REPORT_FORMAT = "If report type is 'expiry' threshold should not be " +
@@ -54,8 +55,6 @@ public class ErrorMessage {
             "Why do you need more than 2147483647 items anyway?";
     public static final String DOUBLE_OVERFLOW_REV_EXP = "Your revenue/expenditure exceeded the double overflow " +
             "limit! How?";
-    public static final String INVALID_REV_FORMAT = "Invalid revenue command format. " +
-            "rev task/taskType [from/startDate] [to/endDate]";
     public static final String INVALID_REV_TODAY_FORMAT = "Invalid revenue command format. \"rev task/today\"";
 
     public static final String INVALID_REV_TOTAL_FORMAT = "Invalid revenue command format. \"rev task/total\"";

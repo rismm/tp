@@ -116,14 +116,12 @@ public class Parser {
             + PRICE_FLAG + BASE_FLAG + "(?<" + PRICE_GROUP + ">.*) ";
     private static final String SELL_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) ";
+    private static final String EXP_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
+            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
+            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
     private static final String REV_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
             "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) " +
             "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) ";
-
-
-    private static final String EXPENDITURE_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
-            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
-            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
 
     /**
      * Returns the command word specified in the user input string
@@ -716,13 +714,13 @@ public class Parser {
         return new SellCommand(name, quantity, currentDate);
     }
 
-    // @@ author dtaywd
+    //@@author dtaywd
     private static Command parseExpenditureCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, FROM_FLAG, TO_FLAG};
-        Matcher matcher = getPatternMatcher(EXPENDITURE_COMMAND_REGEX, input, flags);
+        Matcher matcher = getPatternMatcher(EXP_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
-            throw new TrackerException(ErrorMessage.INVALID_EXPENDITURE_FORMAT);
+            throw new TrackerException(ErrorMessage.INVALID_EXP_FORMAT);
         }
 
         boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
@@ -738,6 +736,31 @@ public class Parser {
         validateNonNegativeForExpRev(type, from, to, "b");
 
         return new ExpenditureCommand(type, from, to);
+    }
+    //@@author
+
+    //@@author vimalapugazhan
+    private static Command parseRevenueCommand(String input) throws TrackerException {
+        String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
+        Matcher matcher = getPatternMatcher(REV_COMMAND_REGEX, input, flags);
+
+        if (!matcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
+        }
+
+        boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
+        boolean hasEnd = !matcher.group(TO_GROUP).isEmpty();
+
+        String taskType = matcher.group(TYPE_GROUP).trim();
+        String startDateString = matcher.group(FROM_GROUP).replace(FROM_GROUP + BASE_FLAG, "").trim();
+        String endDateString = matcher.group(TO_GROUP).replace(TO_GROUP + BASE_FLAG, "").trim();
+
+        validateRevExpFormat(taskType, hasStart, hasEnd);
+        LocalDate startDate = parseDate(startDateString);
+        LocalDate endDate = parseDate(endDateString);
+        validateNonNegativeForExpRev(taskType, startDate, endDate, "s");
+
+        return new RevenueCommand(taskType, startDate, endDate);
     }
     //@@author
 
@@ -768,31 +791,6 @@ public class Parser {
         default: assert taskType.isEmpty();
             break;
         }
-    }
-    //@@author
-
-    //@@author vimalapugazhan
-    private static Command parseRevenueCommand(String input) throws TrackerException {
-        String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
-        Matcher matcher = getPatternMatcher(REV_COMMAND_REGEX, input, flags);
-
-        if (!matcher.matches()) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
-        }
-
-        boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
-        boolean hasEnd = !matcher.group(TO_GROUP).isEmpty();
-
-        String taskType = matcher.group(TYPE_GROUP).trim();
-        String startDateString = matcher.group(FROM_GROUP).replace(FROM_GROUP + BASE_FLAG, "").trim();
-        String endDateString = matcher.group(TO_GROUP).replace(TO_GROUP + BASE_FLAG, "").trim();
-
-        validateRevExpFormat(taskType, hasStart, hasEnd);
-        LocalDate startDate = parseDate(startDateString);
-        LocalDate endDate = parseDate(endDateString);
-        validateNonNegativeForExpRev(taskType, startDate, endDate, "s");
-
-        return new RevenueCommand(taskType, startDate, endDate);
     }
     //@@author
 
