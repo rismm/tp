@@ -56,10 +56,13 @@ public class ErrorMessage {
             "limit! How?";
     public static final String INVALID_REV_FORMAT = "Invalid revenue command format. " +
             "rev task/taskType [from/startDate] [to/endDate]";
-    public static final String INVALID_REV_TODAY_FORMAT = "Invalid revenue command format. \"rev task/today\"";
+    public static final String INVALID_REV_EXP_TODAY_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/today\" or \"exp task/today\"";
 
-    public static final String INVALID_REV_TOTAL_FORMAT = "Invalid revenue command format. \"rev task/total\"";
-    public static final String INVALID_REV_DAY_FORMAT = "Invalid revenue command format. \"rev task/day from/DATE\"";
-    public static final String INVALID_REV_RANGE_FORMAT = "Invalid revenue command format. "
-            + "\"rev task/range from/START_DATE to/END_DATE\"";
+    public static final String INVALID_REV_EXP_TOTAL_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/total\" or \"exp task/total\"";
+    public static final String INVALID_REV_EXP_DAY_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/day from/DATE\" or \"exp task/day from/DATE\"";
+    public static final String INVALID_REV_EXP_RANGE_FORMAT = "Invalid revenue/expenditure command format. "
+            + "\"rev task/range from/START_DATE to/END_DATE\" or \"exp task/range from/START_DATE to/END_DATE\"";
 }

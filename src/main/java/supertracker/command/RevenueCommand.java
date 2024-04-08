@@ -42,7 +42,7 @@ public class RevenueCommand implements Command {
             break;
         }
         filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, SELL_FLAG);
-        filteredList.sort(Item.sortByName());
+        filteredList.sort(Item.sortByExpiry());
         Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue", filteredList);
     }
 

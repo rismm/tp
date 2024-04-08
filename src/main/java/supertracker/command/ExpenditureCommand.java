@@ -50,7 +50,7 @@ public class ExpenditureCommand implements Command {
             break;
         }
         filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, BUY_FLAG);
-        filteredList.sort(Item.sortByName());
+        filteredList.sort(Item.sortByExpiry());
         Ui.printRevenueExpenditure(task, expenditure, startDate, endDate, "expenditure", filteredList);
     }
 

@@ -747,22 +747,22 @@ public class Parser {
         switch (taskType) {
         case TODAY:
             if (hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_TODAY_FORMAT);
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_TODAY_FORMAT);
             }
             break;
         case TOTAL:
             if (hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_TOTAL_FORMAT);
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_TOTAL_FORMAT);
             }
             break;
         case DAY:
             if (!hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_DAY_FORMAT);
             }
             break;
         case RANGE:
             if (!hasStart || !hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_RANGE_FORMAT);
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_RANGE_FORMAT);
             }
             break;
         default: assert taskType.isEmpty();
