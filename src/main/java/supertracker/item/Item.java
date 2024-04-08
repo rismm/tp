@@ -55,7 +55,7 @@ public class Item {
         return Comparator.comparingDouble(Item::getPrice);
     }
 
-    public static Comparator<Item> sortByExpiry() {
+    public static Comparator<Item> sortByDate() {
         return Comparator.comparing(Item::getExpiryDate);
     }
 }

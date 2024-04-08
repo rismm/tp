@@ -8,7 +8,7 @@ import supertracker.ui.Ui;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import java.util.Collections;
 
 // @@ author dtaywd
 public class ExpenditureCommand implements Command {
@@ -16,7 +16,6 @@ public class ExpenditureCommand implements Command {
     private LocalDate startDate;
     private LocalDate endDate;
     private String task;
-
     private BigDecimal expenditure;
 
     public ExpenditureCommand(String task, LocalDate startDate, LocalDate endDate) {
@@ -49,9 +48,10 @@ public class ExpenditureCommand implements Command {
             assert task.isEmpty();
             break;
         }
-        ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, BUY_FLAG);
-        filteredList.sort(Item.sortByName());
-
+        ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(
+                task, startDate, endDate, BUY_FLAG);
+        filteredList.sort(Item.sortByDate());
+        Collections.reverse(filteredList);
         Ui.printRevenueExpenditure(task, expenditure, startDate, endDate, "expenditure", filteredList);
     }
 

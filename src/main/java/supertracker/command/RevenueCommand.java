@@ -25,7 +25,6 @@ public class RevenueCommand implements Command {
 
     @Override
     public void execute() {
-        ArrayList<Transaction> filteredList = new ArrayList<>();
         switch (task) {
         case "today":
             revenue = TransactionList.calculateDay(LocalDate.now(), SELL_FLAG);
@@ -42,7 +41,8 @@ public class RevenueCommand implements Command {
         default: assert task.isEmpty();
             break;
         }
-        filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, SELL_FLAG);
+        ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(
+                task, startDate, endDate, SELL_FLAG);
         filteredList.sort(Item.sortByName());
         Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue", filteredList);
     }
