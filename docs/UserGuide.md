@@ -376,13 +376,13 @@ Example: `rev type/today`
 ```
 Today's revenue is $39.8
 1. Name: apple
-  Quantity: 20
-  Price: 0.99
-  Transaction Date: 19/04/2024
+   Quantity: 20
+   Price: 0.99
+   Transaction Date: 19/04/2024
 2. Name: ball
-  Quantity: 10
-  Price: 2.0
-  Transaction Date: 19/04/2024
+   Quantity: 10
+   Price: 2.0
+   Transaction Date: 19/04/2024
 ```
 <br>
 
