@@ -20,6 +20,7 @@ import supertracker.command.ExpenditureCommand;
 
 import supertracker.item.Inventory;
 import supertracker.item.Item;
+import supertracker.item.TransactionList;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
@@ -734,6 +735,8 @@ public class Parser {
         validateRevExpFormat(type, hasStart, hasEnd);
         LocalDate to = parseDate(toString);
         LocalDate from = parseDate(fromString);
+        validateNonNegativeForExpRev(type, from, to, "b");
+
         return new ExpenditureCommand(type, from, to);
     }
     //@@author
@@ -787,8 +790,35 @@ public class Parser {
         validateRevExpFormat(taskType, hasStart, hasEnd);
         LocalDate startDate = parseDate(startDateString);
         LocalDate endDate = parseDate(endDateString);
+        validateNonNegativeForExpRev(taskType, startDate, endDate, "s");
 
         return new RevenueCommand(taskType, startDate, endDate);
     }
     //@@author
+
+    private static void validateNonNegativeForExpRev(String taskType, LocalDate startDate,
+                                                          LocalDate endDate, String flag) throws TrackerException {
+        double expenditure = 0;
+        switch (taskType) {
+        case "today":
+            LocalDate currDate = LocalDate.now();
+            expenditure = TransactionList.calculateDay(currDate, flag);
+            break;
+        case "total":
+            expenditure = TransactionList.calculateTotal(flag);
+            break;
+        case "day":
+            expenditure = TransactionList.calculateDay(startDate, flag);
+            break;
+        case "range":
+            expenditure = TransactionList.calculateRange(startDate, endDate, flag);
+            break;
+        default:
+            assert taskType.isEmpty();
+        }
+
+        if (expenditure < 0) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
+        }
+    }
 }
