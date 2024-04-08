@@ -451,6 +451,6 @@ then use the buy command to increase its quantity.
 | **Report**      | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
 | **Buy**         | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |
 | **Sell**        | `sell n/NAME q/QUANTITY`                                           | e.g. `sell n/Milk q/10`                      |
-| **Expenditure** | `exp type/expenditureType [from/startDate] [to/endDate]`           | e.g. `exp type/today`                        |
-| **Revenue**     | `rev type/revenueType [from/startDate] [to/endDate]`               | e.g. `rev type/today`                        |
+| **Expenditure** | `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`        | e.g. `exp type/today`                        |
+| **Revenue**     | `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`            | e.g. `rev type/today`                        |
 | **Quit**        | `quit`                                                             | e.g. `quit`                                  |
