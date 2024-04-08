@@ -439,6 +439,11 @@ If you wish to add a newly bought item to the inventory,
 first create a new item in the inventory with its quantity set to 0 using the [new](#create-a-new-item-new) command,
 then use the buy command to increase its quantity.
 
+**Q**: Why am I allowed to set the quantity and/or price of an item to 0?
+
+**A**: We want to provide our users with more flexibility. 
+This can be handy for placeholders or situations where items are free.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command Summary
