@@ -19,7 +19,7 @@ public class ErrorMessage {
     public static final String INVALID_REPORT_TYPE = "Please select a valid report type. Only 'low stock' and " +
             "'expiry' are available.";
     public static final String INVALID_EXPIRY_REPORT_FORMAT = "If report type is 'expiry' threshold should not be " +
-            "specified. ";
+            "specified.";
     public static final String ITEM_NOT_IN_LIST_UPDATE =
             " does not exist in inventory. Unable to update its values. =(";
     public static final String ITEM_NOT_IN_LIST_DELETE =
@@ -34,7 +34,6 @@ public class ErrorMessage {
             " does not exist in inventory. Unable to sell. =(";
     public static final String ITEM_IN_LIST_NEW = " already exists in inventory. Use the update command instead.";
     public static final String QUANTITY_NOT_INTEGER = "Quantity should be a non-negative integer";
-
     public static final String INVALID_NUMBER_FORMAT = "Invalid values for price/quantity";
     public static final String INVALID_QUANTITY_FORMAT = "Invalid value for quantity";
     public static final String INVALID_PRICE_FORMAT = "Invalid value for price";
