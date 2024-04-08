@@ -1,5 +1,6 @@
 package supertracker.item;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Transaction extends Item {
@@ -16,5 +17,16 @@ public class Transaction extends Item {
 
     public LocalDate getTransactionDate() {
         return getExpiryDate();
+    }
+
+    public BigDecimal getTotalPrice() {
+        BigDecimal bigQuantity = new BigDecimal(quantity);
+        BigDecimal bigPrice = new BigDecimal(price);
+        return bigQuantity.multiply(bigPrice);
+    }
+
+    public String getTotalPriceString() {
+        BigDecimal totalPrice = getTotalPrice();
+        return "$" + String.format("%.2f", totalPrice);
     }
 }

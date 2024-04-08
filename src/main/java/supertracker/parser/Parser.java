@@ -120,14 +120,14 @@ public class Parser {
             + PRICE_FLAG + BASE_FLAG + "(?<" + PRICE_GROUP + ">.*) ";
     private static final String SELL_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) ";
+    private static final String EXP_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
+            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
+            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
     private static final String REV_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
             "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) " +
             "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) ";
     private static final String RENAME_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) " +
             "(?<" + NEW_NAME_GROUP + ">(?:" + NEW_NAME_FLAG + BASE_FLAG + ".*)?) ";
-    private static final String EXPENDITURE_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
-            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
-            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
 
     /**
      * Returns the command word specified in the user input string
@@ -327,14 +327,15 @@ public class Parser {
         }
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static void validateDate(LocalDate expiryDate, String dateString) throws TrackerException {
         if (!expiryDate.format(EX_DATE_FORMAT).equals(dateString)) {
             throw new TrackerException(ErrorMessage.INVALID_DATE);
         }
     }
+    //@@author
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static LocalDate parseDate(String dateString) throws TrackerException {
         LocalDate date = UNDEFINED_DATE;
         try {
@@ -348,7 +349,7 @@ public class Parser {
         }
     }
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
         LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
 
@@ -368,6 +369,7 @@ public class Parser {
         }
         return expiryDate;
     }
+    //@@author
 
 
     private static void validateItemExistsInInventory(String name, String errorMessage) throws TrackerException {
@@ -567,7 +569,7 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        //@@vimalapugazhan
+        //@@author vimalapugazhan
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
@@ -583,8 +585,9 @@ public class Parser {
         return new ListCommand(firstParam, secondParam, thirdParam,
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
+    //@@author
 
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static Command parseDeleteCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG};
         Matcher matcher = getPatternMatcher(DELETE_COMMAND_REGEX, input, flags);
@@ -600,6 +603,7 @@ public class Parser {
 
         return new DeleteCommand(name);
     }
+    //@@author
 
     private static Command parseAddCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG, QUANTITY_FLAG};
@@ -730,19 +734,18 @@ public class Parser {
         int quantity = parseQuantity(quantityString);
         validateNonNegativeQuantity(quantityString, quantity);
 
-        double price = Inventory.get(name).getPrice();
         LocalDate currentDate = LocalDate.now();
 
-        return new SellCommand(name, quantity, price, currentDate);
+        return new SellCommand(name, quantity, currentDate);
     }
 
-    // @@ author dtaywd
+    //@@author dtaywd
     private static Command parseExpenditureCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, FROM_FLAG, TO_FLAG};
-        Matcher matcher = getPatternMatcher(EXPENDITURE_COMMAND_REGEX, input, flags);
+        Matcher matcher = getPatternMatcher(EXP_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
-            throw new TrackerException(ErrorMessage.INVALID_EXPENDITURE_FORMAT);
+            throw new TrackerException(ErrorMessage.INVALID_EXP_FORMAT);
         }
 
         boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
@@ -755,39 +758,12 @@ public class Parser {
         validateRevExpFormat(type, hasStart, hasEnd);
         LocalDate to = parseDate(toString);
         LocalDate from = parseDate(fromString);
+
         return new ExpenditureCommand(type, from, to);
     }
+    //@@author
 
-    //@@vimalapugazhan
-    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd)
-            throws TrackerException {
-        switch (taskType) {
-        case TODAY:
-            if (hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_TODAY_FORMAT);
-            }
-            break;
-        case TOTAL:
-            if (hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_TOTAL_FORMAT);
-            }
-            break;
-        case DAY:
-            if (!hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
-            }
-            break;
-        case RANGE:
-            if (!hasStart || !hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_RANGE_FORMAT);
-            }
-            break;
-        default: assert taskType.isEmpty();
-            break;
-        }
-    }
-
-    //@@vimalapugazhan
+    //@@author vimalapugazhan
     private static Command parseRevenueCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
         Matcher matcher = getPatternMatcher(REV_COMMAND_REGEX, input, flags);
@@ -809,4 +785,35 @@ public class Parser {
 
         return new RevenueCommand(taskType, startDate, endDate);
     }
+    //@@author
+
+    //@@author vimalapugazhan
+    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd)
+            throws TrackerException {
+        switch (taskType) {
+        case TODAY:
+            if (hasStart || hasEnd) {
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_TODAY_FORMAT);
+            }
+            break;
+        case TOTAL:
+            if (hasStart || hasEnd) {
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_TOTAL_FORMAT);
+            }
+            break;
+        case DAY:
+            if (!hasStart || hasEnd) {
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_DAY_FORMAT);
+            }
+            break;
+        case RANGE:
+            if (!hasStart || !hasEnd) {
+                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_RANGE_FORMAT);
+            }
+            break;
+        default: assert taskType.isEmpty();
+            break;
+        }
+    }
+    //@@author
 }

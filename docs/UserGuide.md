@@ -15,6 +15,10 @@ optimized for use via a Command Line Interface (CLI).
   - [Find an item: `find`](#find-an-item-find)
   - [List all items: `list`](#list-all-items-list)
   - [Print report: `report`](#print-report-report)
+  - [Buy items: `buy`](#buy-items-buy)
+  - [Sell items: `sell`](#sell-items-sell)
+  - [Print expenditure: `exp`](#print-expenditure-exp)
+  - [Print revenue: `rev`](#print-revenue-rev)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
@@ -261,29 +265,75 @@ Example: `report r/expiry` or `report r/expiry t/`
 
 ```
 There is 1 item close to expiry!
- 1. Name: apple
+ 1. Name: Apple
     Expiry Date: 20/04/2024
  There is 1 item that is expired!
- 1. Name: orange
+ 1. Name: Orange
     Expiry Date: 29/03/2024
 ```
 
 <br>
 
-### Print expenditure `exp`
-There are 4 types of expenditures:
-1. **today** - lists all expenditures that occurred today
-2. **total** - lists all expenditures in total
-3. **day** - lists all expenditures that occurred during the specified day
-4. **range** - lists all expenditures that occurred in the specified range of dates 
+### Buy items: `buy`
+Buy items from suppliers and add them to the inventory. 
+This buy transaction will create a new entry in the transaction list,
+with the current date saved as the transaction date.
+
+Format: `buy n/NAME q/QUANTITY p/PRICE`
+- `NAME` is case-insensitive
+  - e.g. `Cheese` will be interpreted as `cheese`
+- If `NAME` does not exist in the inventory, an error would be thrown
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+  - e.g. 1, 10, 100
+- If the new quantity of the item exceeds 2147483647, an error would be thrown
+- `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
+  - e.g. 1, 0.20, 12.3, 12.345
+- If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
+  - e.g. 12.345 ≈ 12.35
+
+Example: `buy n/Milk q/10 p/3`
+```
+10 Milk bought at $3.00 each for $30.00 in total
+Quantity: 110
+```
+
+<br>
+
+### Sell items: `sell`
+Sell items to customers and remove them from the inventory.
+This sell transaction will create a new entry in the transaction list,
+with the current date saved as the transaction date.
+
+Format: `sell n/NAME q/QUANTITY`
+- `NAME` is case-insensitive
+  - e.g. `Cheese` will be interpreted as `cheese`
+- If `NAME` does not exist in the inventory, an error would be thrown
+- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+  - e.g. 1, 10, 100
+- If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
+
+Example: `sell n/Milk q/10`
+```
+10 Milk sold at $5.00 each for $50.00 in total
+Quantity: 90
+```
+
+<br>
+
+### Print expenditure: `exp`
+There are 4 types of expenditure commands:
+1. **today** - list all buy transactions that occurred today
+2. **total** - list all buy transactions in total
+3. **day** - list all buy transactions that occurred during the specified day
+4. **range** - list all buy transactions that occurred in the specified range of dates 
 not inclusive of the start and end dates
 
-The cumulative expenditures would be first printed to the terminal. 
-Afterwords, the expenditures will be printed to the terminal and will contain the name, 
-quantity and price of each purchase. 
-All expenditures would be listed according to alphabetical order.
+The cumulative expenditure will be first printed to the terminal.
+Afterward, each buy transaction will be printed to the terminal containing its name, 
+quantity, price and transaction date.
+All buy transactions will be listed from most recent to least recent.
 
-Format: `exp type/expenditureType [from/startDate] [to/endDate]`
+Format: `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`
 
 > Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled. 
 > If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
@@ -292,16 +342,52 @@ Format: `exp type/expenditureType [from/startDate] [to/endDate]`
 Example: `exp type/today`
 
 ```
-Today's expenditure is $94.5
-1. Name: apple
+Today's expenditure is $94.50
+1. Name: Apple
    Quantity: 30
-   Price: 2.15
+   Price: $2.15
    Transaction Date: 19/04/2024
-2. Name: banana
+2. Name: Banana
    Quantity: 10
-   Price: 3.0
+   Price: $3.00
    Transaction Date: 19/04/2024
 ```
+
+<br>
+
+### Print revenue: `rev`
+There are 4 types of revenue commands:
+1. **today** - list all sell transactions that occurred today
+2. **total** - list all sell transactions in total
+3. **day** - list all sell transactions that occurred during the specified day
+4. **range** - list all sell transactions that occurred in the specified range of dates 
+not inclusive of the start and end dates
+
+The cumulative revenue will be first printed to the terminal.
+Afterward, each sell transaction will be printed to the terminal containing its name,
+quantity, price and transaction date.
+All sell transactions will be listed from most recent to least recent.
+
+Format: `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`
+
+> Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled.
+> If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
+> If the type is **range**, both startDate and endDate are compulsory.
+
+Example: `rev type/today`
+
+```
+Today's revenue is $39.80
+1. Name: Apple
+   Quantity: 20
+   Price: $0.99
+   Transaction Date: 19/04/2024
+2. Name: Banana
+   Quantity: 10
+   Price: $2.00
+   Transaction Date: 19/04/2024
+```
+
 <br>
 
 ### Quit the program: `quit`
@@ -346,18 +432,40 @@ What if I want different batches of the same item with different expiry dates?
 **A**: Simply add a unique identifier after the item name when creating a new item. 
 e.g. `n/Milk-1`,`n/Milk-2`. The format of the unique identifier is completely up to the user's discretion.
 
+**Q**: Why can't I add new items to the inventory using the buy command?
+
+**A**: The buy command should mainly be used when you want to replenish the stock of an existing item.
+If you wish to add a newly bought item to the inventory, 
+first create a new item in the inventory with its quantity set to 0 using the [new](#create-a-new-item-new) command,
+then use the buy command to increase its quantity.
+
+**Q**: Why am I allowed to set the quantity and/or price of an item to 0?
+
+**A**: We want to provide our users with more flexibility. 
+This can be handy for placeholders or situations where items are free.
+
+**Q**: Why am I allowed to set expiry dates that have already passed?
+
+**A**: We want to provide our users with more flexibility.
+This can be useful if the user has previously entered an incorrect expiry date, 
+allowing them to fix their mistake.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command Summary
 
-| Action     | Format                                                             | Examples                                     |
-|------------|--------------------------------------------------------------------|----------------------------------------------|
-| **New**    | `new n/NAME q/QUANTITY p/PRICE e/EXPIRY_DATE`                      | e.g. `new n/Milk q/100 p/5 e/05-12-2113`     |
-| **Delete** | `delete n/NAME`                                                    | e.g. `delete n/Milk`                         |
-| **Add**    | `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`                       |
-| **Remove** | `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`                    |
-| **Update** | `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113` |
-| **Find**   | `find n/NAME`                                                      | e.g. `find n/apple`                          |
-| **List**   | `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`                     |
-| **Report** | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
-| **Quit**   | `quit`                                                             | e.g. `quit`                                  |
+| Action          | Format                                                             | Examples                                     |
+|-----------------|--------------------------------------------------------------------|----------------------------------------------|
+| **New**         | `new n/NAME q/QUANTITY p/PRICE e/EXPIRY_DATE`                      | e.g. `new n/Milk q/100 p/5 e/05-12-2113`     |
+| **Delete**      | `delete n/NAME`                                                    | e.g. `delete n/Milk`                         |
+| **Add**         | `add n/NAME q/QUANTITY`                                            | e.g. `add n/Milk q/10`                       |
+| **Remove**      | `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`                    |
+| **Update**      | `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113` |
+| **Find**        | `find n/NAME`                                                      | e.g. `find n/apple`                          |
+| **List**        | `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`                     |
+| **Report**      | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
+| **Buy**         | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |
+| **Sell**        | `sell n/NAME q/QUANTITY`                                           | e.g. `sell n/Milk q/10`                      |
+| **Expenditure** | `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`        | e.g. `exp type/today`                        |
+| **Revenue**     | `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`            | e.g. `rev type/today`                        |
+| **Quit**        | `quit`                                                             | e.g. `quit`                                  |

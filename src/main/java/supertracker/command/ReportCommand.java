@@ -11,6 +11,7 @@ import java.util.List;
 public class ReportCommand implements Command{
     private String reportType;
     private int threshold;
+
     public ReportCommand(String reportType, int threshold) {
         this.reportType = reportType;
         this.threshold = threshold;
@@ -50,8 +51,8 @@ public class ReportCommand implements Command{
                 reportExpiredItems.add(item);
             }
         }
-        reportExpiryItems.sort(Item.sortByExpiry());
-        reportExpiredItems.sort(Item.sortByExpiry());
+        reportExpiryItems.sort(Item.sortByDate());
+        reportExpiredItems.sort(Item.sortByDate());
         Ui.reportCommandSuccess(reportExpiryItems, reportType);
         Ui.reportCommandSuccess(reportExpiredItems, "expired");
     }

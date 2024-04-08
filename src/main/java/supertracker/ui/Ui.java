@@ -3,6 +3,7 @@ package supertracker.ui;
 import supertracker.item.Item;
 import supertracker.item.Transaction;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -34,7 +35,6 @@ public class Ui {
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
-    private static final double ROUNDING_FACTOR = 100.0;
 
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -81,6 +81,18 @@ public class Ui {
 
     private static String removeItemOpening(Item item, int quantityRemoved) {
         return quantityRemoved + " " + item.getName() + " removed from inventory!";
+    }
+
+    private static String buyItemOpening(Transaction transaction) {
+        return transaction.getQuantity() + " " + transaction.getName() + " bought at "
+                + transaction.getPriceString() + " each for "
+                + transaction.getTotalPriceString() + " in total";
+    }
+
+    private static String sellItemOpening(Transaction transaction) {
+        return transaction.getQuantity() + " " + transaction.getName() + " sold at "
+                + transaction.getPriceString() + " each for "
+                + transaction.getTotalPriceString() + " in total";
     }
 
     private static String reportLowStockOpening(int quantity) {
@@ -175,6 +187,16 @@ public class Ui {
         printIndent(getQuantityMessage(item));
     }
 
+    public static void buyCommandSuccess(Item item, Transaction transaction) {
+        printIndent(buyItemOpening(transaction));
+        printIndent(getQuantityMessage(item));
+    }
+
+    public static void sellCommandSuccess(Item item, Transaction transaction) {
+        printIndent(sellItemOpening(transaction));
+        printIndent(getQuantityMessage(item));
+    }
+
     public static void reportNoItems() {
         printIndent(REPORT_INVENTORY_NO_ITEMS);
     }
@@ -239,26 +261,25 @@ public class Ui {
         }
     }
 
-    //@@vimalapugazhan
-    public static void printRevenueExpenditure(String task, double amount, LocalDate startDate, LocalDate endDate,
+    public static void printRevenueExpenditure(String task, BigDecimal amount, LocalDate startDate, LocalDate endDate,
                                                String financeType, ArrayList<Transaction> filteredList) {
-        amount = roundTo2Dp(amount);
+        String amountString = String.format("%.2f", amount);
         switch (task) {
         case TODAY:
-            printIndent("Today's " + financeType + " is $" + amount);
+            printIndent("Today's " + financeType + " is $" + amountString);
             printFilteredList(filteredList);
             break;
         case TOTAL:
-            printIndent("Total  " + financeType + "  is $" + amount);
+            printIndent("Total  " + financeType + "  is $" + amountString);
             printFilteredList(filteredList);
             break;
         case DAY:
-            printIndent(financeType + " on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+            printIndent(financeType + " on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + amountString);
             printFilteredList(filteredList);
             break;
         case RANGE:
             printIndent( financeType + " between " + startDate.format(DATE_FORMAT_PRINT) + " and "
-                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + amount);
+                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + amountString);
             printFilteredList(filteredList);
             break;
         default: assert task.isEmpty();
@@ -273,11 +294,12 @@ public class Ui {
             String formattedTransactionDate = transaction.getTransactionDate().format(DATE_FORMAT_PRINT);
             printIndent(count + ". Name: " + transaction.getName());
             printIndent("   Quantity: " + transaction.getQuantity());
-            printIndent("   Price: " + transaction.getPrice());
+            printIndent("   Price: " + transaction.getPriceString());
             printIndent("   Transaction Date: " + formattedTransactionDate);
             count += 1;
         }
     }
+    //@@author
 
     public static void listIntro(int size) {
         assert size >= 0;
@@ -390,9 +412,5 @@ public class Ui {
     private static String padStringWithQuotes(String name, boolean hasComma) {
         String end = hasComma ? "\"," : "\"";
         return "\"" + name + end;
-    }
-
-    private static double roundTo2Dp(double unroundedValue) {
-        return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 }

@@ -1,5 +1,7 @@
+//@@author vimalapugazhan
 package supertracker.command;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -8,26 +10,21 @@ import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
 import supertracker.ui.Ui;
 
-
 public class RevenueCommand implements Command {
     private static final String SELL_FLAG = "s";
     private String task;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double revenue;
+    private BigDecimal revenue;
 
-
-    //@@vimalapugazhan
     public RevenueCommand (String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    //@@vimalapugazhan
     @Override
     public void execute() {
-        ArrayList<Transaction> filteredList = new ArrayList<>();
         switch (task) {
         case "today":
             revenue = TransactionList.calculateDay(LocalDate.now(), SELL_FLAG);
@@ -44,7 +41,8 @@ public class RevenueCommand implements Command {
         default: assert task.isEmpty();
             break;
         }
-        filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, SELL_FLAG);
+        ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(
+                task, startDate, endDate, SELL_FLAG);
         filteredList.sort(Item.sortByName());
         Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue", filteredList);
     }

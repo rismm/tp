@@ -11,28 +11,33 @@ import java.io.IOException;
 public class AddCommand implements Command {
     protected String name;
     protected int quantity;
+    protected Item newItem;
 
     public AddCommand(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
     }
 
-    @Override
-    public void execute() {
+    protected void executeWithoutUi() {
         assert Inventory.contains(name);
         assert quantity >= 0;
 
         Item oldItem = Inventory.get(name);
         int newQuantity = oldItem.getQuantity() + quantity;
-        Item newItem = new Item(oldItem.getName(), newQuantity, oldItem.getPrice(), oldItem.getExpiryDate());
+        newItem = new Item(oldItem.getName(), newQuantity, oldItem.getPrice(), oldItem.getExpiryDate());
         Inventory.put(name, newItem);
-        Ui.addCommandSuccess(newItem, quantity);
 
         try {
             FileManager.saveData();
         } catch (IOException e) {
             Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
         }
+    }
+
+    @Override
+    public void execute() {
+        executeWithoutUi();
+        Ui.addCommandSuccess(newItem, quantity);
     }
 
     @Override

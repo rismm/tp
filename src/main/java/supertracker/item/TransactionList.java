@@ -1,5 +1,6 @@
 package supertracker.item;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -18,43 +19,45 @@ public class TransactionList {
         transactionList.add(transaction);
     }
 
-    //@@vimalapugazhan
-    public static double calculateRange(LocalDate start, LocalDate end, String flag) {
-        double totalAmount = 0;
+    //@@author vimalapugazhan
+    public static BigDecimal calculateRange(LocalDate start, LocalDate end, String flag) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
         for (Transaction transaction : transactionList) {
             LocalDate transactionDate = transaction.getTransactionDate();
             String transactionType = transaction.getType();
             if (transactionType.equals(flag) && transactionDate.isBefore(end) && transactionDate.isAfter(start)) {
-                totalAmount += transaction.getPrice() * transaction.getQuantity();
+                BigDecimal newAmount = transaction.getTotalPrice();
+                totalAmount = totalAmount.add(newAmount);
             }
         }
         return totalAmount;
     }
 
-    //@@vimalapugazhan
-    public static double calculateDay(LocalDate day, String flag) {
-        double totalAmount = 0;
+    public static BigDecimal calculateDay(LocalDate day, String flag) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
         for (Transaction transaction : transactionList) {
             LocalDate transactionDate = transaction.getTransactionDate();
             String transactionType = transaction.getType();
             if (transactionType.equals(flag) && transactionDate.isEqual(day)) {
-                totalAmount += transaction.getPrice() * transaction.getQuantity();
+                BigDecimal newAmount = transaction.getTotalPrice();
+                totalAmount = totalAmount.add(newAmount);
             }
         }
         return totalAmount;
     }
 
-    //@@vimalapugazhan
-    public static double calculateTotal(String flag) {
-        double totalAmount = 0;
+    public static BigDecimal calculateTotal(String flag) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
         for (Transaction transaction : transactionList) {
             String transactionType = transaction.getType();
             if (transactionType.equals(flag)) {
-                totalAmount += transaction.getPrice() * transaction.getQuantity();
+                BigDecimal newAmount = transaction.getTotalPrice();
+                totalAmount = totalAmount.add(newAmount);
             }
         }
         return totalAmount;
     }
+    //@@author
 
     // @@ author dtaywd
     public static ArrayList<Transaction> getFilteredTransactionList(String type, LocalDate start, LocalDate end,

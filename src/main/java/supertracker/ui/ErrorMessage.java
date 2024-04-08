@@ -1,7 +1,6 @@
 package supertracker.ui;
 
 public class ErrorMessage {
-
     public static final String INVALID_UPDATE_FORMAT = "Invalid update command format!";
     public static final String INVALID_RENAME_FORMAT = "Invalid rename command format!";
     public static final String EMPTY_PARAM_INPUT = "Parameters cannot be left empty!";
@@ -12,14 +11,16 @@ public class ErrorMessage {
     public static final String INVALID_REMOVE_FORMAT = "Invalid remove command format!";
     public static final String INVALID_BUY_FORMAT = "Invalid buy command format!";
     public static final String INVALID_SELL_FORMAT = "Invalid sell command format!";
-    public static final String INVALID_REPORT_FORMAT = "Invalid report command format! Follow 'report r/{report type}" +
-            " t/{threshold}";
-    public static final String INVALID_EXPENDITURE_FORMAT = "Invalid expenditure command format! Follow " +
-            "'expenditure t/{task type} to/{startDate} from/{endDate}";
+    public static final String INVALID_REPORT_FORMAT = "Invalid report command format! " +
+            "Follow 'report r/REPORT_TYPE [t/THRESHOLD_VALUE]'";
+    public static final String INVALID_EXP_FORMAT = "Invalid expenditure command format! " +
+            "Follow 'exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]'";
+    public static final String INVALID_REV_FORMAT = "Invalid revenue command format! " +
+            "Follow 'rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]'";
     public static final String INVALID_REPORT_TYPE = "Please select a valid report type. Only 'low stock' and " +
             "'expiry' are available.";
     public static final String INVALID_EXPIRY_REPORT_FORMAT = "If report type is 'expiry' threshold should not be " +
-            "specified. ";
+            "specified.";
     public static final String ITEM_NOT_IN_LIST_UPDATE =
             " does not exist in inventory. Unable to update its values. =(";
     public static final String ITEM_NOT_IN_LIST_DELETE =
@@ -36,7 +37,6 @@ public class ErrorMessage {
             " does not exist in inventory. Unable to sell. =(";
     public static final String ITEM_IN_LIST_NEW = " already exists in inventory. Use the update command instead.";
     public static final String QUANTITY_NOT_INTEGER = "Quantity should be a non-negative integer";
-
     public static final String INVALID_NUMBER_FORMAT = "Invalid values for price/quantity";
     public static final String INVALID_QUANTITY_FORMAT = "Invalid value for quantity";
     public static final String INVALID_PRICE_FORMAT = "Invalid value for price";
@@ -54,11 +54,12 @@ public class ErrorMessage {
             "Oops! Unable to load some of your previous data as the data in the save file has been corrupted!";
     public static final String INTEGER_OVERFLOW = "Unable to add your specified number of items. " +
             "Why do you need more than 2147483647 items anyway?";
-    public static final String INVALID_REV_FORMAT = "Invalid revenue command format. " +
-            "rev task/taskType [from/startDate] [to/endDate]";
-    public static final String INVALID_REV_TODAY_FORMAT = "Invalid revenue command format. \"rev task/today\"";
-    public static final String INVALID_REV_TOTAL_FORMAT = "Invalid revenue command format. \"rev task/total\"";
-    public static final String INVALID_REV_DAY_FORMAT = "Invalid revenue command format. \"rev task/day from/DATE\"";
-    public static final String INVALID_REV_RANGE_FORMAT = "Invalid revenue command format. "
-            + "\"rev task/range from/START_DATE to/END_DATE\"";
+    public static final String INVALID_REV_EXP_TODAY_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/today\" or \"exp task/today\"";
+    public static final String INVALID_REV_EXP_TOTAL_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/total\" or \"exp task/total\"";
+    public static final String INVALID_REV_EXP_DAY_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/day from/DATE\" or \"exp task/day from/DATE\"";
+    public static final String INVALID_REV_EXP_RANGE_FORMAT = "Invalid revenue/expenditure command format. "
+            + "\"rev task/range from/START_DATE to/END_DATE\" or \"exp task/range from/START_DATE to/END_DATE\"";
 }
