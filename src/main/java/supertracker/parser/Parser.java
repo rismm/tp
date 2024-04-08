@@ -818,7 +818,7 @@ public class Parser {
         }
 
         if (expenditure < 0) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
+            throw new TrackerException(ErrorMessage.DOUBLE_OVERFLOW_REV_EXP);
         }
     }
 }
