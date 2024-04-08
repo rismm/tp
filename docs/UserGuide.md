@@ -276,7 +276,8 @@ There is 1 item close to expiry!
 
 ### Buy items: `buy`
 Buy items from suppliers and add them to the inventory. 
-This buy transaction will create a new entry in the transaction list.
+This buy transaction will create a new entry in the transaction list,
+with the current date saved as the transaction date.
 
 Format: `buy n/NAME q/QUANTITY p/PRICE`
 - `NAME` is case-insensitive
@@ -300,7 +301,8 @@ Quantity: 110
 
 ### Sell items: `sell`
 Sell items to customers and remove them from the inventory.
-This sell transaction will create a new entry in the transaction list.
+This sell transaction will create a new entry in the transaction list,
+with the current date saved as the transaction date.
 
 Format: `sell n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
