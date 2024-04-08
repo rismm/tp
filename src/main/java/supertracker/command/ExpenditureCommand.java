@@ -5,6 +5,7 @@ import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
 import supertracker.ui.Ui;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class ExpenditureCommand implements Command {
     private LocalDate endDate;
     private String task;
 
-    private double expenditure;
+    private BigDecimal expenditure;
 
     public ExpenditureCommand(String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
@@ -26,7 +27,6 @@ public class ExpenditureCommand implements Command {
 
     @Override
     public void execute() {
-        ArrayList<Transaction> filteredList = new ArrayList<>();
         switch (task) {
         case "today":
             LocalDate currDate = LocalDate.now();
@@ -49,8 +49,9 @@ public class ExpenditureCommand implements Command {
             assert task.isEmpty();
             break;
         }
-        filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, BUY_FLAG);
+        ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, BUY_FLAG);
         filteredList.sort(Item.sortByName());
+
         Ui.printRevenueExpenditure(task, expenditure, startDate, endDate, "expenditure", filteredList);
     }
 

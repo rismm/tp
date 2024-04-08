@@ -1,6 +1,7 @@
 //@@author vimalapugazhan
 package supertracker.command;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public class RevenueCommand implements Command {
     private String task;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double revenue;
+    private BigDecimal revenue;
 
     public RevenueCommand (String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;

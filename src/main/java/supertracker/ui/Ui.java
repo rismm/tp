@@ -3,6 +3,7 @@ package supertracker.ui;
 import supertracker.item.Item;
 import supertracker.item.Transaction;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -34,7 +35,6 @@ public class Ui {
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
-    private static final double ROUNDING_FACTOR = 100.0;
 
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -245,9 +245,8 @@ public class Ui {
         }
     }
 
-    public static void printRevenueExpenditure(String task, double amount, LocalDate startDate, LocalDate endDate,
+    public static void printRevenueExpenditure(String task, BigDecimal amount, LocalDate startDate, LocalDate endDate,
                                                String financeType, ArrayList<Transaction> filteredList) {
-        amount = roundTo2Dp(amount);
         String amountString = String.format("%.2f", amount);
         switch (task) {
         case TODAY:
@@ -279,7 +278,7 @@ public class Ui {
             String formattedTransactionDate = transaction.getTransactionDate().format(DATE_FORMAT_PRINT);
             printIndent(count + ". Name: " + transaction.getName());
             printIndent("   Quantity: " + transaction.getQuantity());
-            printIndent("   Price: " + transaction.getPrice());
+            printIndent("   Price: " + transaction.getPriceString());
             printIndent("   Transaction Date: " + formattedTransactionDate);
             count += 1;
         }
@@ -394,9 +393,5 @@ public class Ui {
     private static String padStringWithQuotes(String name, boolean hasComma) {
         String end = hasComma ? "\"," : "\"";
         return "\"" + name + end;
-    }
-
-    private static double roundTo2Dp(double unroundedValue) {
-        return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 }

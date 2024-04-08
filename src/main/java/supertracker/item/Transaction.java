@@ -19,10 +19,14 @@ public class Transaction extends Item {
         return getExpiryDate();
     }
 
-    public String getTotalPriceString() {
+    public BigDecimal getTotalPrice() {
         BigDecimal bigQuantity = new BigDecimal(quantity);
         BigDecimal bigPrice = new BigDecimal(price);
-        BigDecimal totalPrice = bigQuantity.multiply(bigPrice);
+        return bigQuantity.multiply(bigPrice);
+    }
+
+    public String getTotalPriceString() {
+        BigDecimal totalPrice = getTotalPrice();
         return "$" + String.format("%.2f", totalPrice);
     }
 }
