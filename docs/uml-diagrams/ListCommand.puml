@@ -22,16 +22,15 @@ interface Command <<interface>> {
 }
 
 class ListCommand {
-    -hasQuantity:boolean
-    -hasPrice:boolean
-    -hasExpiry:boolean
     -firstParam:String
     -secondParam:String
-    -sortBy:String
+    -thirdParam:String
+    -firstSortParam:String
+    -secondSortParam:String
+    -thirdSortParam:String
     -isReverse:boolean
-    -moveItemsWithoutExpiry(items:List<Item>, itemsWithoutExpiry:List<Item>)
-    +ListCommand(hasQuantity:boolean, hasPrice:boolean, hasExpiry:boolean,
-    firstParam:String, secondParam:String, sortBy:String, isReverse:boolean)
+    -sortBy(sortParam:String, items:List<Item>)
+    +ListCommand()
     +execute():void
     +isQuit():boolean
 }
@@ -40,7 +39,7 @@ class Item {
     {static}+sortByName():Comparator<Item>
     {static}+sortByQuantity():Comparator<Item>
     {static}+sortByPrice():Comparator<Item>
-    {static}+sortByExpiry():Comparator<Item>
+    {static}+sortByDate():Comparator<Item>
 }
 
 class Inventory {
@@ -49,13 +48,15 @@ class Inventory {
 
 class Ui {
     {static}+listIntro(size:int):void
-    {static}+listItem(item:Item, index:int, hasQuantity:boolean, hasPrice:boolean,
-    {static}hasExpiry:boolean, firstParam:String, secondParam:String):void
+    {static}+listItem():void
 }
 
 class Parser {
     {static}-parseListCommand(input:String):ListCommand
 }
+
+note "Some parameters and methods \nomitted for brevity" as n1
+
 @enduml
 
 @startuml
@@ -63,22 +64,14 @@ hide footbox
 participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
 participant ":ListCommand" as ListCommand #cbf7f4
 participant "Inventory" as Inventory <<class>> #d5eac2
-participant "Item" as Item <<class>> #fbffb2
 participant "Collections" as Collections <<class>> #ffcdd6
 participant "Ui" as Ui <<class>> #e5c2ea
-participant ":ArrayList<Item>" as ArrayList #bcf7cf
-participant ":ArrayList<Item>" as ArrayList2 #dfe6ff
 
 SuperTracker -> ListCommand : execute()
 activate ListCommand #cbf7f4
 
 ListCommand -> Inventory : getItems()
 activate Inventory #d5eac2
-
-Inventory -> ArrayList ** : new ArrayList<>(items:Collection<Item>)
-activate ArrayList #bcf7cf
-ArrayList --> Inventory : items:ArrayList<Item>
-deactivate ArrayList
 
 Inventory --> ListCommand : items:ArrayList<Item>
 deactivate Inventory
@@ -88,60 +81,29 @@ activate Ui #e5c2ea
 Ui --> ListCommand
 deactivate Ui
 
-ListCommand -> ArrayList2 ** : new ArrayList<Item>()
-activate ArrayList2 #dfe6ff
-ArrayList2 --> ListCommand : itemsWithoutExpiry:ArrayList<Item>
-deactivate ArrayList2
-
-alt sortBy == "q"
-
-ListCommand -> Item : sortByQuantity()
-activate Item #fbffb2
-Item --> ListCommand : comparator:Comparator<Item>
-deactivate Item
-
-else sortBy == "p"
-
-ListCommand -> Item : sortByPrice()
-activate Item #fbffb2
-Item --> ListCommand : comparator:Comparator<Item>
-deactivate Item
-
-else sortBy == "e"
-
-ListCommand -> ListCommand : moveItemsWithoutExpiry(items:ArrayList<Item>, itemsWithoutExpiry:ArrayList<Item>)
+ListCommand -> ListCommand : sortBy(ALPHABET:String, items:ArrayList<Item>)
 activate ListCommand #cbf7f4
 ListCommand --> ListCommand
+note right : items sorted according to alphabet
 deactivate ListCommand
 
-ListCommand -> Item : sortByName()
-activate Item #fbffb2
-Item --> ListCommand : comparator:Comparator<Item>
-deactivate Item
+ListCommand -> ListCommand : sortBy(thirdSortParam:String, items:ArrayList<Item>)
+activate ListCommand #cbf7f4
+ListCommand --> ListCommand
+note right : items sorted according to thirdSortParam
+deactivate ListCommand
 
-ListCommand -> ArrayList2 : sort(comparator:Comparator<Item>)
-activate ArrayList2 #dfe6ff
-ArrayList2 --> ListCommand
-deactivate ArrayList2
+ListCommand -> ListCommand : sortBy(secondSortParam:String, items:ArrayList<Item>)
+activate ListCommand #cbf7f4
+ListCommand --> ListCommand
+note right : items sorted according to secondSortParam
+deactivate ListCommand
 
-ListCommand -> Item : sortByExpiry()
-activate Item #fbffb2
-Item --> ListCommand : comparator:Comparator<Item>
-deactivate Item
-
-else else
-
-ListCommand -> Item : sortByName()
-activate Item #fbffb2
-Item --> ListCommand : comparator:Comparator<Item>
-deactivate Item
-
-end
-
-ListCommand -> ArrayList : sort(comparator:Comparator<Item>)
-activate ArrayList #bcf7cf
-ArrayList --> ListCommand
-deactivate ArrayList
+ListCommand -> ListCommand : sortBy(firstSortParam:String, items:ArrayList<Item>)
+activate ListCommand #cbf7f4
+ListCommand --> ListCommand
+note right : items sorted according to firstSortParam
+deactivate ListCommand
 
 opt isReverse
 
@@ -152,18 +114,9 @@ deactivate Collections
 
 end
 
-opt sortBy == "e"
-
-ListCommand -> ArrayList : addAll(itemsWithoutExpiry:ArrayList<List>)
-activate ArrayList #bcf7cf
-ArrayList --> ListCommand
-deactivate
-
-end
-
 loop items
 
-ListCommand -> Ui : listItem(item:Item, index:int, hasQuantity:boolean, hasPrice:boolean, hasExpiry:boolean, firstParam:String, secondParam:String):void)
+ListCommand -> Ui : listItem(item:Item, index:int, firstParam:String, secondParam:String, thirdParam:String)
 activate Ui #e5c2ea
 Ui --> ListCommand
 deactivate Ui
