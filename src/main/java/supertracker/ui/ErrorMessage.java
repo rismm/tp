@@ -55,7 +55,6 @@ public class ErrorMessage {
             "Why do you need more than 2147483647 items anyway?";
     public static final String INVALID_REV_EXP_TODAY_FORMAT = "Invalid revenue/expenditure command format. " +
             "\"rev task/today\" or \"exp task/today\"";
-
     public static final String INVALID_REV_EXP_TOTAL_FORMAT = "Invalid revenue/expenditure command format. " +
             "\"rev task/total\" or \"exp task/total\"";
     public static final String INVALID_REV_EXP_DAY_FORMAT = "Invalid revenue/expenditure command format. " +
