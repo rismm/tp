@@ -319,19 +319,19 @@ Quantity: 90
 <br>
 
 ### Print expenditure: `exp`
-There are 4 types of expenditures:
-1. **today** - lists all expenditures that occurred today
-2. **total** - lists all expenditures in total
-3. **day** - lists all expenditures that occurred during the specified day
-4. **range** - lists all expenditures that occurred in the specified range of dates 
+There are 4 types of expenditure commands:
+1. **today** - list all buy transactions that occurred today
+2. **total** - list all buy transactions in total
+3. **day** - list all buy transactions that occurred during the specified day
+4. **range** - list all buy transactions that occurred in the specified range of dates 
 not inclusive of the start and end dates
 
-The cumulative expenditures would be first printed to the terminal. 
-Afterwords, the expenditures will be printed to the terminal and will contain the name, 
-quantity and price of each purchase. 
-All expenditures would be listed according to alphabetical order.
+The cumulative expenditure will be first printed to the terminal.
+Afterward, each buy transaction will be printed to the terminal containing its name, 
+quantity, price and transaction date.
+All buy transactions will be listed from most recent to least recent.
 
-Format: `exp type/expenditureType [from/startDate] [to/endDate]`
+Format: `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`
 
 > Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled. 
 > If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
@@ -340,32 +340,33 @@ Format: `exp type/expenditureType [from/startDate] [to/endDate]`
 Example: `exp type/today`
 
 ```
-Today's expenditure is $94.5
-1. Name: apple
+Today's expenditure is $94.50
+1. Name: Apple
    Quantity: 30
-   Price: 2.15
+   Price: $2.15
    Transaction Date: 19/04/2024
-2. Name: banana
+2. Name: Banana
    Quantity: 10
-   Price: 3.0
+   Price: $3.00
    Transaction Date: 19/04/2024
 ```
+
 <br>
 
 ### Print revenue: `rev`
-There are 4 types of revenue:
-1. **today** - lists the revenue earned today
-2. **total** - lists the revenue earned in total
-3. **day** - lists the revenue that earned on the specified day
-4. **range** - lists the revenue earned in the specified range of dates
-   not inclusive of the start and end dates
+There are 4 types of revenue commands:
+1. **today** - list all sell transactions that occurred today
+2. **total** - list all sell transactions in total
+3. **day** - list all sell transactions that occurred during the specified day
+4. **range** - list all sell transactions that occurred in the specified range of dates 
+not inclusive of the start and end dates
 
-The cumulative revenue would be first printed to the terminal.
-Afterwords, each sell order will be printed to the terminal and will contain the name,
-quantity and price of each purchase.
-All orders would be listed according to alphabetical order.
+The cumulative revenue will be first printed to the terminal.
+Afterward, each sell transaction will be printed to the terminal containing its name,
+quantity, price and transaction date.
+All sell transactions will be listed from most recent to least recent.
 
-Format: `rev type/revenueType [from/startDate] [to/endDate]`
+Format: `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`
 
 > Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled.
 > If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
@@ -374,16 +375,17 @@ Format: `rev type/revenueType [from/startDate] [to/endDate]`
 Example: `rev type/today`
 
 ```
-Today's revenue is $39.8
-1. Name: apple
-  Quantity: 20
-  Price: 0.99
-  Transaction Date: 19/04/2024
-2. Name: ball
-  Quantity: 10
-  Price: 2.0
-  Transaction Date: 19/04/2024
+Today's revenue is $39.80
+1. Name: Apple
+   Quantity: 20
+   Price: $0.99
+   Transaction Date: 19/04/2024
+2. Name: Banana
+   Quantity: 10
+   Price: $2.00
+   Transaction Date: 19/04/2024
 ```
+
 <br>
 
 ### Quit the program: `quit`
@@ -451,6 +453,6 @@ then use the buy command to increase its quantity.
 | **Report**      | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
 | **Buy**         | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |
 | **Sell**        | `sell n/NAME q/QUANTITY`                                           | e.g. `sell n/Milk q/10`                      |
-| **Expenditure** | `exp type/expenditureType [from/startDate] [to/endDate]`           | e.g. `exp type/today`                        |
-| **Revenue**     | `rev type/revenueType [from/startDate] [to/endDate]`               | e.g. `rev type/today`                        |
+| **Expenditure** | `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`        | e.g. `exp type/today`                        |
+| **Revenue**     | `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`            | e.g. `rev type/today`                        |
 | **Quit**        | `quit`                                                             | e.g. `quit`                                  |
