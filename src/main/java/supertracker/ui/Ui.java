@@ -44,6 +44,10 @@ public class Ui {
         return "Price: " + item.getPriceString();
     }
 
+    private static String getNameMessage(Item item) {
+        return "Name: " + item.getName();
+    }
+
     private static String getQuantityMessage(Item item) {
         return "Quantity: " + item.getQuantity();
     }
@@ -61,6 +65,10 @@ public class Ui {
 
     private static String updateItemOpening(Item item) {
         return item.getName() + " has been successfully updated!";
+    }
+
+    private static String renameItemOpening(Item item, String name) {
+        return name + " has been successfully renamed to " + item.getName() + ".";
     }
 
     private static String deleteItemOpening(String name) {
@@ -138,6 +146,14 @@ public class Ui {
 
     public static void updateCommandSuccess(Item item) {
         printIndent(updateItemOpening(item));
+        printIndent(getQuantityMessage(item));
+        printIndent(getPriceMessage(item));
+        printIndent(getExpiryDateMessage(item));
+    }
+
+    public static void renameCommandSuccess(Item item, String name) {
+        printIndent(renameItemOpening(item, name));
+        printIndent(getNameMessage(item));
         printIndent(getQuantityMessage(item));
         printIndent(getPriceMessage(item));
         printIndent(getExpiryDateMessage(item));
@@ -341,6 +357,9 @@ public class Ui {
     }
 
     public static void printFoundItem(Item item, int index) {
+        if(index == 1) {
+            Ui.findIntro();
+        }
         String stringToPrint = index + ". Name: " + item.getName();
         printIndent(stringToPrint);
         String quantityString = "   Quantity: " + item.getQuantity();

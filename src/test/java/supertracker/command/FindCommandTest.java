@@ -74,8 +74,7 @@ public class FindCommandTest {
         Command c = Parser.parseCommand(userInput);
         c.execute();
 
-        String expected = FIND_INTRO +
-                "     So sorry, Your item: cake could not be found." + LINE_SEPARATOR;
+        String expected = "     So sorry, Your item: cake could not be found." + LINE_SEPARATOR;
         String actual = outContent.toString();
         assertEquals(expected, actual);
     }

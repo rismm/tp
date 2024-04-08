@@ -3,6 +3,7 @@ package supertracker.ui;
 public class ErrorMessage {
 
     public static final String INVALID_UPDATE_FORMAT = "Invalid update command format!";
+    public static final String INVALID_RENAME_FORMAT = "Invalid rename command format!";
     public static final String EMPTY_PARAM_INPUT = "Parameters cannot be left empty!";
     public static final String INVALID_DELETE_FORMAT = "Invalid delete command format!";
     public static final String INVALID_LIST_FORMAT = "Invalid list command format!";
@@ -27,6 +28,8 @@ public class ErrorMessage {
             " does not exist in inventory. Unable to increase its quantity. =(";
     public static final String ITEM_NOT_IN_LIST_REMOVE =
             " does not exist in inventory. Unable to decrease its quantity. =(";
+    public static final String ITEM_NOT_IN_LIST_RENAME =
+            " does not exist in inventory. Unable to rename your desired item.";
     public static final String ITEM_NOT_IN_LIST_BUY =
             " does not exist in inventory. Unable to buy. =(";
     public static final String ITEM_NOT_IN_LIST_SELL =
@@ -44,8 +47,7 @@ public class ErrorMessage {
     public static final String QUANTITY_TOO_LARGE = "Quantity should be less than or equal to 2147483647";
     public static final String PRICE_TOO_LARGE = "Price should be less than or equal to 2147483647";
     public static final String FILE_HANDLER_ERROR = "Error setting up file handler";
-    public static final String INVALID_FIND_FORMAT =
-            "Please ensure the name of the item you are looking for is correct";
+    public static final String INVALID_FIND_FORMAT = "Invalid find command format!";
     public static final String FILE_SAVE_ERROR = "Oops! Unable to save data due to an I/O error!";
     public static final String FILE_LOAD_ERROR = "Oops! Unable to load your previous data due to an I/O error!";
     public static final String FILE_CORRUPTED_ERROR =
@@ -55,7 +57,6 @@ public class ErrorMessage {
     public static final String INVALID_REV_FORMAT = "Invalid revenue command format. " +
             "rev task/taskType [from/startDate] [to/endDate]";
     public static final String INVALID_REV_TODAY_FORMAT = "Invalid revenue command format. \"rev task/today\"";
-
     public static final String INVALID_REV_TOTAL_FORMAT = "Invalid revenue command format. \"rev task/total\"";
     public static final String INVALID_REV_DAY_FORMAT = "Invalid revenue command format. \"rev task/day from/DATE\"";
     public static final String INVALID_REV_RANGE_FORMAT = "Invalid revenue command format. "
