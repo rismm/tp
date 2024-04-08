@@ -53,9 +53,12 @@ public class ErrorMessage {
             "Oops! Unable to load some of your previous data as the data in the save file has been corrupted!";
     public static final String INTEGER_OVERFLOW = "Unable to add your specified number of items. " +
             "Why do you need more than 2147483647 items anyway?";
-    public static final String INVALID_REV_TODAY_FORMAT = "Invalid revenue command format. \"rev task/today\"";
-    public static final String INVALID_REV_TOTAL_FORMAT = "Invalid revenue command format. \"rev task/total\"";
-    public static final String INVALID_REV_DAY_FORMAT = "Invalid revenue command format. \"rev task/day from/DATE\"";
-    public static final String INVALID_REV_RANGE_FORMAT = "Invalid revenue command format. "
-            + "\"rev task/range from/START_DATE to/END_DATE\"";
+    public static final String INVALID_REV_EXP_TODAY_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/today\" or \"exp task/today\"";
+    public static final String INVALID_REV_EXP_TOTAL_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/total\" or \"exp task/total\"";
+    public static final String INVALID_REV_EXP_DAY_FORMAT = "Invalid revenue/expenditure command format. " +
+            "\"rev task/day from/DATE\" or \"exp task/day from/DATE\"";
+    public static final String INVALID_REV_EXP_RANGE_FORMAT = "Invalid revenue/expenditure command format. "
+            + "\"rev task/range from/START_DATE to/END_DATE\" or \"exp task/range from/START_DATE to/END_DATE\"";
 }

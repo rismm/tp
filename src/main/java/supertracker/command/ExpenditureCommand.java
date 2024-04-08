@@ -48,6 +48,7 @@ public class ExpenditureCommand implements Command {
             assert task.isEmpty();
             break;
         }
+
         ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(
                 task, startDate, endDate, BUY_FLAG);
         filteredList.sort(Item.sortByDate());
