@@ -41,14 +41,9 @@ public class RevenueCommand implements Command {
         default: assert task.isEmpty();
             break;
         }
-<<<<<<< HEAD
-        filteredList = TransactionList.getFilteredTransactionList(task, startDate, endDate, SELL_FLAG);
-        filteredList.sort(Item.sortByExpiry());
-=======
         ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(
                 task, startDate, endDate, SELL_FLAG);
         filteredList.sort(Item.sortByName());
->>>>>>> upstream/master
         Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue", filteredList);
     }
 
