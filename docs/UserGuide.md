@@ -331,7 +331,7 @@ Afterwords, the expenditures will be printed to the terminal and will contain th
 quantity and price of each purchase. 
 All expenditures would be listed according to alphabetical order.
 
-Format: `exp type/expenditureType [from/startDate] [to/endDate]`
+Format: `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`
 
 > Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled. 
 > If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
@@ -365,7 +365,7 @@ Afterwords, each sell order will be printed to the terminal and will contain the
 quantity and price of each purchase.
 All orders would be listed according to alphabetical order.
 
-Format: `rev type/revenueType [from/startDate] [to/endDate]`
+Format: `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`
 
 > Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled.
 > If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
