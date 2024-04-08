@@ -78,7 +78,7 @@ public class ListCommand implements Command {
             comparator = Item.sortByPrice();
             break;
         case EX_DATE_FLAG:
-            comparator = Item.sortByExpiry();
+            comparator = Item.sortByDate();
             break;
         default:
             comparator = Item.sortByName();
