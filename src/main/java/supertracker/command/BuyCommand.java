@@ -2,6 +2,7 @@ package supertracker.command;
 
 import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
+import supertracker.ui.Ui;
 
 import java.time.LocalDate;
 
@@ -18,8 +19,9 @@ public class BuyCommand extends AddCommand {
 
     @Override
     public void execute() {
-        super.execute();
-        Transaction transaction = new Transaction(name, quantity, price, currentDate, BUY_FLAG);
+        super.executeWithoutUi();
+        Transaction transaction = new Transaction(newItem.getName(), quantity, price, currentDate, BUY_FLAG);
         TransactionList.add(transaction);
+        Ui.buyCommandSuccess(newItem, transaction);
     }
 }

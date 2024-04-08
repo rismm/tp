@@ -710,10 +710,9 @@ public class Parser {
         int quantity = parseQuantity(quantityString);
         validateNonNegativeQuantity(quantityString, quantity);
 
-        double price = Inventory.get(name).getPrice();
         LocalDate currentDate = LocalDate.now();
 
-        return new SellCommand(name, quantity, price, currentDate);
+        return new SellCommand(name, quantity, currentDate);
     }
 
     // @@ author dtaywd
