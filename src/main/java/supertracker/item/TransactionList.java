@@ -25,7 +25,8 @@ public class TransactionList {
             LocalDate transactionDate = transaction.getTransactionDate();
             String transactionType = transaction.getType();
             if (transactionType.equals(flag) && transactionDate.isBefore(end) && transactionDate.isAfter(start)) {
-                totalAmount += transaction.getPrice() * transaction.getQuantity();
+                double newAmount = transaction.getPrice() * transaction.getQuantity();
+                totalAmount += newAmount;
             }
         }
         return totalAmount;
@@ -37,7 +38,8 @@ public class TransactionList {
             LocalDate transactionDate = transaction.getTransactionDate();
             String transactionType = transaction.getType();
             if (transactionType.equals(flag) && transactionDate.isEqual(day)) {
-                totalAmount += transaction.getPrice() * transaction.getQuantity();
+                double newAmount = transaction.getPrice() * transaction.getQuantity();
+                totalAmount += newAmount;
             }
         }
         return totalAmount;
@@ -48,7 +50,8 @@ public class TransactionList {
         for (Transaction transaction : transactionList) {
             String transactionType = transaction.getType();
             if (transactionType.equals(flag)) {
-                totalAmount += transaction.getPrice() * transaction.getQuantity();
+                double newAmount = transaction.getPrice() * transaction.getQuantity();
+                totalAmount += newAmount;
             }
         }
         return totalAmount;
