@@ -444,6 +444,12 @@ then use the buy command to increase its quantity.
 **A**: We want to provide our users with more flexibility. 
 This can be handy for placeholders or situations where items are free.
 
+**Q**: Why am I allowed to set expiry dates that have already passed?
+
+**A**: We want to provide our users with more flexibility.
+This can be useful if the user has previously entered an incorrect expiry date, 
+allowing them to fix their mistake.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command Summary
