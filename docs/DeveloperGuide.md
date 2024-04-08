@@ -212,43 +212,37 @@ A ListCommand instance is created by the `parseListCommand` method called by Par
 - `Inventory`: For getting the list of items in the inventory
 - `Ui`: To print the list of items in the inventory to the output
 
-The 7 parameters in the constructor `hasQuantity`, `hasPrice`, `hasExpiry`, `firstParam`, `secondParam`, `sortBy`, `isReverse` are used to determine how the list should be printed out.
-- `hasQuantity`
-  - True if the user has input the quantity flag `q/`, false otherwise
-  - Quantity will be printed to the output if true
-- `hasPrice`
-  - True if the user has input the price flag `p/`, false otherwise
-  - Price will be printed to the output if true
-- `hasExpiry`
-  - True if the user has input the expiry flag `e/`, false otherwise
-  - Expiry date will be printed to the output if true
-- `firstParam`
-  - Can only take 4 possible values `"q"`,`"p"`,`"e"` or `""`. 
-  - Value corresponds to the flag that comes first in the command
-  - If the command has none of these flags (`q/`,`p/`,`e/`), then `""` would be the default value (this variable would no longer be used in the execution of `ListCommand`)
-- `secondParam`
-  - Can only take 4 possible values `"q"`,`"p"`,`"e"` or `""`.
-  - Value corresponds to the flag that comes second in the command
-  - If the command has less than 2 of these flags (`q/`,`p/`,`e/`), then `""` would be the default value (this variable would no longer be used in the execution of `ListCommand`)
-- `sortBy`
-  - Can only take 4 possible values `"q"`,`"p"`,`"e"`, or `""`
-  - `"q"` if the user has input the sort by quantity flag `sq/`
-  - `"p"` if the user has input the sort by price flag `sp/`
-  - `"e"` if the user has input the sort by expiry flag `se/`
-  - `""` would be the default value if the user did not input any sorting flag
-  - If multiple sorting flags are input by the user, `sortBy` will take the value corresponding to the first sorting flag
+The 7 parameters in the constructor `firstParam`, `secondParam`, `thirdParam`, `firstSortParam`, `secondSortParam`, `thirdSortParam`, `isReverse` 
+are used to determine how the list should be printed out.
+- `firstParam`,`secondParam`,`thirdParam`
+  - Used to determine if quantity, price and/or expiry date should be printed out and in what order  
+    e.g. If the command specifies `list q/ p/ e/`, for each item quantity will be printed out first followed by price and expiry date
+  - Can only take 4 possible values `"q"`,`"p"`,`"e"`,`""`
+  - Value corresponds to the order of the flags in the command  
+    e.g. If the command specifies `list p/ e/ q/`, then `firstParam == "p"`, `secondParam == "e"`, `thirdParam == "q"` 
+  - `""` will be the default value if there are less than 3 flags in the command  
+    e.g. If the command specifies `list e/`, then `firstParam == "e"`, `secondParam == ""`, `thirdParam == ""`
+- `firstSortParam`,`secondSortParam`,`thirdSortParam`
+  - Used to determine how the list should be sorted and in what order in the event of ties  
+    e.g. If the command specifies `list sq/ sp/ se/`, list will be sorted in order of ascending quantity.
+    Ties will be sorted in order of ascending price, then ascending date, followed by ascending alphabetical order (A-Z)
+  - Can only take 4 possible values `"q"`,`"p"`,`"e"`,`""`
+  - Value corresponds to the order of the sorting flags in the command  
+    e.g. If the command specifies `list sp/ se/ sq/`, then `firstSortParam == "p"`, `secondSortParam == "e"`, `thirdSortParam == "q"`
+  - `""` will be the default value if there are less than 3 flags in the command  
+    e.g. If the command specifies `list se/`, then `firstSortParam == "e"`, `secondSortParam == ""`, `thirdSortParam == ""`
 - `isReverse`
   - True if the user has input the reverse flag `r/`, false otherwise.
 
-There are 8 sorting modes in total
-1. `sortBy == ""` and `isReverse == false`: Alphabetical ascending (e.g. A-Z)
-2. `sortBy == ""` and `isReverse == true`: Alphabetical descending (e.g. Z-A)
-3. `sortBy == "q"` and `isReverse == false`: Quantity ascending
-4. `sortBy == "q"` and `isReverse == true`: Quantity descending
-5. `sortBy == "p"` and `isReverse == false`: Price ascending
-6. `sortBy == "p"` and `isReverse == true`: Price descending
-7. `sortBy == "e"` and `isReverse == false`: Expiry date ascending (e.g. 2024-2025)
-8. `sortBy == "e"` and `isReverse == true`: Expiry date descending (e.g. 2025-2024)
+There are 8 main sorting modes in total
+1. `list`: Alphabetical ascending (e.g. A-Z)
+2. `list r/`: Alphabetical descending (e.g. Z-A)
+3. `list sq/`: Quantity ascending
+4. `list sq/ r/`: Quantity descending
+5. `list sp/`: Price ascending
+6. `list sp/ r/`: Price descending
+7. `list se/`: Expiry date ascending (e.g. 2024-2025)
+8. `list se/ r/`: Expiry date descending (e.g. 2025-2024)
 
 The following sequence diagram shows the execution of a ListCommand<br>  
 ![ListCommandSequence](uml-diagrams/ListCommandSequence.png)
@@ -256,15 +250,9 @@ The following sequence diagram shows the execution of a ListCommand<br>
 1. The `SuperTracker` class calls the `execute` method of `ListCommand`
 2. The `getItems` method of the `Inventory` class is called to get an `ArrayList` of items in the inventory
 3. The `listIntro` method of the `Ui` class is called to print out the total number of items in the inventory
-4. A new `ArrayList` to store the items without an expiry date is created
-5. Depending on the value of `sortBy`, either the `sortByQuantity`, `sortByPrice`, `sortByExpiry` or `sortByName` method of the `Item` class will be called.
-A comparator used to sort the `ArrayList` of items is returned. 
-> For the specific case where `sortBy == "e"`, the private method `moveItemsWithoutExpiry` is called.
-Items without an expiry date are removed from the original `ArrayList` of items and added to the `ArrayList` created in step 4. This `ArrayList` is then sorted in ascending alphabetical order.
-6. The `sort` method of the `ArrayList` of items is called with a comparator as an input parameter
-7. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
-8. If `sortBy == "e"`, the items without an expiry date are added back to the original `ArrayList` by calling the `addAll` method
-9. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
+4. The private method `sortBy` is called 4 times with different input parameters to sort the `ArrayList` of items according to alphabet, quantity, price and/or expiry date 
+5. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
+6. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
 
 ## Product scope
 ### Target user profile
