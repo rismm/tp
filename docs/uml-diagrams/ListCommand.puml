@@ -14,7 +14,7 @@ Command <|. ListCommand
 Item <... ListCommand
 Ui <.. ListCommand
 Inventory <.. ListCommand
-ListCommand <... Parser
+ListCommand <.. Parser
 
 interface Command <<interface>> {
     +execute():void

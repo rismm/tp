@@ -16,7 +16,7 @@ Command <|. NewCommand
 Item <... NewCommand
 Ui <.. NewCommand
 Inventory <.. NewCommand
-NewCommand <... Parser
+NewCommand <.. Parser
 FileManager <.. NewCommand
 Inventory <.. FileManager
 
