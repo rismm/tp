@@ -1,6 +1,8 @@
 @startuml
 'https://plantuml.com/class-diagram
 skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
 
 abstract class Command
 class Inventory
@@ -18,9 +20,9 @@ NewCommand <... Parser
 FileManager <.. NewCommand
 Inventory <.. FileManager
 
-interface Command {
+interface Command <<interface>> {
     +execute():void
-    +isExit():boolean
+    +isQuit():boolean
 }
 
 class NewCommand {
@@ -28,13 +30,13 @@ class NewCommand {
     -quantity:int
     -price:double
     -expiryDate:LocalDate
-    +NewCommand(name:String, quantity:int, price:double, expiryDate:LocalDate)
+    +NewCommand()
     +execute():void
-    +isExit():boolean
+    +isQuit():boolean
 }
 
 class Item {
-    +Item(name:String, quantity:int, price:double, expiryDate: LocalDate)
+    +Item()
 }
 
 class Inventory {
@@ -52,6 +54,8 @@ class Parser {
 class FileManager {
     {static}+saveData():void
 }
+
+note "Some parameters and methods \nomitted for brevity" as n1
 
 @enduml
 

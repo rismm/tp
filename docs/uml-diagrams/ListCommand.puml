@@ -1,5 +1,7 @@
 @startuml
 skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
 
 abstract class Command
 class Inventory
@@ -14,9 +16,9 @@ Ui <.. ListCommand
 Inventory <.. ListCommand
 ListCommand <... Parser
 
-interface Command {
+interface Command <<interface>> {
     +execute():void
-    +isExit():boolean
+    +isQuit():boolean
 }
 
 class ListCommand {
@@ -31,7 +33,7 @@ class ListCommand {
     +ListCommand(hasQuantity:boolean, hasPrice:boolean, hasExpiry:boolean,
     firstParam:String, secondParam:String, sortBy:String, isReverse:boolean)
     +execute():void
-    +isExit():boolean
+    +isQuit():boolean
 }
 
 class Item {

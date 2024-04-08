@@ -1,6 +1,8 @@
 @startuml
 'https://plantuml.com/sequence-diagram
 skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
 
 abstract class Command
 class Inventory
@@ -13,16 +15,16 @@ Inventory <.. FindCommand
 Ui <.. FindCommand
 FindCommand <.. Parser
 
-interface Command {
+interface Command <<interface>> {
     +execute():void
-    +isExit():boolean
+    +isQuit():boolean
 }
 
 class FindCommand {
     -name:String
     +FindCommand(name:String)
     +execute():void
-    +isExit():boolean
+    +isQuit():boolean
 }
 
 class Inventory {

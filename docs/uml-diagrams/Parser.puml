@@ -2,6 +2,8 @@
 @startuml
 'https://plantuml.com/class-diagram
 skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
 
 class SuperTracker
 class Parser
@@ -13,9 +15,9 @@ Command <.. SuperTracker
 TrackerException <.. SuperTracker
 TrackerException <.. Parser
 
-interface Command {
+interface Command <<interface>> {
     execute():void
-    isExit():boolean
+    isQuit():boolean
 }
 
 class TrackerException {
@@ -51,6 +53,6 @@ else invalid userInput
     deactivate Parser
 end
 
-SuperTracker -> User : Output
+SuperTracker --> User : Output
 
 @enduml
