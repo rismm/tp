@@ -3,6 +3,7 @@ package supertracker.item;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class TransactionList {
     private static final String TODAY = "today";
@@ -17,6 +18,14 @@ public class TransactionList {
 
     public static void add(Transaction transaction) {
         transactionList.add(transaction);
+    }
+
+    public static int size() {
+        return transactionList.size();
+    }
+
+    public static Iterator<Transaction> iterator() {
+        return transactionList.iterator();
     }
 
     //@@author vimalapugazhan
