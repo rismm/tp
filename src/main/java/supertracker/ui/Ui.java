@@ -379,7 +379,7 @@ public class Ui {
     }
 
     public static void printFoundItem(Item item, int index) {
-        if(index == 1) {
+        if (index == 1) {
             Ui.findIntro();
         }
         String stringToPrint = index + ". Name: " + item.getName();
