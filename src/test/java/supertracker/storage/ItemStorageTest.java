@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class FileManagerTest {
+public class ItemStorageTest {
     private static final String INVALID_EX_DATE = "01-01-99999";
     private static final DateTimeFormatter INVALID_EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse(INVALID_EX_DATE, INVALID_EX_DATE_FORMAT);
@@ -36,13 +36,13 @@ public class FileManagerTest {
         for (NewCommand newItem : newItems) {
             newItem.execute();
         }
-        FileManager.saveData();
+        ItemStorage.saveData();
         Inventory.clear();
     }
 
     @Test
     void loadData_validData_correctlyRead() throws IOException {
-        FileManager.loadData();
+        ItemStorage.loadData();
 
         Item[] items = {
             new Item("orange", 10, 2.00, CURR_DATE),
@@ -77,6 +77,6 @@ public class FileManagerTest {
             newCommand.execute();
         }
 
-        FileManager.saveData();
+        ItemStorage.saveData();
     }
 }

@@ -3,6 +3,7 @@ package supertracker.command;
 import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
 import supertracker.storage.FileManager;
+import supertracker.storage.TransactionStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
@@ -32,7 +33,7 @@ public class SellCommand extends RemoveCommand {
         Ui.sellCommandSuccess(newItem, transaction);
 
         try {
-            FileManager.saveTransaction(transaction);
+            TransactionStorage.saveTransaction(transaction);
         } catch (IOException e) {
             Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
         }

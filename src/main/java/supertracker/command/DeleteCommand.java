@@ -2,6 +2,7 @@ package supertracker.command;
 
 import supertracker.item.Inventory;
 import supertracker.storage.FileManager;
+import supertracker.storage.ItemStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
@@ -23,7 +24,7 @@ public class DeleteCommand implements Command {
         Ui.deleteCommandSuccess(name);
 
         try {
-            FileManager.saveData();
+            ItemStorage.saveData();
         } catch (IOException e) {
             Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
         }

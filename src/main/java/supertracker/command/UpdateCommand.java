@@ -1,6 +1,7 @@
 package supertracker.command;
 
 import supertracker.storage.FileManager;
+import supertracker.storage.ItemStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 import supertracker.item.Inventory;
@@ -50,7 +51,7 @@ public class UpdateCommand implements Command {
         Ui.updateCommandSuccess(newItem);
 
         try {
-            FileManager.saveData();
+            ItemStorage.saveData();
         } catch (IOException e) {
             Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
         }
