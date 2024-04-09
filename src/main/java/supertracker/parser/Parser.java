@@ -37,6 +37,10 @@ import java.util.regex.Pattern;
 import java.time.LocalDate;
 
 public class Parser {
+    private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final double ROUNDING_FACTOR = 100.0;
     private static final String QUIT_COMMAND = "quit";
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
@@ -53,7 +57,6 @@ public class Parser {
     private static final String RENAME_COMMAND = "rename";
     private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
-    private static final double ROUNDING_FACTOR = 100.0;
     private static final String BASE_FLAG = "/";
     private static final String NAME_FLAG = "n";
     private static final String NEW_NAME_FLAG = "r";
@@ -61,19 +64,16 @@ public class Parser {
     private static final String PRICE_FLAG = "p";
     private static final String EX_DATE_FLAG = "e";
     private static final String BEFORE_DATE_FLAG = "b";
+    private static final String SORT_QUANTITY_FLAG = "sq";
+    private static final String SORT_PRICE_FLAG = "sp";
+    private static final String SORT_EX_DATE_FLAG = "se";
+    private static final String REVERSE_FLAG = "r";
     private static final String NAME_GROUP = "name";
     private static final String NEW_NAME_GROUP = "rename";
     private static final String QUANTITY_GROUP = "quantity";
     private static final String PRICE_GROUP = "price";
     private static final String EX_DATE_GROUP = "expiry";
     private static final String BEFORE_DATE_GROUP = "before";
-    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
-    private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private static final String SORT_QUANTITY_FLAG = "sq";
-    private static final String SORT_PRICE_FLAG = "sp";
-    private static final String SORT_EX_DATE_FLAG = "se";
-    private static final String REVERSE_FLAG = "r";
     private static final String SORT_QUANTITY_GROUP = "sortQuantity";
     private static final String SORT_PRICE_GROUP = "sortPrice";
     private static final String SORT_EX_DATE_GROUP = "sortExpiry";
@@ -96,7 +96,7 @@ public class Parser {
     // Do note that the file delimiter constant needs to follow the separator constant in the FileManager class
     private static final String FILE_DELIMITER = " ,,, ";
 
-    //To be used in getPatternMatcher to split the input into its respective parameter groups
+    // To be used in getPatternMatcher to split the input into its respective parameter groups
     private static final String NEW_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
             + QUANTITY_FLAG + BASE_FLAG + "(?<" + QUANTITY_GROUP + ">.*) "
             + PRICE_FLAG + BASE_FLAG + "(?<" + PRICE_GROUP + ">.*) "

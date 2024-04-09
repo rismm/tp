@@ -28,9 +28,11 @@ public class Ui {
     private static final String REPORT_EXPIRED_NO_ITEMS_OPENING = "There are no items that are expired!";
     private static final String REPORT_INVENTORY_NO_ITEMS = "There are no items in the inventory, " +
             "please consider adding some in!";
-    private static final String CLEAR_CONFIRMATION_FIRST_LINE = "Are you sure you want to clear all transactions before ";
+    private static final String CLEAR_CONFIRMATION_FIRST_LINE =
+            "Are you sure you want to clear all transactions before ";
     private static final String CLEAR_CONFIRMATION_SECOND_LINE = "Enter 'y' or 'Y' if you wish to proceed";
-    private static final String CLEAR_CONFIRMATION_THIRD_LINE = "Enter anything else if you wish to cancel the clear operation";
+    private static final String CLEAR_CONFIRMATION_THIRD_LINE =
+            "Enter anything else if you wish to cancel the clear operation";
     private static final String CLEAR_CANCELLED = "Clear operation has been cancelled";
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final DateTimeFormatter DATE_FORMAT_PRINT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -436,6 +438,7 @@ public class Ui {
             return;
         }
         String plural = transactionsCleared == 1 ? "" : "s";
-        printIndent(transactionsCleared + " transaction" + plural + " before " + beforeDate.format(DATE_FORMAT_PRINT) + " successfully cleared!");
+        printIndent(transactionsCleared + " transaction" + plural
+                + " before " + dateString + " successfully cleared!");
     }
 }
