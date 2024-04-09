@@ -88,6 +88,8 @@ public class Parser {
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
+    private static final String REV_COMMAND = "revenue";
+    private static final String EXP_COMMAND = "expenditure";
 
     // Do note that the file delimiter constant needs to follow the separator constant in the FileManager class
     private static final String FILE_DELIMITER = " ,,, ";
@@ -760,9 +762,9 @@ public class Parser {
         String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
         String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
 
-        validateRevExpFormat(type, hasStart, hasEnd);
-        LocalDate to = parseDate(toString);
-        LocalDate from = parseDate(fromString);
+        validateRevExpFormat(type, hasStart, hasEnd, EXP_COMMAND);
+        LocalDate to = validateDateForRevAndExp(toString);
+        LocalDate from = validateDateForRevAndExp(fromString);
 
         return new ExpenditureCommand(type, from, to);
     }
@@ -783,42 +785,94 @@ public class Parser {
         String taskType = matcher.group(TYPE_GROUP).trim();
         String startDateString = matcher.group(FROM_GROUP).replace(FROM_GROUP + BASE_FLAG, "").trim();
         String endDateString = matcher.group(TO_GROUP).replace(TO_GROUP + BASE_FLAG, "").trim();
-
-        validateRevExpFormat(taskType, hasStart, hasEnd);
-        LocalDate startDate = parseDate(startDateString);
-        LocalDate endDate = parseDate(endDateString);
+        validateRevExpFormat(taskType, hasStart, hasEnd, REV_COMMAND);
+        LocalDate startDate = validateDateForRevAndExp(startDateString);
+        LocalDate endDate = validateDateForRevAndExp(endDateString);
 
         return new RevenueCommand(taskType, startDate, endDate);
     }
     //@@author
 
+    private static LocalDate validateDateForRevAndExp(String startDateString) throws TrackerException {
+        LocalDate date;
+        try {
+            date = parseDate(startDateString);
+        } catch (TrackerException e) {
+            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
+        }
+        if (date.equals(UNDEFINED_DATE)) {
+            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+        }
+        return date;
+    }
+
     //@@author vimalapugazhan
-    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd)
+    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd, String command)
             throws TrackerException {
         switch (taskType) {
         case TODAY:
             if (hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_TODAY_FORMAT);
+                validateTodayFormat(command);
             }
             break;
         case TOTAL:
             if (hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_TOTAL_FORMAT);
+                validateTotalFormat(command);
             }
             break;
         case DAY:
             if (!hasStart || hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_DAY_FORMAT);
+                validateDayFormat(command);
             }
             break;
         case RANGE:
             if (!hasStart || !hasEnd) {
-                throw new TrackerException(ErrorMessage.INVALID_REV_EXP_RANGE_FORMAT);
+                validateRangeFormat(command);
             }
             break;
-        default: assert taskType.isEmpty();
+        default:
+            handleInvalidFormat(command);
             break;
         }
     }
     //@@author
+    private static void validateTodayFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_TODAY_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_TODAY_FORMAT);
+        }
+    }
+
+    private static void validateTotalFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_TOTAL_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_TOTAL_FORMAT);
+        }
+    }
+
+    private static void validateDayFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_DAY_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
+        }
+    }
+
+    private static void validateRangeFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_RANGE_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_RANGE_FORMAT);
+        }
+    }
+
+    private static void handleInvalidFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
+        }
+    }
 }
