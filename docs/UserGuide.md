@@ -398,8 +398,9 @@ Format: `quit`
 --------------------------------------------------------------------------------------------------------------------
 
 ### Saving inventory data
-Inventory data in the program is saved to the hard disk in the file path `./data/` in the same directory that
-the `SuperTracker.jar` file is in. Data will be saved automatically after any command that changes the item data in the inventory.
+Data in the program is saved to the hard disk in the file path `./data/` in the same directory that
+the `SuperTracker.jar` file is in. Item data will be saved automatically after any command that changes the item data in the inventory.
+Similarly, transaction data will be saved automatically after commands that add transaction data.
 
 <br>
 
@@ -410,12 +411,15 @@ If there is no data file, the program will the skip loading process.
 <br>
 
 ### Editing the data file
-Inventory data of the `SuperTracker` program is stored in a text file `items.txt` in the path `./data/` relative to 
+Data of the `SuperTracker` program is stored in a text files in the path `./data/` relative to 
 the directory the `SuperTracker.jar` file is in. Users can edit and update the inventory data directly through the data file
-if they would like to do so.
-> Note: Edit the data file at your own caution. If the changes made to the data file are in an invalid format, the program
+if they would like to do so. Inventory data is stored in `items.txt`, and transaction data is stored in `transactions.txt`.
+> Note 1: **Edit the data file at your own caution.** If the changes made to the data file are in an invalid format, the program
 > will ignore those changes on its next load. The corrupted changes will be erased, so do keep a backup of the data 
 > file before editing.
+> 
+> Note 2: Edited transaction data with dates that have not happened yet **will be treated as corrupted data**, so do avoid adding
+> transactions that have not happened yet.
 
 --------------------------------------------------------------------------------------------------------------------
 
