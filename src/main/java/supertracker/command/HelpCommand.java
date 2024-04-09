@@ -1,6 +1,8 @@
 package supertracker.command;
 
 import supertracker.ui.HelpCommandUi;
+import supertracker.ui.Ui;
+
 import java.util.Scanner;
 
 public class HelpCommand implements Command {
@@ -16,9 +18,6 @@ public class HelpCommand implements Command {
     private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
 
-    public HelpCommand() {
-    }
-
     private static String getHelpCommandReply(String input) {
         if (!input.contains(" ")) {
             return input;
@@ -32,6 +31,7 @@ public class HelpCommand implements Command {
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();
         String helpCommandWord = getHelpCommandReply(input);
+        Ui.printLine();
 
         switch (helpCommandWord) {
         case NEW_COMMAND:
@@ -71,6 +71,8 @@ public class HelpCommand implements Command {
             HelpCommandUi.printInvalidHelpMessage();
             break;
         }
+
+        HelpCommandUi.helpClosingMessage();
     }
 
     @Override

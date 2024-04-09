@@ -172,14 +172,14 @@ public class Parser {
         case QUIT_COMMAND:
             command = new QuitCommand();
             break;
+        case HELP_COMMAND:
+            command = new HelpCommand();
+            break;
         case NEW_COMMAND:
             command = parseNewCommand(params);
             break;
         case LIST_COMMAND:
             command = parseListCommand(params);
-            break;
-        case HELP_COMMAND:
-            command = new HelpCommand();
             break;
         case UPDATE_COMMAND:
             command = parseUpdateCommand(params);
