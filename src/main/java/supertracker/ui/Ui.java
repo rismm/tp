@@ -35,7 +35,6 @@ public class Ui {
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
-
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
     }
