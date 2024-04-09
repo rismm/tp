@@ -1,6 +1,5 @@
 package supertracker.command;
 
-import supertracker.storage.FileManager;
 import supertracker.storage.ItemStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;

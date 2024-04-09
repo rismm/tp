@@ -50,8 +50,13 @@ public class ErrorMessage {
     public static final String INVALID_FIND_FORMAT = "Invalid find command format!";
     public static final String FILE_SAVE_ERROR = "Oops! Unable to save data due to an I/O error!";
     public static final String FILE_LOAD_ERROR = "Oops! Unable to load your previous data due to an I/O error!";
-    public static final String FILE_CORRUPTED_ERROR =
-            "Oops! Unable to load some of your previous data as the data in the save file has been corrupted!";
+    public static final String ITEM_FILE_CORRUPTED_ERROR =
+            "Oops! Unable to load some of your previous item data as the data in the save file has been corrupted!";
+    public static final String TRANSACTION_FILE_CORRUPTED_ERROR =
+            "Oops! Unable to load some of your previous transaction data"
+            + " as the data in the save file has been corrupted!";
+    public static final String TRANSACTION_DATE_LOAD_ERROR = "Looks like you might have edited a transaction date "
+            + "in the save file to a date that has not happened yet";
     public static final String INTEGER_OVERFLOW = "Unable to add your specified number of items. " +
             "Why do you need more than 2147483647 items anyway?";
     public static final String INVALID_REV_EXP_TODAY_FORMAT = "Invalid revenue/expenditure command format. " +

@@ -50,7 +50,7 @@ public class ItemStorage extends FileManager {
     }
 
     /**
-     * Loads and reads data from a designated text file from the path specified in the class.
+     * Loads and reads item data from a designated text file from the path specified in the class.
      * Parses each line of data into an Item class and adds to the item list in the Inventory class.
      * If data is corrupted, prints to the UI the number of corrupted lines.
      *
@@ -67,18 +67,18 @@ public class ItemStorage extends FileManager {
         Inventory.clear();
         Scanner fileScanner = new Scanner(saveFile);
         String itemData;
-        int corruptedData = 0;
+        boolean hasCorruptedData = false;
         while (fileScanner.hasNext()) {
             try {
                 itemData = fileScanner.nextLine();
                 Item item = parseItemData(itemData);
                 Inventory.put(item.getName(), item);
             } catch (Exception e) {
-                corruptedData++;
+                hasCorruptedData = true;
             }
         }
-        if (corruptedData != 0) {
-            Ui.printError(ErrorMessage.FILE_CORRUPTED_ERROR);
+        if (hasCorruptedData) {
+            Ui.printError(ErrorMessage.ITEM_FILE_CORRUPTED_ERROR);
             saveData();
         }
         fileScanner.close();

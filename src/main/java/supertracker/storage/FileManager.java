@@ -16,12 +16,6 @@ public class FileManager {
     protected static final String NO_DATE = "no date";
     protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     protected static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
-    protected static final int MAX_NUMBER_OF_PARAMS = 5;
-    protected static final int NAME_INDEX = 0;
-    protected static final int QUANTITY_INDEX = 1;
-    protected static final int PRICE_INDEX = 2;
-    protected static final int DATE_INDEX = 3;
-    protected static final int EXTRA_INDEX = 3;
 
     protected static void checkDataDirectory() {
         File directory = new File(DATA_PATH);

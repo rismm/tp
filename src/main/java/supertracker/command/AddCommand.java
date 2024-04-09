@@ -2,7 +2,6 @@ package supertracker.command;
 
 import supertracker.item.Inventory;
 import supertracker.item.Item;
-import supertracker.storage.FileManager;
 import supertracker.storage.ItemStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;

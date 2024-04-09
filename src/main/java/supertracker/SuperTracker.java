@@ -4,8 +4,8 @@ import supertracker.command.Command;
 import supertracker.command.InvalidCommand;
 import supertracker.command.QuitCommand;
 import supertracker.parser.Parser;
-import supertracker.storage.FileManager;
 import supertracker.storage.ItemStorage;
+import supertracker.storage.TransactionStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
@@ -40,6 +40,7 @@ public class SuperTracker {
 
         try {
             ItemStorage.loadData();
+            TransactionStorage.loadTransactionData();
         } catch (IOException e) {
             Ui.printError(ErrorMessage.FILE_LOAD_ERROR);
         }
