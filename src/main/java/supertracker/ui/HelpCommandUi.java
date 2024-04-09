@@ -7,17 +7,17 @@ public class HelpCommandUi extends Ui {
             "** Any other invalid input will bring you back to the main console";
     private static final String TO_SHOW_PARAMETERS = " to show parameters";
     private static final String[] HELP_LIST_OF_COMMANDS = {
-            "Create a new item: type 'new'",
-            "Delete an item: type 'delete'",
-            "Change quantity of an item: type 'change'",
-            "Update an item: type 'update'",
-            "Find an item: type 'find'",
-            "Rename an item: type 'rename'",
-            "List all items: type 'list'",
-            "Print a report: type 'report'",
-            "Print expenditure: type 'exp'",
-            "Print revenue: type 'rev'",
-            "Buy or sell items: type 'transaction'"
+        "Create a new item: type 'new'",
+        "Delete an item: type 'delete'",
+        "Change quantity of an item: type 'change'",
+        "Update an item: type 'update'",
+        "Find an item: type 'find'",
+        "Rename an item: type 'rename'",
+        "List all items: type 'list'",
+        "Print a report: type 'report'",
+        "Print expenditure: type 'exp'",
+        "Print revenue: type 'rev'",
+        "Buy or sell items: type 'transaction'"
     };
     private static final String HELP_CLOSING_MESSAGE_FIRST_LINE =
             "** Refer to UserGuide for further explanation";
