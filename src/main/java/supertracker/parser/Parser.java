@@ -7,6 +7,7 @@ import supertracker.command.BuyCommand;
 import supertracker.command.Command;
 import supertracker.command.DeleteCommand;
 import supertracker.command.FindCommand;
+import supertracker.command.HelpCommand;
 import supertracker.command.InvalidCommand;
 import supertracker.command.ListCommand;
 import supertracker.command.NewCommand;
@@ -36,6 +37,7 @@ public class Parser {
     private static final String QUIT_COMMAND = "quit";
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
+    private static final String HELP_COMMAND = "help";
     private static final String UPDATE_COMMAND = "update";
     private static final String DELETE_COMMAND = "delete";
     private static final String ADD_COMMAND = "add";
@@ -168,6 +170,9 @@ public class Parser {
             break;
         case LIST_COMMAND:
             command = parseListCommand(params);
+            break;
+        case HELP_COMMAND:
+            command = new HelpCommand();
             break;
         case UPDATE_COMMAND:
             command = parseUpdateCommand(params);
