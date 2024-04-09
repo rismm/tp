@@ -2,7 +2,7 @@ package supertracker.command;
 
 import supertracker.item.Inventory;
 import supertracker.item.Item;
-import supertracker.storage.FileManager;
+import supertracker.storage.ItemStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
@@ -31,7 +31,7 @@ public class RemoveCommand implements Command {
         Inventory.put(name, newItem);
 
         try {
-            FileManager.saveData();
+            ItemStorage.saveData();
         } catch (IOException e) {
             Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
         }

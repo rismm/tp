@@ -11,8 +11,12 @@ public class TransactionList {
     private static final String RANGE = "range";
     private static ArrayList<Transaction> transactionList = new ArrayList<>();
 
-    public static Item get(int index) {
+    public static Transaction get(int index) {
         return transactionList.get(index);
+    }
+
+    public static int getLength() {
+        return transactionList.size();
     }
 
     public static void add(Transaction transaction) {
