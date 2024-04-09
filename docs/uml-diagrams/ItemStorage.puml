@@ -1,4 +1,5 @@
 @startuml
+
 skinparam classAttributeIconSize 0
 skinparam CircledCharacterFontSize 0
 skinparam CircledCharacterRadius 0
@@ -7,20 +8,15 @@ class SuperTracker
 class FileManager
 class Inventory
 class Item
-class Command
-class TransactionStorage
+class CommandClass
 class ItemStorage
-class Transaction
-class TransactionList
 
-FileManager <|-- ItemStorage
-FileManager <|-- TransactionStorage
+FileManager <|--- ItemStorage
 Inventory <.. ItemStorage
-Item <. ItemStorage
-Item "*" <-* Inventory
-Item <|-- Transaction
-Transaction "*" <-* TransactionList
-FileManager <.. Command
+Item <.. ItemStorage
+Item "*" <--* Inventory
+ItemStorage <.. CommandClass
+ItemStorage <. SuperTracker
 
 class FileManager {
     {static}#DATA_PATH:String
@@ -28,11 +24,18 @@ class FileManager {
     {static}#getNameQtyPriceStrings(item:Item):String[]
 }
 
+class ItemStorage {
+    {static}+saveData():void
+    {static}+loadData():void
+    {static}-getItemData(item:Item):String
+    {static}-parseItemData(data:String):Item
+}
+
 class SuperTracker {
     {static}-run():void
 }
 
-class Command {
+class CommandClass {
     +execute():void
 }
 
@@ -48,5 +51,10 @@ class Item {
     -expiryDate:LocalDate
     +getName():String
 }
+
+note right of CommandClass
+    CommandClass refers to the classes
+    that implement the Command interface
+endnote
 
 @enduml

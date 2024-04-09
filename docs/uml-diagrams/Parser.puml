@@ -1,6 +1,5 @@
 
 @startuml
-'https://plantuml.com/class-diagram
 skinparam classAttributeIconSize 0
 skinparam CircledCharacterFontSize 0
 skinparam CircledCharacterRadius 0
@@ -27,7 +26,7 @@ class TrackerException {
 }
 
 class Parser {
-    {static}+parseCommand(input:String) : Command
+    {static}+parseCommand(input:String):Command
 }
 
 @enduml
@@ -42,13 +41,13 @@ User -> SuperTracker : userInput
 SuperTracker -> Parser : parseCommand(userInput)
 activate Parser #cbf7f4
 
-alt valid command word in userInput
+alt Valid command word
     Parser -> Parser : getPatternMatcher(regex, userInput, paramFlags)
     activate Parser #a9dff5
     Parser --> Parser : commandToExecute
     deactivate Parser
     Parser --> SuperTracker : commandToExecute
-else invalid userInput
+else Invalid command word
     Parser --> SuperTracker : InvalidCommand
     deactivate Parser
 end
