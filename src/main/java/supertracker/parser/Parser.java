@@ -200,14 +200,14 @@ public class Parser {
         case SELL_COMMAND:
             command = parseSellCommand(params);
             break;
-        case REVENUE_COMMAND:
-            command = parseRevenueCommand(params);
-            break;
         case RENAME_COMMAND:
             command = parseRenameCommand(params);
             break;
         case EXPENDITURE_COMMAND:
             command = parseExpenditureCommand(params);
+            break;
+        case REVENUE_COMMAND:
+            command = parseRevenueCommand(params);
             break;
         default:
             command = new InvalidCommand();
