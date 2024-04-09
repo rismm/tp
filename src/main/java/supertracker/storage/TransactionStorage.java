@@ -126,8 +126,8 @@ public class TransactionStorage extends FileManager {
             Ui.printError(ErrorMessage.TRANSACTION_FILE_CORRUPTED_ERROR);
             if (hasDateAfterToday) {
                 Ui.printIndent(ErrorMessage.TRANSACTION_DATE_LOAD_ERROR);
-                //saveAllTransactions();
             }
+            saveAllTransactions();
         }
         fileScanner.close();
     }
@@ -142,7 +142,7 @@ public class TransactionStorage extends FileManager {
             if (!data[i].startsWith(PARAM_LABELS[i])) {
                 throw new Exception();
             }
-            data[i] = data[i].substring(data[i].indexOf(PARAM_LABELS[i])).trim();
+            data[i] = data[i].substring(data[i].indexOf(" ")).trim();
         }
 
         String name = data[NAME_INDEX];
