@@ -1,7 +1,9 @@
 package supertracker.command;
+
 import supertracker.ui.HelpCommandUi;
 import java.util.Scanner;
-public class HelpCommand implements Command{
+
+public class HelpCommand implements Command {
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
     private static final String UPDATE_COMMAND = "update";
