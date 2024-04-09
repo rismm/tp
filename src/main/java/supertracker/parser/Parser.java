@@ -480,6 +480,92 @@ public class Parser {
         }
     }
 
+    private static LocalDate validateDateForRevAndExp(String startDateString) throws TrackerException {
+        LocalDate date;
+        try {
+            date = parseDate(startDateString);
+        } catch (TrackerException e) {
+            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
+        }
+        if (date.equals(UNDEFINED_DATE)) {
+            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
+        }
+        return date;
+    }
+
+    //@@author vimalapugazhan
+    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd, String command)
+            throws TrackerException {
+        switch (taskType) {
+        case TODAY:
+            if (hasStart || hasEnd) {
+                validateTodayFormat(command);
+            }
+            break;
+        case TOTAL:
+            if (hasStart || hasEnd) {
+                validateTotalFormat(command);
+            }
+            break;
+        case DAY:
+            if (!hasStart || hasEnd) {
+                validateDayFormat(command);
+            }
+            break;
+        case RANGE:
+            if (!hasStart || !hasEnd) {
+                validateRangeFormat(command);
+            }
+            break;
+        default:
+            handleInvalidFormat(command);
+            break;
+        }
+    }
+    //@@author
+
+    //@@author dtaywd
+    private static void validateTodayFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_TODAY_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_TODAY_FORMAT);
+        }
+    }
+
+    private static void validateTotalFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_TOTAL_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_TOTAL_FORMAT);
+        }
+    }
+
+    private static void validateDayFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_DAY_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
+        }
+    }
+
+    private static void validateRangeFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_RANGE_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_RANGE_FORMAT);
+        }
+    }
+
+    private static void handleInvalidFormat(String command) throws TrackerException {
+        if (command.equals(EXP_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_EXP_FORMAT);
+        } else if (command.equals(REV_COMMAND)) {
+            throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
+        }
+    }
+    //@@author
+
     private static Command parseNewCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
         Matcher matcher = getPatternMatcher(NEW_COMMAND_REGEX, input, flags);
@@ -792,87 +878,4 @@ public class Parser {
         return new RevenueCommand(taskType, startDate, endDate);
     }
     //@@author
-
-    private static LocalDate validateDateForRevAndExp(String startDateString) throws TrackerException {
-        LocalDate date;
-        try {
-            date = parseDate(startDateString);
-        } catch (TrackerException e) {
-            throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
-        }
-        if (date.equals(UNDEFINED_DATE)) {
-            throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
-        }
-        return date;
-    }
-
-    //@@author vimalapugazhan
-    private static void validateRevExpFormat(String taskType, boolean hasStart, boolean hasEnd, String command)
-            throws TrackerException {
-        switch (taskType) {
-        case TODAY:
-            if (hasStart || hasEnd) {
-                validateTodayFormat(command);
-            }
-            break;
-        case TOTAL:
-            if (hasStart || hasEnd) {
-                validateTotalFormat(command);
-            }
-            break;
-        case DAY:
-            if (!hasStart || hasEnd) {
-                validateDayFormat(command);
-            }
-            break;
-        case RANGE:
-            if (!hasStart || !hasEnd) {
-                validateRangeFormat(command);
-            }
-            break;
-        default:
-            handleInvalidFormat(command);
-            break;
-        }
-    }
-    //@@author
-    private static void validateTodayFormat(String command) throws TrackerException {
-        if (command.equals(EXP_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_EXP_TODAY_FORMAT);
-        } else if (command.equals(REV_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_TODAY_FORMAT);
-        }
-    }
-
-    private static void validateTotalFormat(String command) throws TrackerException {
-        if (command.equals(EXP_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_EXP_TOTAL_FORMAT);
-        } else if (command.equals(REV_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_TOTAL_FORMAT);
-        }
-    }
-
-    private static void validateDayFormat(String command) throws TrackerException {
-        if (command.equals(EXP_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_EXP_DAY_FORMAT);
-        } else if (command.equals(REV_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
-        }
-    }
-
-    private static void validateRangeFormat(String command) throws TrackerException {
-        if (command.equals(EXP_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_EXP_RANGE_FORMAT);
-        } else if (command.equals(REV_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_RANGE_FORMAT);
-        }
-    }
-
-    private static void handleInvalidFormat(String command) throws TrackerException {
-        if (command.equals(EXP_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_EXP_FORMAT);
-        } else if (command.equals(REV_COMMAND)) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
-        }
-    }
 }
