@@ -17,6 +17,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Print report: `report`](#print-report-report)
   - [Buy items: `buy`](#buy-items-buy)
   - [Sell items: `sell`](#sell-items-sell)
+  - [Clear transactions: `clear`](#clear-transactions-clear)
   - [Print expenditure: `exp`](#print-expenditure-exp)
   - [Print revenue: `rev`](#print-revenue-rev)
   - [Quit the program: `quit`](#quit-the-program-quit)
@@ -320,6 +321,34 @@ Quantity: 90
 
 <br>
 
+### Clear transactions: `clear`
+Clear all transactions *before* a specified date
+
+Format `clear [b/BEFORE_DATE]`
+- If the optional parameter `[b/BEFORE_DATE]` is not specified or `BEFORE_DATE` is empty,
+the current date will be taken as the before date
+- If `BEFORE_DATE` is invalid, an error would be thrown
+> Note: This command does **NOT** clear transactions that occurred on `BEFORE_DATE`
+
+- If the initial command is successful, an additional confirmation message will be shown to the user
+- Enter `y` or `Y` to proceed with the clear operation
+- Enter anything else to cancel the clear operation
+> Note: `y` or `Y` must be exact and should not contain any whitespace or other characters. e.g. entering `y  ` or `yY` will cancel the clear operation
+
+Example: `clear b/19-04-2024`
+```
+Are you sure you want to clear all transactions before 19/04/2024?
+Enter 'y' or 'Y' if you wish to proceed
+Enter anything else if you wish to cancel the clear operation
+```
+
+Example: `y`
+```
+2 transactions before 19/04/2024 successfully cleared!
+```
+
+<br>
+
 ### Print expenditure: `exp`
 There are 4 types of expenditure commands:
 1. **today** - list all buy transactions that occurred today
@@ -466,6 +495,7 @@ allowing them to fix their mistake.
 | **Report**      | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
 | **Buy**         | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |
 | **Sell**        | `sell n/NAME q/QUANTITY`                                           | e.g. `sell n/Milk q/10`                      |
+| **Clear**       | `clear [b/BEFORE_DATE]`                                            | e.g. `clear b/19-04-2024`                    |
 | **Expenditure** | `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`        | e.g. `exp type/today`                        |
 | **Revenue**     | `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`            | e.g. `rev type/today`                        |
 | **Quit**        | `quit`                                                             | e.g. `quit`                                  |
