@@ -5,6 +5,7 @@ import supertracker.ui.Ui;
 
 import java.util.Scanner;
 
+//@@author TimothyLKM
 public class HelpCommand implements Command {
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";

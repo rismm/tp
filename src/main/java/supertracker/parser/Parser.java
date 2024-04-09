@@ -653,6 +653,7 @@ public class Parser {
         return new RemoveCommand(name, quantity);
     }
 
+    //@@author TimothyLKM
     private static Command parseFindCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG};
         Matcher matcher = getPatternMatcher(FIND_COMMAND_REGEX, input, flags);
@@ -667,6 +668,7 @@ public class Parser {
 
         return new FindCommand(name);
     }
+    //@@author
 
     private static Command parseReportCommand(String input) throws TrackerException {
         String[] flags = {REPORT_TYPE_FLAG, THRESHOLD_FLAG};
