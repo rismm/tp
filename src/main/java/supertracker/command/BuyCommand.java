@@ -2,8 +2,11 @@ package supertracker.command;
 
 import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
+import supertracker.storage.TransactionStorage;
+import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class BuyCommand extends AddCommand {
@@ -23,5 +26,11 @@ public class BuyCommand extends AddCommand {
         Transaction transaction = new Transaction(newItem.getName(), quantity, price, currentDate, BUY_FLAG);
         TransactionList.add(transaction);
         Ui.buyCommandSuccess(newItem, transaction);
+
+        try {
+            TransactionStorage.saveTransaction(transaction);
+        } catch (IOException e) {
+            Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
+        }
     }
 }

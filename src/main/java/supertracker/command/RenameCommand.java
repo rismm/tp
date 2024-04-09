@@ -2,7 +2,7 @@ package supertracker.command;
 
 import supertracker.item.Inventory;
 import supertracker.item.Item;
-import supertracker.storage.FileManager;
+import supertracker.storage.ItemStorage;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
@@ -36,7 +36,7 @@ public class RenameCommand implements Command {
         Ui.renameCommandSuccess(newItem, name);
 
         try {
-            FileManager.saveData();
+            ItemStorage.saveData();
         } catch (IOException e) {
             Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
         }
