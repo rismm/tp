@@ -1,5 +1,6 @@
 package supertracker.ui;
 
+//@@author TimothyLKM
 public class HelpCommandUi extends Ui {
     private static final String HELP_SUCCESS_MESSAGE_FIRST_LINE =
             "Hello! These are the list of commands that I can help you with:";
