@@ -5,18 +5,19 @@ public class HelpCommandUi extends Ui {
             "Hello! These are the list of commands that I can help you with:";
     private static final String HELP_SUCCESS_MESSAGE_SECOND_LINE =
             "** Any other invalid input will bring you back to the main console";
+    private static final String TO_SHOW_PARAMETERS = " to show parameters";
     private static final String[] HELP_LIST_OF_COMMANDS = {
-            "Create a new item: type 'new' to show parameters",
-            "Delete an item: type 'delete' to show parameters",
-            "Change quantity of an item: type 'change' to show parameters",
-            "Update an item: type 'update' to show parameters",
-            "Find an item: type 'find' to show parameters",
-            "Rename an item: type 'rename' to show parameters",
-            "List all items: type 'list' to show parameters",
-            "Print a report: type 'report' to show parameters",
-            "Print expenditure: type 'exp' to show parameters",
-            "Print revenue: type 'rev' to show parameters",
-            "Buy or sell items: type 'transaction' to show parameters"
+            "Create a new item: type 'new'",
+            "Delete an item: type 'delete'",
+            "Change quantity of an item: type 'change'",
+            "Update an item: type 'update'",
+            "Find an item: type 'find'",
+            "Rename an item: type 'rename'",
+            "List all items: type 'list'",
+            "Print a report: type 'report'",
+            "Print expenditure: type 'exp'",
+            "Print revenue: type 'rev'",
+            "Buy or sell items: type 'transaction'"
     };
     private static final String HELP_CLOSING_MESSAGE_FIRST_LINE =
             "** Refer to UserGuide for further explanation";
@@ -59,7 +60,7 @@ public class HelpCommandUi extends Ui {
     private static void printHelpListOfCommands() {
         int index = 1;
         for (String command : HELP_LIST_OF_COMMANDS) {
-            printIndent(index + ". " + command);
+            printIndent(index + ". " + command + TO_SHOW_PARAMETERS);
             index++;
         }
     }
