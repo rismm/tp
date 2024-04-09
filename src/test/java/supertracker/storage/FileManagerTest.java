@@ -51,7 +51,7 @@ public class FileManagerTest {
             new Item("1_+$%$_)00", 9999999, 20.90, CURR_DATE),
             new Item("cheese,,,p/,,,,", 9, 7.00, UNDEFINED_DATE),
             new Item("cheese*&_yoyo*&_ ,,,q/-120,,", 9, 0, CURR_DATE),
-            new Item("p ,,, l", 40, 0, UNDEFINED_DATE)
+            new Item("p*&_l", 40, 0, UNDEFINED_DATE)
         };
 
         for (Item item : items) {

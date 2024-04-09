@@ -2,8 +2,11 @@ package supertracker.command;
 
 import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
+import supertracker.storage.FileManager;
+import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class SellCommand extends RemoveCommand {
@@ -27,5 +30,11 @@ public class SellCommand extends RemoveCommand {
         );
         TransactionList.add(transaction);
         Ui.sellCommandSuccess(newItem, transaction);
+
+        try {
+            FileManager.saveTransaction(transaction);
+        } catch (IOException e) {
+            Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
+        }
     }
 }
