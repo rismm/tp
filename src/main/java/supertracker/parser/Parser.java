@@ -12,11 +12,13 @@ import supertracker.command.ListCommand;
 import supertracker.command.NewCommand;
 import supertracker.command.QuitCommand;
 import supertracker.command.RemoveCommand;
+import supertracker.command.RenameCommand;
 import supertracker.command.ReportCommand;
 import supertracker.command.RevenueCommand;
 import supertracker.command.SellCommand;
 import supertracker.command.UpdateCommand;
 import supertracker.command.ExpenditureCommand;
+
 
 import supertracker.item.Inventory;
 import supertracker.item.Item;
@@ -44,15 +46,18 @@ public class Parser {
     private static final String REPORT_COMMAND = "report";
     private static final String BUY_COMMAND = "buy";
     private static final String SELL_COMMAND = "sell";
+    private static final String RENAME_COMMAND = "rename";
     private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
     private static final double ROUNDING_FACTOR = 100.0;
     private static final String BASE_FLAG = "/";
     private static final String NAME_FLAG = "n";
+    private static final String NEW_NAME_FLAG = "r";
     private static final String QUANTITY_FLAG = "q";
     private static final String PRICE_FLAG = "p";
     private static final String EX_DATE_FLAG = "e";
     private static final String NAME_GROUP = "name";
+    private static final String NEW_NAME_GROUP = "rename";
     private static final String QUANTITY_GROUP = "quantity";
     private static final String PRICE_GROUP = "price";
     private static final String EX_DATE_GROUP = "expiry";
@@ -121,6 +126,8 @@ public class Parser {
     private static final String REV_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
             "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) " +
             "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) ";
+    private static final String RENAME_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) " +
+            "(?<" + NEW_NAME_GROUP + ">(?:" + NEW_NAME_FLAG + BASE_FLAG + ".*)?) ";
 
     /**
      * Returns the command word specified in the user input string
@@ -193,11 +200,14 @@ public class Parser {
         case SELL_COMMAND:
             command = parseSellCommand(params);
             break;
-        case REVENUE_COMMAND:
-            command = parseRevenueCommand(params);
+        case RENAME_COMMAND:
+            command = parseRenameCommand(params);
             break;
         case EXPENDITURE_COMMAND:
             command = parseExpenditureCommand(params);
+            break;
+        case REVENUE_COMMAND:
+            command = parseRevenueCommand(params);
             break;
         default:
             command = new InvalidCommand();
@@ -338,7 +348,6 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
         }
     }
-    //@@author
 
     //@@author vimalapugazhan
     private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
@@ -516,6 +525,23 @@ public class Parser {
         validateNonNegativePrice(priceString, price);
         
         return new UpdateCommand(name, quantity, price, expiryDate);
+    }
+
+    private static Command parseRenameCommand(String input) throws TrackerException {
+        String[] flags = {NAME_FLAG, NEW_NAME_FLAG};
+        Matcher matcher = getPatternMatcher(RENAME_COMMAND_REGEX, input, flags);
+
+        if (!matcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_RENAME_FORMAT);
+        }
+
+        String name = matcher.group(NAME_GROUP).trim();
+        validateNonEmptyParam(name);
+        String newName = matcher.group(NEW_NAME_GROUP).replace(NEW_NAME_FLAG + BASE_FLAG, "").trim();
+        validateNonEmptyParam(newName);
+        validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_RENAME);
+
+        return new RenameCommand(name, newName);
     }
 
     private static Command parseListCommand(String input) throws TrackerException {

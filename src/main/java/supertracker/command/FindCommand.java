@@ -19,7 +19,6 @@ public class FindCommand implements Command {
         boolean isFound = false;
         List<Item> items = Inventory.getItems();
 
-        Ui.findIntro();
         for (Item item : items) {
             if (item.getName().toLowerCase().contains(name.toLowerCase())) {
                 Ui.printFoundItem(item, index);
