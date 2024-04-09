@@ -15,7 +15,8 @@ public class HelpCommand implements Command {
     private static final String RENAME_COMMAND = "rename";
     private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
-    public HelpCommand(){
+
+    public HelpCommand() {
     }
 
     private static String getHelpCommandReply(String input) {
