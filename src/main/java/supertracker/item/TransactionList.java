@@ -16,16 +16,16 @@ public class TransactionList {
         return transactionList.get(index);
     }
 
-    public static int getLength() {
-        return transactionList.size();
-    }
-
     public static void add(Transaction transaction) {
         transactionList.add(transaction);
     }
 
     public static int size() {
         return transactionList.size();
+    }
+
+    public static void clear() {
+        transactionList.clear();
     }
 
     public static Iterator<Transaction> iterator() {
