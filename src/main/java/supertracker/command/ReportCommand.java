@@ -59,7 +59,7 @@ public class ReportCommand implements Command{
     /**
      * Creates and displays a report for items that are close to expiry or have expired.
      *
-     * @param items              The list of inventory items to check for expiry.
+     * @param items               The list of inventory items to check for expiry.
      * @param expiryThresholdDate The threshold date to determine items close to expiry.
      * @param currDate            The current date used for comparison.
      * @param dayBeforeCurrDay    The date one day before the current date for expiry comparison.
