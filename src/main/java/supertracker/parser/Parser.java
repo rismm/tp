@@ -431,10 +431,18 @@ public class Parser {
         }
     }
 
+    private static String addMissingParams(String input, boolean hasParam, boolean hasSortParam, String flag, String sortFlag) {
+        if (!hasParam && hasSortParam) {
+            int index = input.indexOf(sortFlag + BASE_FLAG);
+            return input.substring(0, index) + flag + BASE_FLAG + " " + input.substring(index);
+        }
+        return input;
+    }
+
     private static ArrayList<Integer> getParamPositions(String input, boolean hasQuantity, boolean hasPrice,
             boolean hasExpiry, String quantityFlag, String priceFlag, String expiryFlag) {
         ArrayList<Integer> paramPositions =  new ArrayList<>();
-        // to check if p, q, e appears first and second
+        // to check if p, q, e appears first, second or third
 
         int quantityPosition;
         int pricePosition;
@@ -786,7 +794,21 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        //@@author vimalapugazhan
+        input = addMissingParams(input, hasQuantity, hasSortQuantity, QUANTITY_FLAG, SORT_QUANTITY_FLAG);
+        input = addMissingParams(input, hasPrice, hasSortPrice, PRICE_FLAG, SORT_PRICE_FLAG);
+        input = addMissingParams(input, hasExpiry, hasSortExpiry, EX_DATE_FLAG, SORT_EX_DATE_FLAG);
+        input = LIST_COMMAND + " " + input;
+
+        Matcher updatedMatcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
+
+        if (!updatedMatcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_LIST_FORMAT);
+        }
+
+        hasQuantity = !updatedMatcher.group(QUANTITY_GROUP).isEmpty();
+        hasPrice = !updatedMatcher.group(PRICE_GROUP).isEmpty();
+        hasExpiry = !updatedMatcher.group(EX_DATE_GROUP).isEmpty();
+
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
@@ -802,7 +824,6 @@ public class Parser {
         return new ListCommand(firstParam, secondParam, thirdParam,
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
-    //@@author
 
     //@@author vimalapugazhan
     private static Command parseDeleteCommand(String input) throws TrackerException {
