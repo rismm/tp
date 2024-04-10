@@ -292,6 +292,12 @@ public class Parser {
         return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 
+    private static void validatePositiveQuantity(String quantityString, int quantity) throws TrackerException {
+        if (!quantityString.isEmpty() && quantity <= 0) {
+            throw new TrackerException(ErrorMessage.QUANTITY_NOT_POSITIVE);
+        }
+    }
+
     private static void validateNonNegativeQuantity(String quantityString, int quantity) throws TrackerException {
         if (!quantityString.isEmpty() && quantity < 0) {
             throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
@@ -832,7 +838,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_ADD);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
         validateNoIntegerOverflow(name, quantity);
 
         return new AddCommand(name,quantity);
@@ -854,7 +860,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_REMOVE);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
 
         return new RemoveCommand(name, quantity);
     }
@@ -927,7 +933,7 @@ public class Parser {
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
 
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
         validateNonNegativePrice(priceString, price);
         validateNoIntegerOverflow(name, quantity);
 
@@ -952,7 +958,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_SELL);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
 
         LocalDate currentDate = LocalDate.now();
 

@@ -111,7 +111,7 @@ Format: `add n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If the new quantity of the item exceeds 2147483647, an error would be thrown
 
@@ -130,7 +130,7 @@ Format: `remove n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
 
@@ -284,7 +284,7 @@ Format: `buy n/NAME q/QUANTITY p/PRICE`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If the new quantity of the item exceeds 2147483647, an error would be thrown
 - `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
@@ -309,7 +309,7 @@ Format: `sell n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
 

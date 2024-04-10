@@ -66,8 +66,8 @@ public class AddCommandTest {
     }
 
     @Test
-    public void addCommand_quantityLessThanZero() {
-        String userInput = "add n/Milk q/-100";
+    public void addCommand_quantityNotPositive() {
+        String userInput = "add n/Milk q/0";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 

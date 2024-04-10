@@ -66,8 +66,8 @@ public class RemoveCommandTest {
     }
 
     @Test
-    public void removeCommand_quantityLessThanZero() {
-        String userInput = "remove n/Milk q/-50";
+    public void removeCommand_quantityNotPositive() {
+        String userInput = "remove n/Milk q/0";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
