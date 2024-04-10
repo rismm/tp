@@ -52,6 +52,21 @@ public class TransactionStorage extends FileManager {
     }
 
     /**
+     * Saves all transactional data currently in the transaction list. A public method to call saveAllTransactions().
+     *
+     * @throws IOException if text file cannot be opened or accessed for whatever reason
+     */
+    public static void resaveCurrentTransactions() throws IOException {
+        checkDataDirectory();
+
+        File saveFile = new File(FILE_PATH);
+        if (!saveFile.exists()) {
+            saveFile.createNewFile();
+        }
+        saveAllTransactions();
+    }
+
+    /**
      * Saves all transactional data in the transaction list. Assumes that the save file already exists.
      *
      * @throws IOException if text file cannot be opened or accessed for whatever reason
