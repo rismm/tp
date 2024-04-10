@@ -99,10 +99,10 @@ public class ExpenditureCommandTest {
         Command c = Parser.parseCommand(userInput);
         c.execute();
 
-        Double amount = 32.5;
-        String amountString = String.format("%.2f", amount);
+        Double totalAmount = 32.5;
+        String totalAmountString = String.format("%.2f", totalAmount);
 
-        String expected = "     Total expenditure is $" + amountString + LINE_SEPARATOR +
+        String expected = "     Total expenditure is $" + totalAmountString + LINE_SEPARATOR +
                 "     1. Name: orange" + LINE_SEPARATOR +
                 "        Quantity: 20" + LINE_SEPARATOR +
                 "        Price: $1.00" + LINE_SEPARATOR +
