@@ -4,6 +4,7 @@ package supertracker.command;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import supertracker.item.Item;
 import supertracker.item.Transaction;
@@ -43,7 +44,8 @@ public class RevenueCommand implements Command {
         }
         ArrayList<Transaction> filteredList = TransactionList.getFilteredTransactionList(
                 task, startDate, endDate, SELL_FLAG);
-        filteredList.sort(Item.sortByName());
+        filteredList.sort(Item.sortByDate());
+        Collections.reverse(filteredList);
         Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue", filteredList);
     }
 

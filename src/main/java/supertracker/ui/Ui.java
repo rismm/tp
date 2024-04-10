@@ -276,7 +276,7 @@ public class Ui {
             printFilteredList(filteredList);
             break;
         case TOTAL:
-            printIndent("Total  " + financeType + "  is $" + amountString);
+            printIndent("Total " + financeType + " is $" + amountString);
             printFilteredList(filteredList);
             break;
         case DAY:
