@@ -798,6 +798,7 @@ public class Parser {
         input = addMissingParams(input, hasPrice, hasSortPrice, PRICE_FLAG, SORT_PRICE_FLAG);
         input = addMissingParams(input, hasExpiry, hasSortExpiry, EX_DATE_FLAG, SORT_EX_DATE_FLAG);
         input = LIST_COMMAND + " " + input;
+        System.out.println(input);
 
         Matcher updatedMatcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
 
@@ -814,6 +815,9 @@ public class Parser {
         String firstParam = extractParam(input, paramOrder, 0, false);
         String secondParam = extractParam(input, paramOrder, 1, false);
         String thirdParam = extractParam(input, paramOrder, 2, false);
+        System.out.println(firstParam);
+        System.out.println(secondParam);
+        System.out.println(thirdParam);
 
         ArrayList<Integer> sortParamOrder = getParamPositions(input, hasSortQuantity, hasSortPrice, hasSortExpiry,
                 SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, SORT_EX_DATE_FLAG);

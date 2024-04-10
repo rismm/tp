@@ -207,11 +207,15 @@ Format: `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`
   - e.g. if the command specifies `list q/ p/ e/`, the quantity will be printed first followed by price and expiry date
 - `sq/` will list the items in order of ascending quantity
 - `sp/` will list the items in order of ascending price
-- `se/` will list the items in order of ascending date
+- `se/` will list the items in order of ascending date, items with no expiry date will be listed at the end
 - If the command has no sorting parameters, the list will be sorted in ascending alphabetical order (A-Z) by default
 - If the command has multiple sorting parameters, the list will be sorted in the same order as the sorting flags
   - e.g. if the command specifies `list sq/ sp/ se/`, list will be sorted in order of ascending quantity. 
   Ties will be sorted in order of ascending price, then ascending date, followed by ascending alphabetical order (A-Z)
+- If `q/` is not specified but `sq/` is specified, the command will be interpreted as `q/ sq/`. 
+Same logic applies to price and expiry date
+  - e.g. if the command specifies `list sq/ sp/ q/`, the command will be interpreted as `list sq/ p/ sp/ q/`,
+  although the list will be sorted in order of ascending quantity, price will be printed before quantity
 - `r/` will reverse the order of the list
 
 Example: `list q/ p/ e/ sp/ r/`
