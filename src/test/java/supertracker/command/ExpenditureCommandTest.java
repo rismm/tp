@@ -48,10 +48,10 @@ public class ExpenditureCommandTest {
 
         Command[] commands = {
             new NewCommand("orange", 0, 2.00, invalidDate),
-            new NewCommand("apple", 0, 1.00, invalidDate),
+            new NewCommand("grape", 0, 1.00, invalidDate),
             new NewCommand("banana", 0, 3.00, invalidDate),
             new BuyCommand("orange", 20, 1.00, currDate),
-            new BuyCommand("apple", 10, 0.50, twoDaysAgoDate),
+            new BuyCommand("grape", 10, 0.50, twoDaysAgoDate),
             new BuyCommand("banana", 5, 1.50, twoWeeksAgoDate),
         };
         for (Command c : commands) {
@@ -66,6 +66,7 @@ public class ExpenditureCommandTest {
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
     }
+
 
     /**
      * Tests the construction of expenditure report for today's transactions.
@@ -107,7 +108,7 @@ public class ExpenditureCommandTest {
                 "        Quantity: 20" + LINE_SEPARATOR +
                 "        Price: $1.00" + LINE_SEPARATOR +
                 "        Transaction Date: " + currDateFormatted + LINE_SEPARATOR +
-                "     2. Name: apple" + LINE_SEPARATOR +
+                "     2. Name: grape" + LINE_SEPARATOR +
                 "        Quantity: 10" + LINE_SEPARATOR +
                 "        Price: $0.50" + LINE_SEPARATOR +
                 "        Transaction Date: " + twoDaysAgoDateFormatted + LINE_SEPARATOR +
@@ -134,7 +135,7 @@ public class ExpenditureCommandTest {
         String amountString = String.format("%.2f", amount);
 
         String expected = "     expenditure on " + twoDaysAgoDateFormatted + " was $" + amountString + LINE_SEPARATOR +
-                "     1. Name: apple" + LINE_SEPARATOR +
+                "     1. Name: grape" + LINE_SEPARATOR +
                 "        Quantity: 10" + LINE_SEPARATOR +
                 "        Price: $0.50" + LINE_SEPARATOR +
                 "        Transaction Date: " + twoDaysAgoDateFormatted + LINE_SEPARATOR;
@@ -163,7 +164,7 @@ public class ExpenditureCommandTest {
                 "        Quantity: 20" + LINE_SEPARATOR +
                 "        Price: $1.00" + LINE_SEPARATOR +
                 "        Transaction Date: " + currDateFormatted + LINE_SEPARATOR +
-                "     2. Name: apple" + LINE_SEPARATOR +
+                "     2. Name: grape" + LINE_SEPARATOR +
                 "        Quantity: 10" + LINE_SEPARATOR +
                 "        Price: $0.50" + LINE_SEPARATOR +
                 "        Transaction Date: " + twoDaysAgoDateFormatted + LINE_SEPARATOR;
