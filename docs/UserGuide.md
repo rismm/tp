@@ -20,6 +20,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Clear transactions: `clear`](#clear-transactions-clear)
   - [Print expenditure: `exp`](#print-expenditure-exp)
   - [Print revenue: `rev`](#print-revenue-rev)
+  - [Print profit: `profit`](#print-profit-profit)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
@@ -415,6 +416,34 @@ Today's revenue is $39.80
    Quantity: 10
    Price: $2.00
    Transaction Date: 19/04/2024
+```
+
+<br>
+
+### Print profit: `profit`
+There are 4 types of profit commands:
+1. **today** - calculates the profit for the day
+2. **total** - calculates total profit
+3. **day** - calculates the profit on a specified day
+4. **range** - calculates the profit over the specified range of dates 
+not inclusive of the start and end dates
+
+The cumulative revenue will be first printed to the terminal.
+Afterward, each sell transaction will be printed to the terminal containing its name,
+quantity, price and transaction date.
+All sell transactions will be listed from most recent to least recent.
+
+Format: `profit type/PROFIT_TYPE [from/START_DATE] [to/END_DATE]`
+
+> Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled.
+> If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
+> If the type is **range**, both startDate and endDate are compulsory.
+
+Example: `profit type/today`
+
+```
+Today's profit is $9.20
+Nice! You have a profit.
 ```
 
 <br>
