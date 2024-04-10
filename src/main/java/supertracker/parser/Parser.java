@@ -455,7 +455,13 @@ public class Parser {
         }
     }
 
-    private static String addMissingParams(String input, boolean hasParam, boolean hasSortParam, String flag, String sortFlag) {
+    private static String addMissingParams(
+        String input,
+        boolean hasParam,
+        boolean hasSortParam,
+        String flag,
+        String sortFlag
+    ) {
         if (!hasParam && hasSortParam) {
             int index = input.indexOf(SPACE + sortFlag + BASE_FLAG);
             return input.substring(0, index) + SPACE + flag + BASE_FLAG + input.substring(index);
