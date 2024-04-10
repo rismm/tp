@@ -73,6 +73,15 @@ public class TransactionList {
     //@@author
 
     // @@ author dtaywd
+    /**
+     * Retrieves a filtered list of transactions based on the specified type, start date, and end date.
+     *
+     * @param type  The type of transaction filter ('today', 'total', 'day', or 'range').
+     * @param start The start date for filtering transactions (used in 'day' and 'range' types).
+     * @param end   The end date for filtering transactions (used in 'range' type).
+     * @param flag  The flag representing the transaction type to filter (e.g., 'b' for buy transactions).
+     * @return An ArrayList of transactions filtered based on the specified criteria.
+     */
     public static ArrayList<Transaction> getFilteredTransactionList(String type, LocalDate start, LocalDate end,
                                                                  String flag) {
         ArrayList<Transaction> filteredList= new ArrayList<>();
@@ -96,8 +105,15 @@ public class TransactionList {
         }
         return filteredList;
     }
+    //@@author
 
     // @@ author dtaywd
+    /**
+     * Retrieves all transactions of a specific type and adds them to the filtered list.
+     *
+     * @param flag          The flag representing the transaction type to filter.
+     * @param filteredList  The list to which filtered transactions will be added.
+     */
     private static void getTotalTransactionList(String flag, ArrayList<Transaction> filteredList) {
         for (Transaction transaction : transactionList) {
             String transactionType = transaction.getType();
@@ -106,8 +122,16 @@ public class TransactionList {
             }
         }
     }
+    //@@author
 
     // @@ author dtaywd
+    /**
+     * Retrieves transactions occurring on a specific day of a given type and adds them to the filtered list.
+     *
+     * @param start         The date to filter transactions for.
+     * @param flag          The flag representing the transaction type to filter.
+     * @param filteredList  The list to which filtered transactions will be added.
+     */
     private static void getDayTransactionList(LocalDate start, String flag, ArrayList<Transaction> filteredList) {
         for (Transaction transaction : transactionList) {
             LocalDate transactionDate = transaction.getTransactionDate();
@@ -117,8 +141,18 @@ public class TransactionList {
             }
         }
     }
+    //@@author
 
     // @@ author dtaywd
+    /**
+     * Retrieves transactions occurring within a specified date range of a given type
+     * and adds them to the filtered list.
+     *
+     * @param start         The start date of the date range to filter transactions for (not inclusive).
+     * @param end           The end date of the date range to filter transactions for (not inclusive).
+     * @param flag          The flag representing the transaction type to filter.
+     * @param filteredList  The list to which filtered transactions will be added.
+     */
     private static void getRangeTransactionList(LocalDate start, LocalDate end, String flag,
                                                 ArrayList<Transaction> filteredList) {
         for (Transaction transaction : transactionList) {
@@ -129,5 +163,6 @@ public class TransactionList {
             }
         }
     }
+    //@@author
 }
 

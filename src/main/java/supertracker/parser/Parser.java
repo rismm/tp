@@ -457,6 +457,14 @@ public class Parser {
         }
     }
 
+    //@@ author dtaywd
+    /**
+     * Validates the input parameters for the report command to ensure they are not empty.
+     *
+     * @param reportType      The type of report to generate ("low stock" or "expiry").
+     * @param thresholdString The threshold value as a string (for "low stock" report).
+     * @throws TrackerException If the input parameters are empty or invalid.
+     */
     private static void validateNonEmptyParamsReport(String reportType, String thresholdString)
             throws TrackerException {
         if (reportType.isEmpty() || (reportType.equals("low stock") && thresholdString.isEmpty())) {
@@ -464,17 +472,31 @@ public class Parser {
         }
     }
 
+    /**
+     * Validates the format of the report command parameters.
+     *
+     * @param reportType      The type of report to generate ("low stock" or "expiry").
+     * @param thresholdString The threshold value as a string (for "low stock" report).
+     * @throws TrackerException If the report format is invalid for the specified report type.
+     */
     private static void validateReportFormat(String reportType, String thresholdString) throws TrackerException {
         if (reportType.equals("expiry") && !thresholdString.isEmpty()) {
             throw new TrackerException(ErrorMessage.INVALID_EXPIRY_REPORT_FORMAT);
         }
     }
 
+    /**
+     * Validates the report type to ensure it is either "expiry" or "low stock".
+     *
+     * @param reportType The type of report to generate ("expiry" or "low stock").
+     * @throws TrackerException If the report type is invalid.
+     */
     private static void validateReportType(String reportType) throws TrackerException {
         if (!reportType.equals("expiry") && !reportType.equals("low stock")) {
             throw new TrackerException(ErrorMessage.INVALID_REPORT_TYPE);
         }
     }
+    //@@author
 
     private static void validateNoIntegerOverflow(String name, int quantityToAdd) throws TrackerException {
         Item item = Inventory.get(name);
@@ -515,6 +537,14 @@ public class Parser {
     //@@author
 
     //@@author dtaywd
+    /**
+     * Throws a TrackerException if the specified command has invalid format for "today" task.
+     *
+     * @param hasStart Whether a start date flag is present.
+     * @param hasEnd   Whether an end date flag is present.
+     * @param command  The type of command (e.g., EXPENDITURE_COMMAND or REVENUE_COMMAND).
+     * @throws TrackerException If the command format is invalid for the "today" task.
+     */
     private static void todayErrorFormat(boolean hasStart, boolean hasEnd, String command) throws TrackerException {
         if (hasStart || hasEnd) {
             if (command.equals(EXPENDITURE_COMMAND)) {
@@ -525,6 +555,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Throws a TrackerException if the specified command has invalid format for "total" task.
+     *
+     * @param hasStart Whether a start date flag is present.
+     * @param hasEnd   Whether an end date flag is present.
+     * @param command  The type of command (e.g., EXPENDITURE_COMMAND or REVENUE_COMMAND).
+     * @throws TrackerException If the command format is invalid for the "total" task.
+     */
     private static void totalErrorFormat(boolean hasStart, boolean hasEnd, String command) throws TrackerException {
         if (hasStart || hasEnd) {
             if (command.equals(EXPENDITURE_COMMAND)) {
@@ -535,6 +573,15 @@ public class Parser {
         }
     }
 
+    /**
+     * Throws a TrackerException if the specified command has invalid format for "day" task.
+     *
+     * @param hasStart      Whether a start date flag is present.
+     * @param hasEnd        Whether an end date flag is present.
+     * @param command       The type of command (e.g., EXPENDITURE_COMMAND or REVENUE_COMMAND).
+     * @param hasStartParam Whether the start date parameter is provided and valid.
+     * @throws TrackerException If the command format is invalid for the "day" task.
+     */
     private static void dayErrorFormat(
             boolean hasStart,
             boolean hasEnd,
@@ -552,6 +599,16 @@ public class Parser {
         }
     }
 
+    /**
+     * Throws a TrackerException if the specified command has invalid format for "range" task.
+     *
+     * @param hasStart      Whether a start date flag is present.
+     * @param hasEnd        Whether an end date flag is present.
+     * @param command       The type of command (e.g., EXPENDITURE_COMMAND or REVENUE_COMMAND).
+     * @param hasStartParam Whether the start date parameter is provided and valid.
+     * @param hasEndParam   Whether the end date parameter is provided and valid.
+     * @throws TrackerException If the command format is invalid for the "range" task.
+     */
     private static void rangeErrorFormat(
             boolean hasStart,
             boolean hasEnd,
@@ -570,6 +627,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Throws a TrackerException for handling an invalid command format.
+     *
+     * @param command The type of command (e.g., EXPENDITURE_COMMAND or REVENUE_COMMAND).
+     * @throws TrackerException If the command format is invalid.
+     */
     private static void handleInvalidFormat(String command) throws TrackerException {
         if (command.equals(EXPENDITURE_COMMAND)) {
             throw new TrackerException(ErrorMessage.INVALID_EXP_FORMAT);
@@ -607,6 +670,14 @@ public class Parser {
         return new NewCommand(name, quantity, price, expiryDate);
     }
 
+    //@@author dtaywd
+    /**
+     * Parses the input string to create an UpdateCommand based on the specified format.
+     *
+     * @param input The input string containing the update command.
+     * @return An UpdateCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the update command.
+     */
     private static Command parseUpdateCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG, QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG};
         Matcher matcher = getPatternMatcher(UPDATE_COMMAND_REGEX, input, flags);
@@ -632,6 +703,7 @@ public class Parser {
 
         return new UpdateCommand(name, quantity, price, expiryDate);
     }
+    //@@author
 
     private static Command parseRenameCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG, NEW_NAME_FLAG};
@@ -771,6 +843,13 @@ public class Parser {
     }
     //@@author
 
+    /**
+     * Parses the input string to create a ReportCommand based on the specified format.
+     *
+     * @param input The input string containing the report command.
+     * @return A ReportCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the report command.
+     */
     private static Command parseReportCommand(String input) throws TrackerException {
         String[] flags = {REPORT_TYPE_FLAG, THRESHOLD_FLAG};
         Matcher matcher = getPatternMatcher(REPORT_COMMAND_REGEX, input, flags);
@@ -866,6 +945,13 @@ public class Parser {
     }
 
     //@@author dtaywd
+    /**
+     * Parses the input string to create an ExpenditureCommand based on the specified format.
+     *
+     * @param input The input string containing the expenditure command.
+     * @return An ExpenditureCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the expenditure command.
+     */
     private static Command parseExpenditureCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, FROM_FLAG, TO_FLAG};
         Matcher matcher = getPatternMatcher(EXP_COMMAND_REGEX, input, flags);
