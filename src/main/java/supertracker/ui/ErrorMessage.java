@@ -11,6 +11,7 @@ public class ErrorMessage {
     public static final String INVALID_REMOVE_FORMAT = "Invalid remove command format!";
     public static final String INVALID_BUY_FORMAT = "Invalid buy command format!";
     public static final String INVALID_SELL_FORMAT = "Invalid sell command format!";
+    public static final String INVALID_CLEAR_FORMAT = "Invalid clear command format!";
     public static final String INVALID_REPORT_FORMAT = "Invalid report command format! " +
             "Follow 'report r/REPORT_TYPE [t/THRESHOLD_VALUE]'";
     public static final String INVALID_EXP_FORMAT = "Invalid expenditure command format! " +
@@ -41,7 +42,7 @@ public class ErrorMessage {
     public static final String INVALID_QUANTITY_FORMAT = "Invalid value for quantity";
     public static final String INVALID_PRICE_FORMAT = "Invalid value for price";
     public static final String INVALID_DATE_FORMAT = "Invalid date. Follow \"dd-mm-yyyy\" format";
-    public static final String INVALID_DATE = "This date is cannot exist";
+    public static final String INVALID_DATE = "This date cannot exist";
     public static final String QUANTITY_TOO_SMALL = "Quantity should be more than or equal to 0";
     public static final String PRICE_TOO_SMALL = "Price should be more than or equal to 0";
     public static final String QUANTITY_TOO_LARGE = "Quantity should be less than or equal to 2147483647";

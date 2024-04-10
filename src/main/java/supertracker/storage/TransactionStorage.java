@@ -62,7 +62,7 @@ public class TransactionStorage extends FileManager {
         BufferedWriter writer = new BufferedWriter(fw);
         assert saveFile.exists();
 
-        int transactionSize = TransactionList.getLength();
+        int transactionSize = TransactionList.size();
         for (int i = 0; i < transactionSize; i++) {
             String transactionData = getTransactionData(TransactionList.get(i));
             writer.write(transactionData);

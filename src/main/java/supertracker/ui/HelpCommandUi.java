@@ -18,7 +18,8 @@ public class HelpCommandUi extends Ui {
         "Print a report: type 'report'",
         "Print expenditure: type 'exp'",
         "Print revenue: type 'rev'",
-        "Buy or sell items: type 'transaction'"
+        "Buy or sell items: type 'transaction'",
+        "Clear transactions: type 'clear'"
     };
     private static final String HELP_CLOSING_MESSAGE_FIRST_LINE =
             "** Refer to UserGuide for further explanation";
@@ -53,6 +54,8 @@ public class HelpCommandUi extends Ui {
             "A expenditure command should look like this: exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]";
     private static final String HELP_REV_PARAMETERS =
             "A revenue command should look like this: rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]";
+    private static final String HELP_CLEAR_PARAMETERS =
+            "A clear command should look like this: clear [b/BEFORE_DATE]";
     private static final String INVALID_HELP_COMMAND_MESSAGE_FIRST_LINE =
             "You have input an invalid command.";
     private static final String INVALID_HELP_COMMAND_MESSAGE_SECOND_LINE =
@@ -118,6 +121,10 @@ public class HelpCommandUi extends Ui {
 
     public static void printRevenueCommandParams() {
         printIndent(HELP_REV_PARAMETERS);
+    }
+
+    public static void printClearCommandParams() {
+        printIndent(HELP_CLEAR_PARAMETERS);
     }
 
     public static void printInvalidHelpMessage() {

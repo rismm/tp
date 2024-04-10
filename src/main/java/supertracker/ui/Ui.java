@@ -28,6 +28,12 @@ public class Ui {
     private static final String REPORT_EXPIRED_NO_ITEMS_OPENING = "There are no items that are expired!";
     private static final String REPORT_INVENTORY_NO_ITEMS = "There are no items in the inventory, " +
             "please consider adding some in!";
+    private static final String CLEAR_CONFIRMATION_FIRST_LINE =
+            "Are you sure you want to clear all transactions before ";
+    private static final String CLEAR_CONFIRMATION_SECOND_LINE = "Enter 'y' or 'Y' if you wish to proceed";
+    private static final String CLEAR_CONFIRMATION_THIRD_LINE =
+            "Enter anything else if you wish to cancel the clear operation";
+    private static final String CLEAR_CANCELLED = "Clear operation has been cancelled";
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final DateTimeFormatter DATE_FORMAT_PRINT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
@@ -35,6 +41,7 @@ public class Ui {
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
+
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
     }
@@ -411,5 +418,27 @@ public class Ui {
     private static String padStringWithQuotes(String name, boolean hasComma) {
         String end = hasComma ? "\"," : "\"";
         return "\"" + name + end;
+    }
+
+    public static void clearCommandConfirmation(LocalDate beforeDate) {
+        printIndent(CLEAR_CONFIRMATION_FIRST_LINE + beforeDate.format(DATE_FORMAT_PRINT) + "?");
+        printIndent(CLEAR_CONFIRMATION_SECOND_LINE);
+        printIndent(CLEAR_CONFIRMATION_THIRD_LINE);
+        printLine();
+    }
+
+    public static void clearCommandCancelled() {
+        printIndent(CLEAR_CANCELLED);
+    }
+
+    public static void clearCommandSuccess(int transactionsCleared, LocalDate beforeDate) {
+        String dateString = beforeDate.format(DATE_FORMAT_PRINT);
+        if (transactionsCleared == 0) {
+            printIndent("Nothing cleared. No transactions before " + dateString + " available to clear");
+            return;
+        }
+        String plural = transactionsCleared == 1 ? "" : "s";
+        printIndent(transactionsCleared + " transaction" + plural
+                + " before " + dateString + " successfully cleared!");
     }
 }
