@@ -18,6 +18,8 @@ public class ErrorMessage {
             "Follow 'exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]'";
     public static final String INVALID_REV_FORMAT = "Invalid revenue command format! " +
             "Follow 'rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]'";
+    public static final String INVALID_PROFIT_FORMAT = "Invalid profit command format! " +
+            "Follow 'profit type/PROFIT_TYPE [from/START_DATE] [to/END_DATE]'";
     public static final String INVALID_REPORT_TYPE = "Please select a valid report type. Only 'low stock' and " +
             "'expiry' are available.";
     public static final String INVALID_EXPIRY_REPORT_FORMAT = "If report type is 'expiry' threshold should not be " +
@@ -85,6 +87,4 @@ public class ErrorMessage {
             "\"profit task/day from/DATE\"";
     public static final String INVALID_PROFIT_RANGE_FORMAT = "Invalid profit command format. " +
             "\"profit task/range from/START_DATE to/END_DATE\"";
-    public static final String INVALID_PROFIT_FORMAT = "Invalid profit command format! " +
-            "Follow 'profit type/PROFIT_TYPE [from/START_DATE] [to/END_DATE]'";
 }
