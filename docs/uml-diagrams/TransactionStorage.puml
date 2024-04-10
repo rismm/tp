@@ -1,0 +1,65 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+
+class SuperTracker
+class FileManager
+class TransactionList
+class Transaction
+class CommandClass
+class TransactionStorage
+class Item
+
+Item <|- Transaction
+FileManager <|--- TransactionStorage
+TransactionList <.. TransactionStorage
+Transaction <.. TransactionStorage
+Transaction "*" <--* TransactionList
+TransactionStorage <.. CommandClass
+TransactionStorage <. SuperTracker
+
+class FileManager {
+    {static}#DATA_PATH:String
+    {static}#checkDataDirectory():void
+    {static}#getNameQtyPriceStrings(item:Item):String[]
+}
+
+class TransactionStorage {
+    {static}+saveTransaction(transaction:Transaction):void
+    {static}+loadTransactionData():void
+    {static}-getTransactionData(item:Item):String
+    {static}-parseTransactionData(data:String):Transaction
+    {static}-saveAllTransactions():void
+}
+
+class SuperTracker {
+    {static}-run():void
+}
+
+class CommandClass {
+    +execute():void
+}
+
+class TransactionList {
+    {static}+get(index:int):Transaction
+    {static}+add(transaction:Transaction):void
+}
+
+class Transaction {
+    +getTransactionDate():LocalDate
+}
+
+class Item {
+    -name:String
+    -quantity:int
+    -price:double
+    -expiryDate:LocalDate
+}
+
+note left of CommandClass
+    CommandClass refers to the classes
+    that implement the Command interface
+endnote
+
+@enduml

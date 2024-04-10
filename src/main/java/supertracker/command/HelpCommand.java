@@ -1,8 +1,11 @@
 package supertracker.command;
 
 import supertracker.ui.HelpCommandUi;
+import supertracker.ui.Ui;
+
 import java.util.Scanner;
 
+//@@author TimothyLKM
 public class HelpCommand implements Command {
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
@@ -15,9 +18,7 @@ public class HelpCommand implements Command {
     private static final String RENAME_COMMAND = "rename";
     private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
-
-    public HelpCommand() {
-    }
+    private static final String CLEAR_COMMAND = "clear";
 
     private static String getHelpCommandReply(String input) {
         if (!input.contains(" ")) {
@@ -32,6 +33,7 @@ public class HelpCommand implements Command {
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();
         String helpCommandWord = getHelpCommandReply(input);
+        Ui.printLine();
 
         switch (helpCommandWord) {
         case NEW_COMMAND:
@@ -67,10 +69,15 @@ public class HelpCommand implements Command {
         case REVENUE_COMMAND:
             HelpCommandUi.printRevenueCommandParams();
             break;
+        case CLEAR_COMMAND:
+            HelpCommandUi.printClearCommandParams();
+            break;
         default:
             HelpCommandUi.printInvalidHelpMessage();
             break;
         }
+
+        HelpCommandUi.helpClosingMessage();
     }
 
     @Override

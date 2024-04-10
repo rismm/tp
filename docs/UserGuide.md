@@ -17,6 +17,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Print report: `report`](#print-report-report)
   - [Buy items: `buy`](#buy-items-buy)
   - [Sell items: `sell`](#sell-items-sell)
+  - [Clear transactions: `clear`](#clear-transactions-clear)
   - [Print expenditure: `exp`](#print-expenditure-exp)
   - [Print revenue: `rev`](#print-revenue-rev)
   - [Quit the program: `quit`](#quit-the-program-quit)
@@ -320,6 +321,34 @@ Quantity: 90
 
 <br>
 
+### Clear transactions: `clear`
+Clear all transactions *before* a specified date
+
+Format `clear [b/BEFORE_DATE]`
+- If the optional parameter `[b/BEFORE_DATE]` is not specified or `BEFORE_DATE` is empty,
+the current date will be taken as the before date
+- If `BEFORE_DATE` is invalid, an error would be thrown
+> Note: This command does **NOT** clear transactions that occurred on `BEFORE_DATE`
+
+- If the initial command is successful, an additional confirmation message will be shown to the user
+- Enter `y` or `Y` to proceed with the clear operation
+- Enter anything else to cancel the clear operation
+> Note: `y` or `Y` must be exact and should not contain any whitespace or other characters. e.g. entering `y  ` or `yY` will cancel the clear operation
+
+Example: `clear b/19-04-2024`
+```
+Are you sure you want to clear all transactions before 19/04/2024?
+Enter 'y' or 'Y' if you wish to proceed
+Enter anything else if you wish to cancel the clear operation
+```
+
+Example: `y`
+```
+2 transactions before 19/04/2024 successfully cleared!
+```
+
+<br>
+
 ### Print expenditure: `exp`
 There are 4 types of expenditure commands:
 1. **today** - list all buy transactions that occurred today
@@ -398,8 +427,9 @@ Format: `quit`
 --------------------------------------------------------------------------------------------------------------------
 
 ### Saving inventory data
-Inventory data in the program is saved to the hard disk in the file path `./data/` in the same directory that
-the `SuperTracker.jar` file is in. Data will be saved automatically after any command that changes the item data in the inventory.
+Data in the program is saved to the hard disk in the file path `./data/` in the same directory that
+the `SuperTracker.jar` file is in. Item data will be saved automatically after any command that changes the item data in the inventory.
+Similarly, transaction data will be saved automatically after commands that add transaction data.
 
 <br>
 
@@ -410,12 +440,15 @@ If there is no data file, the program will the skip loading process.
 <br>
 
 ### Editing the data file
-Inventory data of the `SuperTracker` program is stored in a text file `items.txt` in the path `./data/` relative to 
+Data of the `SuperTracker` program is stored in a text files in the path `./data/` relative to 
 the directory the `SuperTracker.jar` file is in. Users can edit and update the inventory data directly through the data file
-if they would like to do so.
-> Note: Edit the data file at your own caution. If the changes made to the data file are in an invalid format, the program
+if they would like to do so. Inventory data is stored in `items.txt`, and transaction data is stored in `transactions.txt`.
+> Note 1: **Edit the data file at your own caution.** If the changes made to the data file are in an invalid format, the program
 > will ignore those changes on its next load. The corrupted changes will be erased, so do keep a backup of the data 
 > file before editing.
+> 
+> Note 2: Edited transaction data with dates that have not happened yet **will be treated as corrupted data**, so do avoid adding
+> transactions that have not happened yet.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -466,6 +499,7 @@ allowing them to fix their mistake.
 | **Report**      | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
 | **Buy**         | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |
 | **Sell**        | `sell n/NAME q/QUANTITY`                                           | e.g. `sell n/Milk q/10`                      |
+| **Clear**       | `clear [b/BEFORE_DATE]`                                            | e.g. `clear b/19-04-2024`                    |
 | **Expenditure** | `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`        | e.g. `exp type/today`                        |
 | **Revenue**     | `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`            | e.g. `rev type/today`                        |
 | **Quit**        | `quit`                                                             | e.g. `quit`                                  |
