@@ -2,8 +2,11 @@ package supertracker.command;
 
 import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
+import supertracker.storage.TransactionStorage;
+import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -41,6 +44,12 @@ public class ClearCommand implements Command {
         int newTransactionListSize = TransactionList.size();
         int transactionsCleared = oldTransactionListSize - newTransactionListSize;
         Ui.clearCommandSuccess(transactionsCleared, beforeDate);
+
+        try {
+            TransactionStorage.resaveCurrentTransactions();
+        } catch (IOException e) {
+            Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
+        }
     }
 
     @Override
