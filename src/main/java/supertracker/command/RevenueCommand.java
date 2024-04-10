@@ -35,8 +35,8 @@ public class RevenueCommand implements Command {
     }
 
     /**
-     * Executes the expenditure command based on the specified task.
-     * Calculates expenditure and displays relevant information using UI utilities.
+     * Executes the revenue command based on the specified task.
+     * Calculates revenue and displays relevant information using UI utilities.
      */
     @Override
     public void execute() {
