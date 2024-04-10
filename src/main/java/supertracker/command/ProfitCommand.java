@@ -7,6 +7,9 @@ import supertracker.ui.Ui;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Represents a command to calculate and display profit information based on specified criteria.
+ */
 public class ProfitCommand implements Command{
     private static final String BUY_FLAG = "b";
     private static final String SELL_FLAG = "s";
@@ -15,12 +18,23 @@ public class ProfitCommand implements Command{
     private LocalDate endDate;
     private BigDecimal profit;
 
+    /**
+     * Constructs an ProfitCommand with the specified task, start date, and end date.
+     *
+     * @param task      The task type (e.g., "today", "total", "day", "range").
+     * @param startDate The start date for filtering transactions.
+     * @param endDate   The end date for filtering transactions (used with "range" task).
+     */
     public ProfitCommand (String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
+    /**
+     * Executes the profit command based on the specified task.
+     * Calculates profit and displays relevant information using UI utilities.
+     */
     @Override
     public void execute() {
         BigDecimal revenue = BigDecimal.valueOf(0);
@@ -49,6 +63,11 @@ public class ProfitCommand implements Command{
         Ui.printProfit(task, profit, startDate, endDate);
     }
 
+    /**
+     * Indicates whether executing this command should result in quitting the application.
+     *
+     * @return Always returns false, as executing this command does not trigger application quit.
+     */
     @Override
     public boolean isQuit() {
         return false;

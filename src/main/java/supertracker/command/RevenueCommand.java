@@ -11,6 +11,9 @@ import supertracker.item.Transaction;
 import supertracker.item.TransactionList;
 import supertracker.ui.Ui;
 
+/**
+ * Represents a command to calculate and display revenue information based on specified criteria.
+ */
 public class RevenueCommand implements Command {
     private static final String SELL_FLAG = "s";
     private String task;
@@ -18,12 +21,23 @@ public class RevenueCommand implements Command {
     private LocalDate endDate;
     private BigDecimal revenue;
 
+    /**
+     * Constructs an RevenueCommand with the specified task, start date, and end date.
+     *
+     * @param task      The task type (e.g., "today", "total", "day", "range").
+     * @param startDate The start date for filtering transactions.
+     * @param endDate   The end date for filtering transactions (used with "range" task).
+     */
     public RevenueCommand (String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
+    /**
+     * Executes the revenue command based on the specified task.
+     * Calculates revenue and displays relevant information using UI utilities.
+     */
     @Override
     public void execute() {
         switch (task) {
@@ -49,6 +63,11 @@ public class RevenueCommand implements Command {
         Ui.printRevenueExpenditure(task, revenue, startDate, endDate, "revenue", filteredList);
     }
 
+    /**
+     * Indicates whether executing this command should result in quitting the application.
+     *
+     * @return Always returns false, as executing this command does not trigger application quit.
+     */
     @Override
     public boolean isQuit() {
         return false;
