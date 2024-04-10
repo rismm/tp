@@ -216,6 +216,31 @@ public class ListCommandTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void listCommand_quantityAfterSortQuantity_correctlyConstructed() throws TrackerException {
+        String userInput = "list sq/ sp/ q/";
+        Command c = Parser.parseCommand(userInput);
+        c.execute();
+        String expected = LIST_INTRO +
+                INDEX_1 + C_NAME + C_PRICE + C_QUANTITY + LINE_SEPARATOR +
+                INDEX_2 + B_NAME + B_PRICE + B_QUANTITY + LINE_SEPARATOR +
+                INDEX_3 + A_NAME + A_PRICE + A_QUANTITY + LINE_SEPARATOR;
+        String actual = outContent.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void listCommand_multipleInvalidParameters() throws TrackerException {
+        String userInput = "list n/sp/ sp/sp/ /sq/";
+        Command c = Parser.parseCommand(userInput);
+        c.execute();
+        String expected = LIST_INTRO +
+                INDEX_1 + B_NAME + B_PRICE + LINE_SEPARATOR +
+                INDEX_2 + A_NAME + A_PRICE + LINE_SEPARATOR +
+                INDEX_3 + C_NAME + C_PRICE + LINE_SEPARATOR;
+        String actual = outContent.toString();
+        assertEquals(expected, actual);
+    }
 
     @AfterEach
     public void restoreStreams() {
