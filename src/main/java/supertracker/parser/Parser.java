@@ -26,6 +26,7 @@ import supertracker.item.Inventory;
 import supertracker.item.Item;
 import supertracker.ui.ErrorMessage;
 import supertracker.ui.Ui;
+import supertracker.util.Triple;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -132,11 +133,11 @@ public class Parser {
             "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
             "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
     private static final String REV_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
-            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) " +
-            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) ";
+            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
+            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
     private static final String PROFIT_COMMAND_REGEX = TYPE_FLAG + BASE_FLAG + "(?<" + TYPE_GROUP + ">.*) " +
-            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) " +
-            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) ";
+            "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
+            "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
     private static final String RENAME_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) " +
             "(?<" + NEW_NAME_GROUP + ">(?:" + NEW_NAME_FLAG + BASE_FLAG + ".*)?) ";
 
@@ -572,7 +573,7 @@ public class Parser {
      * @param hasEndParam       The string inputted after the end date flag is not empty.
      * @throws TrackerException If the methods called in this method throws TrackerException.
      */
-    private static void validateRevExpProfitFormat(
+    private static void validateExpRevProfitFormat(
         String taskType,
         boolean hasStart,
         boolean hasEnd,
@@ -597,6 +598,27 @@ public class Parser {
             handleInvalidFormat(command);
             break;
         }
+    }
+    //@@author
+
+    //@@author vimalapugazhan
+    private static Triple<String, LocalDate, LocalDate> parseExpRevProfit(Matcher matcher, String command)
+            throws TrackerException {
+        boolean hasFrom = !matcher.group(FROM_GROUP).isEmpty();
+        boolean hasTo = !matcher.group(TO_GROUP).isEmpty();
+
+        String type = matcher.group(TYPE_GROUP).trim();
+        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
+        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
+
+        boolean hasStartParam = !fromString.isEmpty();
+        boolean hasEndParam = !toString.isEmpty();
+
+        validateExpRevProfitFormat(type, hasFrom, hasTo, command, hasStartParam, hasEndParam);
+        LocalDate to = parseDate(toString);
+        LocalDate from = parseDate(fromString);
+
+        return new Triple<>(type, from, to);
     }
     //@@author
 
@@ -704,7 +726,7 @@ public class Parser {
             case PROFIT_COMMAND:
                 throw new TrackerException(ErrorMessage.INVALID_PROFIT_RANGE_FORMAT);
             default:
-
+                break;
             }
         } else if (!hasStartParam || !hasEndParam) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
@@ -1070,19 +1092,10 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_EXP_FORMAT);
         }
 
-        boolean hasFrom = !matcher.group(FROM_GROUP).isEmpty();
-        boolean hasTo = !matcher.group(TO_GROUP).isEmpty();
-
-        String type = matcher.group(TYPE_GROUP).trim();
-        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
-        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
-
-        boolean hasStartParam = !fromString.isEmpty();
-        boolean hasEndParam = !toString.isEmpty();
-
-        validateRevExpProfitFormat(type, hasFrom, hasTo, EXPENDITURE_COMMAND, hasStartParam, hasEndParam);
-        LocalDate to = parseDate(toString);
-        LocalDate from = parseDate(fromString);
+        Triple<String, LocalDate, LocalDate> triple = parseExpRevProfit(matcher, EXPENDITURE_COMMAND);
+        String type = triple.getFirst();
+        LocalDate from = triple.getSecond();
+        LocalDate to = triple.getThird();
 
         return new ExpenditureCommand(type, from, to);
     }
@@ -1097,28 +1110,19 @@ public class Parser {
      * @throws TrackerException If there is an error parsing or validating the revenue command.
      */
     private static Command parseRevenueCommand(String input) throws TrackerException {
-        String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
+        String[] flags = {TYPE_FLAG, FROM_FLAG, TO_FLAG};
         Matcher matcher = getPatternMatcher(REV_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
             throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
         }
 
-        boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
-        boolean hasEnd = !matcher.group(TO_GROUP).isEmpty();
+        Triple<String, LocalDate, LocalDate> triple = parseExpRevProfit(matcher, REVENUE_COMMAND);
+        String type = triple.getFirst();
+        LocalDate from = triple.getSecond();
+        LocalDate to = triple.getThird();
 
-        String taskType = matcher.group(TYPE_GROUP).trim();
-        String startDateString = matcher.group(FROM_GROUP).replace(FROM_GROUP + BASE_FLAG, "").trim();
-        String endDateString = matcher.group(TO_GROUP).replace(TO_GROUP + BASE_FLAG, "").trim();
-
-        boolean hasStartParam = !startDateString.isEmpty();
-        boolean hasEndParam = !endDateString.isEmpty();
-
-        validateRevExpProfitFormat(taskType, hasStart, hasEnd, REVENUE_COMMAND, hasStartParam, hasEndParam);
-        LocalDate startDate = parseDate(startDateString);
-        LocalDate endDate = parseDate(endDateString);
-
-        return new RevenueCommand(taskType, startDate, endDate);
+        return new RevenueCommand(type, from, to);
     }
     //@@author
 
@@ -1131,28 +1135,19 @@ public class Parser {
      * @throws TrackerException If there is an error parsing or validating the profit command.
      */
     private static Command parseProfitCommand(String input) throws TrackerException {
-        String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
+        String[] flags = {TYPE_FLAG, FROM_FLAG, TO_FLAG};
         Matcher matcher = getPatternMatcher(PROFIT_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
+            throw new TrackerException(ErrorMessage.INVALID_PROFIT_FORMAT);
         }
 
-        boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
-        boolean hasEnd = !matcher.group(TO_GROUP).isEmpty();
+        Triple<String, LocalDate, LocalDate> triple = parseExpRevProfit(matcher, PROFIT_COMMAND);
+        String type = triple.getFirst();
+        LocalDate from = triple.getSecond();
+        LocalDate to = triple.getThird();
 
-        String taskType = matcher.group(TYPE_GROUP).trim();
-        String startDateString = matcher.group(FROM_GROUP).replace(FROM_GROUP + BASE_FLAG, "").trim();
-        String endDateString = matcher.group(TO_GROUP).replace(TO_GROUP + BASE_FLAG, "").trim();
-
-        boolean hasStartParam = !startDateString.isEmpty();
-        boolean hasEndParam = !endDateString.isEmpty();
-
-        validateRevExpProfitFormat(taskType, hasStart, hasEnd, PROFIT_COMMAND, hasStartParam, hasEndParam);
-        LocalDate startDate = parseDate(startDateString);
-        LocalDate endDate = parseDate(endDateString);
-
-        return new ProfitCommand(taskType, startDate, endDate);
+        return new ProfitCommand(type, from, to);
     }
     //@@author
 }
