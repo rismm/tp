@@ -349,14 +349,29 @@ public class Parser {
     }
 
     //@@author vimalapugazhan
-    private static void validateDate(LocalDate expiryDate, String dateString) throws TrackerException {
-        if (!expiryDate.format(EX_DATE_FORMAT).equals(dateString)) {
+    /**
+     * Checks for invalid dates inputted even if they follow the correct format (e.g. 31-02-2024) by
+     * comparing the datesString to the string derived from the parsed date.
+     *
+     * @param date DateString that has been parsed.
+     * @param dateString Date that the user has inputted as a string.
+     * @throws TrackerException If the input date is invalid.
+     */
+    private static void validateDate(LocalDate date, String dateString) throws TrackerException {
+        if (!date.format(EX_DATE_FORMAT).equals(dateString)) {
             throw new TrackerException(ErrorMessage.INVALID_DATE);
         }
     }
     //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the date inputted to a LocalDate type.
+     *
+     * @param dateString Dates inputted as string to be parsed into LocalDate type.
+     * @return date Parsed valid LocalDate dates.
+     * @throws TrackerException If dateString is inputted in the wrong format.
+     */
     private static LocalDate parseDate(String dateString) throws TrackerException {
         LocalDate date = UNDEFINED_DATE;
         try {
@@ -369,8 +384,18 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
         }
     }
+    //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the inputted string into a valid date if inputted string contains a new date or
+     * sets the new expiry date as undefined if the user inputs nil (to remove the expiry date from the item)
+     *
+     * @param dateString Dates inputted as string to be parsed into LocalDate type.
+     * @return expiryDate The parsed LocalDate that is used in the updateCommand.
+     * @throws TrackerException If DateTimeParseException when the date is the wrong format
+     * @throws TrackerException If NumberFormatException when date does not consist of integers.
+     */
     private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
         LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
 
@@ -516,6 +541,18 @@ public class Parser {
     }
 
     //@@author vimalapugazhan
+    /**
+     * Checks for invalid inputs for each taskType by
+     * ensuring the params for each type is present and the params are valid.
+     *
+     * @param taskType          The task type (e.g., "today", "total", "day", "range").
+     * @param hasStart          Whether a start date flag is present.
+     * @param hasEnd            Whether an end date flag is present.
+     * @param command           Revenue, Expenditure or Profit command that requires checking of format.
+     * @param hasStartParam     The string inputted after the start date flag is not empty.
+     * @param hasEndParam       The string inputted after the end date flag is not empty.
+     * @throws TrackerException If the methods called in this method throws TrackerException.
+     */
     private static void validateRevExpProfitFormat(
         String taskType,
         boolean hasStart,
@@ -780,7 +817,6 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        //@@author vimalapugazhan
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
@@ -796,9 +832,15 @@ public class Parser {
         return new ListCommand(firstParam, secondParam, thirdParam,
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
-    //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parse input to extract the name of item being deleted to return new DeleteCommand.
+     *
+     * @param input User inputted string containing the delete command.
+     * @return DeleteCommand object containing the name of item being deleted.
+     * @throws TrackerException If item does not exist in the list.
+     */
     private static Command parseDeleteCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG};
         Matcher matcher = getPatternMatcher(DELETE_COMMAND_REGEX, input, flags);
@@ -1012,6 +1054,13 @@ public class Parser {
     //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the input string to create a RevenueCommand based on the specified format.
+     *
+     * @param input The input string containing the revenue command.
+     * @return RevenueCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the revenue command.
+     */
     private static Command parseRevenueCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
         Matcher matcher = getPatternMatcher(REV_COMMAND_REGEX, input, flags);
@@ -1039,6 +1088,13 @@ public class Parser {
     //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the input string to create a ProfitCommand based on the specified format.
+     *
+     * @param input The input string containing the profit command.
+     * @return ProfitCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the profit command.
+     */
     private static Command parseProfitCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
         Matcher matcher = getPatternMatcher(PROFIT_COMMAND_REGEX, input, flags);
