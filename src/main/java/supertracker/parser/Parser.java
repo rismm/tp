@@ -228,8 +228,8 @@ public class Parser {
             command = parseRevenueCommand(params);
             break;
         case PROFIT_COMMAND:
-        command = parseProfitCommand(params);
-        break;
+            command = parseProfitCommand(params);
+            break;
         default:
             command = new InvalidCommand();
             break;
@@ -532,6 +532,8 @@ public class Parser {
                 throw new TrackerException(ErrorMessage.INVALID_REV_TODAY_FORMAT);
             case PROFIT_COMMAND:
                 throw new TrackerException(ErrorMessage.INVALID_PROFIT_TODAY_FORMAT);
+            default:
+
             }
         }
     }
@@ -545,6 +547,8 @@ public class Parser {
                 throw new TrackerException(ErrorMessage.INVALID_REV_TOTAL_FORMAT);
             case PROFIT_COMMAND:
                 throw new TrackerException(ErrorMessage.INVALID_PROFIT_TOTAL_FORMAT);
+            default:
+
             }
         }
     }
@@ -563,6 +567,8 @@ public class Parser {
                 throw new TrackerException(ErrorMessage.INVALID_REV_DAY_FORMAT);
             case PROFIT_COMMAND:
                 throw new TrackerException(ErrorMessage.INVALID_PROFIT_DAY_FORMAT);
+            default:
+
             }
         } else if (!hasStartParam) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
@@ -584,6 +590,8 @@ public class Parser {
                 throw new TrackerException(ErrorMessage.INVALID_REV_RANGE_FORMAT);
             case PROFIT_COMMAND:
                 throw new TrackerException(ErrorMessage.INVALID_PROFIT_RANGE_FORMAT);
+            default:
+
             }
         } else if (!hasStartParam || !hasEndParam) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
@@ -598,6 +606,8 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
         case PROFIT_COMMAND:
             throw new TrackerException(ErrorMessage.INVALID_PROFIT_FORMAT);
+        default:
+
         }
     }
     //@@author
