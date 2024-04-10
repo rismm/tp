@@ -41,6 +41,10 @@ public class Ui {
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
+    private static final String PROFIT_MESSAGE = "Nice! You have a profit.";
+    private static final String BREAK_EVEN_MESSAGE = "You have broken even.";
+    private static final String LOSS_MESSAGE = "You lost money.";
+
 
     private static String getListSize(int size){
         return ("There are " + size + " unique items in your inventory:");
@@ -356,6 +360,35 @@ public class Ui {
             break;
         default: assert task.isEmpty();
             break;
+        }
+    }
+
+    public static void printProfit(String task, BigDecimal amount, LocalDate startDate, LocalDate endDate) {
+        int profitSign = Integer.compare(amount.compareTo(BigDecimal.valueOf(0)), 0);
+        String amountString = String.format("%.2f", amount);
+        switch (task) {
+        case TODAY:
+            printIndent("Today's profit is $" + amountString);
+            break;
+        case TOTAL:
+            printIndent("Total profit is $" + amountString);
+            break;
+        case DAY:
+            printIndent("Your profit on " + startDate.format(DATE_FORMAT_PRINT) + " was $" + amountString);
+            break;
+        case RANGE:
+            printIndent( "Your profit between " + startDate.format(DATE_FORMAT_PRINT) + " and "
+                    + endDate.format(DATE_FORMAT_PRINT) + " was $" + amountString);
+            break;
+        default: assert task.isEmpty();
+            break;
+        }
+        if (profitSign == 1) {
+            printIndent(PROFIT_MESSAGE);
+        } else if (profitSign == 0) {
+            printIndent(BREAK_EVEN_MESSAGE);
+        } else {
+            printIndent(LOSS_MESSAGE);
         }
     }
 

@@ -40,6 +40,6 @@ Given below are my contributions to the project.
     - Used PlantUML to create the UML class and sequence diagrams for update command
 
 - **Contributions to team-based tasks:**
-  - Teammate PR reviewed: [40](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/40), [71](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/71), [85](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/85) 
+  - Teammate PR reviewed: [40](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/40), [71](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/71), [85](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/85)
   - Contributed to the JUnit tests for update, report, revenue and expenditure command
   - Helped suggest improvements
