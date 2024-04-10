@@ -22,7 +22,6 @@ import supertracker.command.RevenueCommand;
 import supertracker.command.SellCommand;
 import supertracker.command.UpdateCommand;
 
-
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 import supertracker.ui.ErrorMessage;
@@ -30,18 +29,18 @@ import supertracker.ui.Ui;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import java.time.LocalDate;
 
 public class Parser {
     private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final double ROUNDING_FACTOR = 100.0;
+    private static final String SPACE = " ";
     private static final String QUIT_COMMAND = "quit";
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
@@ -148,10 +147,10 @@ public class Parser {
      * @return a String of the first word in the user input
      */
     private static String getCommandWord(String input) {
-        if (!input.contains(" ")) {
+        if (!input.contains(SPACE)) {
             return input;
         }
-        return input.substring(0, input.indexOf(" "));
+        return input.substring(0, input.indexOf(SPACE));
     }
 
     /**
@@ -161,10 +160,10 @@ public class Parser {
      * @return a String of the parameters in the user input
      */
     private static String getParameters(String input) {
-        if (!input.contains(" ")) {
+        if (!input.contains(SPACE)) {
             return "";
         }
-        return input.substring(input.indexOf(" ")).trim();
+        return input.substring(input.indexOf(SPACE)).trim();
     }
 
     /**
@@ -266,7 +265,7 @@ public class Parser {
                     break;
                 }
             }
-            stringPattern.append(" ");
+            stringPattern.append(SPACE);
         }
 
         return stringPattern.toString();
@@ -290,6 +289,12 @@ public class Parser {
 
     private static double roundTo2Dp(double unroundedValue) {
         return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
+    }
+
+    private static void validatePositiveQuantity(String quantityString, int quantity) throws TrackerException {
+        if (!quantityString.isEmpty() && quantity <= 0) {
+            throw new TrackerException(ErrorMessage.QUANTITY_NOT_POSITIVE);
+        }
     }
 
     private static void validateNonNegativeQuantity(String quantityString, int quantity) throws TrackerException {
@@ -450,25 +455,39 @@ public class Parser {
         }
     }
 
+    private static String addMissingParams(
+        String input,
+        boolean hasParam,
+        boolean hasSortParam,
+        String flag,
+        String sortFlag
+    ) {
+        if (!hasParam && hasSortParam) {
+            int index = input.indexOf(SPACE + sortFlag + BASE_FLAG);
+            return input.substring(0, index) + SPACE + flag + BASE_FLAG + input.substring(index);
+        }
+        return input;
+    }
+
     private static ArrayList<Integer> getParamPositions(String input, boolean hasQuantity, boolean hasPrice,
             boolean hasExpiry, String quantityFlag, String priceFlag, String expiryFlag) {
         ArrayList<Integer> paramPositions =  new ArrayList<>();
-        // to check if p, q, e appears first and second
+        // to check if p, q, e appears first, second or third
 
         int quantityPosition;
         int pricePosition;
         int expiryPosition;
 
         if (hasQuantity) {
-            quantityPosition = input.indexOf(quantityFlag + BASE_FLAG);
+            quantityPosition = input.indexOf(SPACE + quantityFlag + BASE_FLAG);
             paramPositions.add(quantityPosition);
         }
         if (hasPrice) {
-            pricePosition = input.indexOf(priceFlag + BASE_FLAG);
+            pricePosition = input.indexOf(SPACE + priceFlag + BASE_FLAG);
             paramPositions.add(pricePosition);
         }
         if (hasExpiry) {
-            expiryPosition = input.indexOf(expiryFlag + BASE_FLAG);
+            expiryPosition = input.indexOf(SPACE + expiryFlag + BASE_FLAG);
             paramPositions.add(expiryPosition);
         }
 
@@ -482,9 +501,9 @@ public class Parser {
         try {
             int paramPos = paramOrder.get(index);
             if (isSort) {
-                return input.substring(paramPos + 1, paramPos + 2);
+                return input.substring(paramPos + 2, paramPos + 3);
             }
-            return input.substring(paramPos, paramPos + 1);
+            return input.substring(paramPos + 1, paramPos + 2);
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {
             return "";
         }
@@ -817,6 +836,22 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
+        input = SPACE + input;
+
+        input = addMissingParams(input, hasQuantity, hasSortQuantity, QUANTITY_FLAG, SORT_QUANTITY_FLAG);
+        input = addMissingParams(input, hasPrice, hasSortPrice, PRICE_FLAG, SORT_PRICE_FLAG);
+        input = addMissingParams(input, hasExpiry, hasSortExpiry, EX_DATE_FLAG, SORT_EX_DATE_FLAG);
+
+        Matcher updatedMatcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
+
+        if (!updatedMatcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_LIST_FORMAT);
+        }
+
+        hasQuantity = !updatedMatcher.group(QUANTITY_GROUP).isEmpty();
+        hasPrice = !updatedMatcher.group(PRICE_GROUP).isEmpty();
+        hasExpiry = !updatedMatcher.group(EX_DATE_GROUP).isEmpty();
+
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
@@ -874,7 +909,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_ADD);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
         validateNoIntegerOverflow(name, quantity);
 
         return new AddCommand(name,quantity);
@@ -896,7 +931,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_REMOVE);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
 
         return new RemoveCommand(name, quantity);
     }
@@ -969,7 +1004,7 @@ public class Parser {
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
 
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
         validateNonNegativePrice(priceString, price);
         validateNoIntegerOverflow(name, quantity);
 
@@ -994,7 +1029,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_SELL);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
 
         LocalDate currentDate = LocalDate.now();
 
