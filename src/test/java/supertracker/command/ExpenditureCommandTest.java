@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import supertracker.TrackerException;
 import supertracker.item.Inventory;
+import supertracker.item.TransactionList;
 import supertracker.parser.Parser;
 
 import java.io.ByteArrayOutputStream;
@@ -45,6 +46,7 @@ public class ExpenditureCommandTest {
     @BeforeAll
     public static void setUp() {
         Inventory.clear();
+        TransactionList.clear();
 
         Command[] commands = {
             new NewCommand("orange", 0, 2.00, invalidDate),
