@@ -66,6 +66,12 @@ public class Ui {
         return item.getName() + " has been added to the inventory!";
     }
 
+    /**
+     * Formats the expiry date to be printed in the correct format and alignment.
+     *
+     * @param item Item from inventory.
+     * @return Formatted expiry date message.
+     */
     private static String getExpiryDateMessage(Item item) {
         if (!item.getExpiryDate().isEqual(UNDEFINED_DATE)) {
             return "Expiry Date: " + item.getExpiryDateString();
@@ -219,6 +225,11 @@ public class Ui {
         printIndent(getExpiryDateMessage(item));
     }
 
+    /**
+     * Prints message for successful deletion of item from inventory.
+     *
+     * @param name Name of item in inventory to be deleted.
+     */
     public static void deleteCommandSuccess(String name) {
         printIndent(deleteItemOpening(name));
     }
@@ -337,6 +348,17 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays the revenue/expenditure value and corresponding transactions
+     * over a length of time according to the task, start and end dates.
+     *
+     * @param task          The task type (e.g., "today", "total", "day", "range").
+     * @param amount        Revenue or expenditure value.
+     * @param startDate     The start date for filtering transactions.
+     * @param endDate       The end date for filtering transactions (used with "range" task).
+     * @param financeType   Revenue or expenditure command.
+     * @param filteredList  List of transaction items fitting the criteria that has been sorted alphabetically.
+     */
     public static void printRevenueExpenditure(String task, BigDecimal amount, LocalDate startDate, LocalDate endDate,
                                                String financeType, ArrayList<Transaction> filteredList) {
         String amountString = String.format("%.2f", amount);
@@ -363,6 +385,14 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays the profit value over a length of time according to the task, start and end dates.
+     *
+     * @param task      The task type (e.g., "today", "total", "day", "range").
+     * @param amount    Revenue or expenditure value.
+     * @param startDate The start date for filtering transactions.
+     * @param endDate   The end date for filtering transactions (used with "range" task)
+     */
     public static void printProfit(String task, BigDecimal amount, LocalDate startDate, LocalDate endDate) {
         int profitSign = Integer.compare(amount.compareTo(BigDecimal.valueOf(0)), 0);
         String amountString = String.format("%.2f", amount);
@@ -392,7 +422,7 @@ public class Ui {
         }
     }
 
-    // author dtaywd
+    //@@ author dtaywd
     /**
      * Prints a formatted list of transactions with details including name, quantity, price, and transaction date.
      *
