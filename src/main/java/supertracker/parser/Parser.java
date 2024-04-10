@@ -22,7 +22,6 @@ import supertracker.command.RevenueCommand;
 import supertracker.command.SellCommand;
 import supertracker.command.UpdateCommand;
 
-
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 import supertracker.ui.ErrorMessage;
@@ -30,12 +29,11 @@ import supertracker.ui.Ui;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import java.time.LocalDate;
 
 public class Parser {
     private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
