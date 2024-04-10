@@ -18,6 +18,7 @@ public class HelpCommand implements Command {
     private static final String RENAME_COMMAND = "rename";
     private static final String EXPENDITURE_COMMAND = "exp";
     private static final String REVENUE_COMMAND = "rev";
+    private static final String PROFIT_COMMAND = "profit";
     private static final String CLEAR_COMMAND = "clear";
 
     private static String getHelpCommandReply(String input) {
@@ -68,6 +69,9 @@ public class HelpCommand implements Command {
             break;
         case REVENUE_COMMAND:
             HelpCommandUi.printRevenueCommandParams();
+            break;
+        case PROFIT_COMMAND:
+            HelpCommandUi.printProfitCommandParams();
             break;
         case CLEAR_COMMAND:
             HelpCommandUi.printClearCommandParams();
