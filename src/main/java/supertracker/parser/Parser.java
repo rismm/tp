@@ -42,6 +42,7 @@ public class Parser {
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final double ROUNDING_FACTOR = 100.0;
+    private static final String SPACE = " ";
     private static final String QUIT_COMMAND = "quit";
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
@@ -148,10 +149,10 @@ public class Parser {
      * @return a String of the first word in the user input
      */
     private static String getCommandWord(String input) {
-        if (!input.contains(" ")) {
+        if (!input.contains(SPACE)) {
             return input;
         }
-        return input.substring(0, input.indexOf(" "));
+        return input.substring(0, input.indexOf(SPACE));
     }
 
     /**
@@ -161,10 +162,10 @@ public class Parser {
      * @return a String of the parameters in the user input
      */
     private static String getParameters(String input) {
-        if (!input.contains(" ")) {
+        if (!input.contains(SPACE)) {
             return "";
         }
-        return input.substring(input.indexOf(" ")).trim();
+        return input.substring(input.indexOf(SPACE)).trim();
     }
 
     /**
@@ -266,7 +267,7 @@ public class Parser {
                     break;
                 }
             }
-            stringPattern.append(" ");
+            stringPattern.append(SPACE);
         }
 
         return stringPattern.toString();
@@ -433,8 +434,8 @@ public class Parser {
 
     private static String addMissingParams(String input, boolean hasParam, boolean hasSortParam, String flag, String sortFlag) {
         if (!hasParam && hasSortParam) {
-            int index = input.indexOf(sortFlag + BASE_FLAG);
-            return input.substring(0, index) + flag + BASE_FLAG + " " + input.substring(index);
+            int index = input.indexOf(SPACE + sortFlag + BASE_FLAG);
+            return input.substring(0, index) + SPACE + flag + BASE_FLAG + input.substring(index);
         }
         return input;
     }
@@ -449,15 +450,15 @@ public class Parser {
         int expiryPosition;
 
         if (hasQuantity) {
-            quantityPosition = input.indexOf(quantityFlag + BASE_FLAG);
+            quantityPosition = input.indexOf(SPACE + quantityFlag + BASE_FLAG);
             paramPositions.add(quantityPosition);
         }
         if (hasPrice) {
-            pricePosition = input.indexOf(priceFlag + BASE_FLAG);
+            pricePosition = input.indexOf(SPACE + priceFlag + BASE_FLAG);
             paramPositions.add(pricePosition);
         }
         if (hasExpiry) {
-            expiryPosition = input.indexOf(expiryFlag + BASE_FLAG);
+            expiryPosition = input.indexOf(SPACE + expiryFlag + BASE_FLAG);
             paramPositions.add(expiryPosition);
         }
 
@@ -471,9 +472,9 @@ public class Parser {
         try {
             int paramPos = paramOrder.get(index);
             if (isSort) {
-                return input.substring(paramPos + 1, paramPos + 2);
+                return input.substring(paramPos + 2, paramPos + 3);
             }
-            return input.substring(paramPos, paramPos + 1);
+            return input.substring(paramPos + 1, paramPos + 2);
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {
             return "";
         }
@@ -794,11 +795,11 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
+        input = SPACE + input;
+
         input = addMissingParams(input, hasQuantity, hasSortQuantity, QUANTITY_FLAG, SORT_QUANTITY_FLAG);
         input = addMissingParams(input, hasPrice, hasSortPrice, PRICE_FLAG, SORT_PRICE_FLAG);
         input = addMissingParams(input, hasExpiry, hasSortExpiry, EX_DATE_FLAG, SORT_EX_DATE_FLAG);
-        input = LIST_COMMAND + " " + input;
-        System.out.println(input);
 
         Matcher updatedMatcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
 
@@ -815,9 +816,6 @@ public class Parser {
         String firstParam = extractParam(input, paramOrder, 0, false);
         String secondParam = extractParam(input, paramOrder, 1, false);
         String thirdParam = extractParam(input, paramOrder, 2, false);
-        System.out.println(firstParam);
-        System.out.println(secondParam);
-        System.out.println(thirdParam);
 
         ArrayList<Integer> sortParamOrder = getParamPositions(input, hasSortQuantity, hasSortPrice, hasSortExpiry,
                 SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, SORT_EX_DATE_FLAG);
