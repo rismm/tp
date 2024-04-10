@@ -16,7 +16,6 @@ public class ProfitCommand implements Command{
     private String task;
     private LocalDate startDate;
     private LocalDate endDate;
-    private BigDecimal profit;
 
     /**
      * Constructs an ProfitCommand with the specified task, start date, and end date.
@@ -59,7 +58,7 @@ public class ProfitCommand implements Command{
         default: assert task.isEmpty();
             break;
         }
-        profit = revenue.subtract(expenditure);
+        BigDecimal profit = revenue.subtract(expenditure);
         Ui.printProfit(task, profit, startDate, endDate);
     }
 
