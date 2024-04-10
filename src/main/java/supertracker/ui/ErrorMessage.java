@@ -43,6 +43,7 @@ public class ErrorMessage {
     public static final String INVALID_PRICE_FORMAT = "Invalid value for price";
     public static final String INVALID_DATE_FORMAT = "Invalid date. Follow \"dd-mm-yyyy\" format";
     public static final String INVALID_DATE = "This date cannot exist";
+    public static final String QUANTITY_NOT_POSITIVE = "Quantity should be more than or equal to 1";
     public static final String QUANTITY_TOO_SMALL = "Quantity should be more than or equal to 0";
     public static final String PRICE_TOO_SMALL = "Price should be more than or equal to 0";
     public static final String QUANTITY_TOO_LARGE = "Quantity should be less than or equal to 2147483647";

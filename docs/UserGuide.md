@@ -20,6 +20,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Clear transactions: `clear`](#clear-transactions-clear)
   - [Print expenditure: `exp`](#print-expenditure-exp)
   - [Print revenue: `rev`](#print-revenue-rev)
+  - [Print profit: `profit`](#print-profit-profit)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
@@ -111,7 +112,7 @@ Format: `add n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If the new quantity of the item exceeds 2147483647, an error would be thrown
 
@@ -130,7 +131,7 @@ Format: `remove n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
 
@@ -207,11 +208,15 @@ Format: `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`
   - e.g. if the command specifies `list q/ p/ e/`, the quantity will be printed first followed by price and expiry date
 - `sq/` will list the items in order of ascending quantity
 - `sp/` will list the items in order of ascending price
-- `se/` will list the items in order of ascending date
+- `se/` will list the items in order of ascending date, items with no expiry date will be listed at the end
 - If the command has no sorting parameters, the list will be sorted in ascending alphabetical order (A-Z) by default
 - If the command has multiple sorting parameters, the list will be sorted in the same order as the sorting flags
   - e.g. if the command specifies `list sq/ sp/ se/`, list will be sorted in order of ascending quantity. 
   Ties will be sorted in order of ascending price, then ascending date, followed by ascending alphabetical order (A-Z)
+- If `q/` is not specified but `sq/` is specified, the command will be interpreted as `q/ sq/`. 
+Same logic applies to price and expiry date
+  - e.g. if the command specifies `list sq/ sp/ q/`, the command will be interpreted as `list sq/ p/ sp/ q/`,
+  although the list will be sorted in order of ascending quantity, price will be printed before quantity
 - `r/` will reverse the order of the list
 
 Example: `list q/ p/ e/ sp/ r/`
@@ -284,7 +289,7 @@ Format: `buy n/NAME q/QUANTITY p/PRICE`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If the new quantity of the item exceeds 2147483647, an error would be thrown
 - `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
@@ -309,7 +314,7 @@ Format: `sell n/NAME q/QUANTITY`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` does not exist in the inventory, an error would be thrown
-- `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
+- `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
 
@@ -415,6 +420,34 @@ Today's revenue is $39.80
    Quantity: 10
    Price: $2.00
    Transaction Date: 19/04/2024
+```
+
+<br>
+
+### Print profit: `profit`
+There are 4 types of profit commands:
+1. **today** - calculates the profit for the day
+2. **total** - calculates total profit
+3. **day** - calculates the profit on a specified day
+4. **range** - calculates the profit over the specified range of dates 
+not inclusive of the start and end dates
+
+The cumulative revenue will be first printed to the terminal.
+Afterward, each sell transaction will be printed to the terminal containing its name,
+quantity, price and transaction date.
+All sell transactions will be listed from most recent to least recent.
+
+Format: `profit type/PROFIT_TYPE [from/START_DATE] [to/END_DATE]`
+
+> Note: If the type is **today** or **total**, startDate and endDate are not supposed to be filled.
+> If the type is **day**, startDate is compulsory and endDate is not supposed to be filled.
+> If the type is **range**, both startDate and endDate are compulsory.
+
+Example: `profit type/today`
+
+```
+Today's profit is $9.20
+Nice! You have a profit.
 ```
 
 <br>

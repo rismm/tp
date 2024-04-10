@@ -22,7 +22,6 @@ import supertracker.command.RevenueCommand;
 import supertracker.command.SellCommand;
 import supertracker.command.UpdateCommand;
 
-
 import supertracker.item.Inventory;
 import supertracker.item.Item;
 import supertracker.ui.ErrorMessage;
@@ -30,18 +29,18 @@ import supertracker.ui.Ui;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import java.time.LocalDate;
 
 public class Parser {
     private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final double ROUNDING_FACTOR = 100.0;
+    private static final String SPACE = " ";
     private static final String QUIT_COMMAND = "quit";
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
@@ -148,10 +147,10 @@ public class Parser {
      * @return a String of the first word in the user input
      */
     private static String getCommandWord(String input) {
-        if (!input.contains(" ")) {
+        if (!input.contains(SPACE)) {
             return input;
         }
-        return input.substring(0, input.indexOf(" "));
+        return input.substring(0, input.indexOf(SPACE));
     }
 
     /**
@@ -161,10 +160,10 @@ public class Parser {
      * @return a String of the parameters in the user input
      */
     private static String getParameters(String input) {
-        if (!input.contains(" ")) {
+        if (!input.contains(SPACE)) {
             return "";
         }
-        return input.substring(input.indexOf(" ")).trim();
+        return input.substring(input.indexOf(SPACE)).trim();
     }
 
     /**
@@ -266,7 +265,7 @@ public class Parser {
                     break;
                 }
             }
-            stringPattern.append(" ");
+            stringPattern.append(SPACE);
         }
 
         return stringPattern.toString();
@@ -290,6 +289,12 @@ public class Parser {
 
     private static double roundTo2Dp(double unroundedValue) {
         return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
+    }
+
+    private static void validatePositiveQuantity(String quantityString, int quantity) throws TrackerException {
+        if (!quantityString.isEmpty() && quantity <= 0) {
+            throw new TrackerException(ErrorMessage.QUANTITY_NOT_POSITIVE);
+        }
     }
 
     private static void validateNonNegativeQuantity(String quantityString, int quantity) throws TrackerException {
@@ -349,14 +354,29 @@ public class Parser {
     }
 
     //@@author vimalapugazhan
-    private static void validateDate(LocalDate expiryDate, String dateString) throws TrackerException {
-        if (!expiryDate.format(EX_DATE_FORMAT).equals(dateString)) {
+    /**
+     * Checks for invalid dates inputted even if they follow the correct format (e.g. 31-02-2024) by
+     * comparing the datesString to the string derived from the parsed date.
+     *
+     * @param date DateString that has been parsed.
+     * @param dateString Date that the user has inputted as a string.
+     * @throws TrackerException If the input date is invalid.
+     */
+    private static void validateDate(LocalDate date, String dateString) throws TrackerException {
+        if (!date.format(EX_DATE_FORMAT).equals(dateString)) {
             throw new TrackerException(ErrorMessage.INVALID_DATE);
         }
     }
     //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the date inputted to a LocalDate type.
+     *
+     * @param dateString Dates inputted as string to be parsed into LocalDate type.
+     * @return date Parsed valid LocalDate dates.
+     * @throws TrackerException If dateString is inputted in the wrong format.
+     */
     private static LocalDate parseDate(String dateString) throws TrackerException {
         LocalDate date = UNDEFINED_DATE;
         try {
@@ -369,8 +389,18 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_DATE_FORMAT);
         }
     }
+    //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the inputted string into a valid date if inputted string contains a new date or
+     * sets the new expiry date as undefined if the user inputs nil (to remove the expiry date from the item)
+     *
+     * @param dateString Dates inputted as string to be parsed into LocalDate type.
+     * @return expiryDate The parsed LocalDate that is used in the updateCommand.
+     * @throws TrackerException If DateTimeParseException when the date is the wrong format
+     * @throws TrackerException If NumberFormatException when date does not consist of integers.
+     */
     private static LocalDate parseExpiryDateUpdate(String dateString) throws TrackerException {
         LocalDate expiryDate = LocalDate.parse("1-1-1", DateTimeFormatter.ofPattern("y-M-d"));
 
@@ -425,25 +455,39 @@ public class Parser {
         }
     }
 
+    private static String addMissingParams(
+        String input,
+        boolean hasParam,
+        boolean hasSortParam,
+        String flag,
+        String sortFlag
+    ) {
+        if (!hasParam && hasSortParam) {
+            int index = input.indexOf(SPACE + sortFlag + BASE_FLAG);
+            return input.substring(0, index) + SPACE + flag + BASE_FLAG + input.substring(index);
+        }
+        return input;
+    }
+
     private static ArrayList<Integer> getParamPositions(String input, boolean hasQuantity, boolean hasPrice,
             boolean hasExpiry, String quantityFlag, String priceFlag, String expiryFlag) {
         ArrayList<Integer> paramPositions =  new ArrayList<>();
-        // to check if p, q, e appears first and second
+        // to check if p, q, e appears first, second or third
 
         int quantityPosition;
         int pricePosition;
         int expiryPosition;
 
         if (hasQuantity) {
-            quantityPosition = input.indexOf(quantityFlag + BASE_FLAG);
+            quantityPosition = input.indexOf(SPACE + quantityFlag + BASE_FLAG);
             paramPositions.add(quantityPosition);
         }
         if (hasPrice) {
-            pricePosition = input.indexOf(priceFlag + BASE_FLAG);
+            pricePosition = input.indexOf(SPACE + priceFlag + BASE_FLAG);
             paramPositions.add(pricePosition);
         }
         if (hasExpiry) {
-            expiryPosition = input.indexOf(expiryFlag + BASE_FLAG);
+            expiryPosition = input.indexOf(SPACE + expiryFlag + BASE_FLAG);
             paramPositions.add(expiryPosition);
         }
 
@@ -457,9 +501,9 @@ public class Parser {
         try {
             int paramPos = paramOrder.get(index);
             if (isSort) {
-                return input.substring(paramPos + 1, paramPos + 2);
+                return input.substring(paramPos + 2, paramPos + 3);
             }
-            return input.substring(paramPos, paramPos + 1);
+            return input.substring(paramPos + 1, paramPos + 2);
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {
             return "";
         }
@@ -516,6 +560,18 @@ public class Parser {
     }
 
     //@@author vimalapugazhan
+    /**
+     * Checks for invalid inputs for each taskType by
+     * ensuring the params for each type is present and the params are valid.
+     *
+     * @param taskType          The task type (e.g., "today", "total", "day", "range").
+     * @param hasStart          Whether a start date flag is present.
+     * @param hasEnd            Whether an end date flag is present.
+     * @param command           Revenue, Expenditure or Profit command that requires checking of format.
+     * @param hasStartParam     The string inputted after the start date flag is not empty.
+     * @param hasEndParam       The string inputted after the end date flag is not empty.
+     * @throws TrackerException If the methods called in this method throws TrackerException.
+     */
     private static void validateRevExpProfitFormat(
         String taskType,
         boolean hasStart,
@@ -780,7 +836,22 @@ public class Parser {
         boolean hasSortExpiry = !matcher.group(SORT_EX_DATE_GROUP).isEmpty();
         boolean isReverse = !matcher.group(REVERSE_GROUP).isEmpty();
 
-        //@@author vimalapugazhan
+        input = SPACE + input;
+
+        input = addMissingParams(input, hasQuantity, hasSortQuantity, QUANTITY_FLAG, SORT_QUANTITY_FLAG);
+        input = addMissingParams(input, hasPrice, hasSortPrice, PRICE_FLAG, SORT_PRICE_FLAG);
+        input = addMissingParams(input, hasExpiry, hasSortExpiry, EX_DATE_FLAG, SORT_EX_DATE_FLAG);
+
+        Matcher updatedMatcher = getPatternMatcher(LIST_COMMAND_REGEX, input, flags);
+
+        if (!updatedMatcher.matches()) {
+            throw new TrackerException(ErrorMessage.INVALID_LIST_FORMAT);
+        }
+
+        hasQuantity = !updatedMatcher.group(QUANTITY_GROUP).isEmpty();
+        hasPrice = !updatedMatcher.group(PRICE_GROUP).isEmpty();
+        hasExpiry = !updatedMatcher.group(EX_DATE_GROUP).isEmpty();
+
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
         String firstParam = extractParam(input, paramOrder, 0, false);
@@ -796,9 +867,15 @@ public class Parser {
         return new ListCommand(firstParam, secondParam, thirdParam,
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
     }
-    //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parse input to extract the name of item being deleted to return new DeleteCommand.
+     *
+     * @param input User inputted string containing the delete command.
+     * @return DeleteCommand object containing the name of item being deleted.
+     * @throws TrackerException If item does not exist in the list.
+     */
     private static Command parseDeleteCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG};
         Matcher matcher = getPatternMatcher(DELETE_COMMAND_REGEX, input, flags);
@@ -832,7 +909,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_ADD);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
         validateNoIntegerOverflow(name, quantity);
 
         return new AddCommand(name,quantity);
@@ -854,7 +931,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_REMOVE);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
 
         return new RemoveCommand(name, quantity);
     }
@@ -927,7 +1004,7 @@ public class Parser {
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
 
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
         validateNonNegativePrice(priceString, price);
         validateNoIntegerOverflow(name, quantity);
 
@@ -952,7 +1029,7 @@ public class Parser {
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_SELL);
 
         int quantity = parseQuantity(quantityString);
-        validateNonNegativeQuantity(quantityString, quantity);
+        validatePositiveQuantity(quantityString, quantity);
 
         LocalDate currentDate = LocalDate.now();
 
@@ -1012,6 +1089,13 @@ public class Parser {
     //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the input string to create a RevenueCommand based on the specified format.
+     *
+     * @param input The input string containing the revenue command.
+     * @return RevenueCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the revenue command.
+     */
     private static Command parseRevenueCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
         Matcher matcher = getPatternMatcher(REV_COMMAND_REGEX, input, flags);
@@ -1039,6 +1123,13 @@ public class Parser {
     //@@author
 
     //@@author vimalapugazhan
+    /**
+     * Parses the input string to create a ProfitCommand based on the specified format.
+     *
+     * @param input The input string containing the profit command.
+     * @return ProfitCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the profit command.
+     */
     private static Command parseProfitCommand(String input) throws TrackerException {
         String[] flags = {TYPE_FLAG, TO_FLAG, FROM_FLAG};
         Matcher matcher = getPatternMatcher(PROFIT_COMMAND_REGEX, input, flags);
