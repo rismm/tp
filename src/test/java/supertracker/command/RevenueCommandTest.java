@@ -38,6 +38,10 @@ public class RevenueCommandTest {
             (INVALID_EX_DATE, DateTimeFormatter.ofPattern(INVALID_EX_DATE_FORMAT));
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
+    /**
+     * Sets up the inventory and executes initial commands before running any test.
+     * Clears the inventory, then executes a series of commands to populate it with items.
+     */
     @BeforeAll
     public static void setUp() {
         Inventory.clear();
@@ -55,11 +59,18 @@ public class RevenueCommandTest {
         }
     }
 
+    /**
+     * Redirects system output to a PrintStream for capturing output during tests.
+     */
     @BeforeEach
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
     }
 
+    /**
+     * Tests the construction of expenditure report for today's transactions.
+     * Verifies that the correct output is printed based on executed commands.
+     */
     @Test
     public void revenueCommand_today_correctlyConstructed() throws TrackerException {
         String userInput = "rev type/today";
@@ -78,6 +89,10 @@ public class RevenueCommandTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the construction of total expenditure report.
+     * Verifies that the correct total expenditure report is printed based on executed commands.
+     */
     @Test
     public void revenueCommand_total_correctlyConstructed() throws TrackerException {
         String userInput = "rev type/total";
@@ -105,6 +120,10 @@ public class RevenueCommandTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the construction of expenditure report for a specific day.
+     * Verifies that the correct expenditure report for a given day is printed.
+     */
     @Test
     public void revenueCommand_day_correctlyConstructed() throws TrackerException {
         String userInput = "rev type/day from/" + twoDaysAgoUserInput;
@@ -124,6 +143,10 @@ public class RevenueCommandTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the construction of expenditure report for a date range.
+     * Verifies that the correct expenditure report for a given date range is printed.
+     */
     @Test
     public void revenueCommand_range_correctlyConstructed() throws TrackerException {
         String userInput = "rev type/range from/" + threeDayAgoUserInput + " to/" + oneDayAheadUserInput;
@@ -148,24 +171,40 @@ public class RevenueCommandTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the behavior when the user input for expenditure command is incomplete.
+     * Verifies that a TrackerException is thrown when required parameters are missing.
+     */
     @Test
     public void revenueCommand_missingParamInput() {
         String userInput = "exp type/";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
+    /**
+     * Tests the behavior when the user input for expenditure command has too many parameters.
+     * Verifies that a TrackerException is thrown when unexpected parameters are provided.
+     */
     @Test
     public void revenueCommand_tooManyParamInput() {
         String userInput = "exp type/total from/";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
+    /**
+     * Tests the behavior when the user input for expenditure command is missing the flags for day task.
+     * Verifies that a TrackerException is thrown when essential flags are absent.
+     */
     @Test
     public void revenueCommand_missingDayFlag() {
         String userInput = "exp type/day";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
+    /**
+     * Tests the behavior when the user input for expenditure command is missing the flag for range task.
+     * Verifies that a TrackerException is thrown when the range flag is missing.
+     */
     @Test
     public void revenueCommand_missingRangeFlag() {
         String userInput = "exp type/range from/" + threeDayAgoUserInput;
