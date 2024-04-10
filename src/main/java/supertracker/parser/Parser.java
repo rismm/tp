@@ -1135,7 +1135,7 @@ public class Parser {
         Matcher matcher = getPatternMatcher(PROFIT_COMMAND_REGEX, input, flags);
 
         if (!matcher.matches()) {
-            throw new TrackerException(ErrorMessage.INVALID_REV_FORMAT);
+            throw new TrackerException(ErrorMessage.INVALID_PROFIT_FORMAT);
         }
 
         boolean hasStart = !matcher.group(FROM_GROUP).isEmpty();
