@@ -105,31 +105,69 @@ public class Ui {
                 + transaction.getTotalPriceString() + " in total";
     }
 
+    /**
+     * Generates a message indicating the total number of items low on stock.
+     *
+     * @param quantity The quantity of items that are low on stock.
+     * @return A string message describing the low stock situation.
+     */
     private static String reportLowStockOpening(int quantity) {
         assert quantity >= 0;
         String isOrAre = quantity == 1 ? "is " : "are ";
         return "There " + isOrAre + quantity + " items low on stocks!";
     }
+
+    /**
+     * Generates a message indicating the total number of items close to expiry.
+     *
+     * @param quantity The quantity of items that are close to expiry.
+     * @return A string message describing the items close to expiry.
+     */
     private static String reportExpiryHasItemsOpening(int quantity) {
         String isOrAre = quantity == 1 ? "is " : "are ";
         String itemOrItems = quantity == 1 ? " item " : "items ";
         return "There " + isOrAre + quantity + itemOrItems +"close to expiry!";
     }
 
+    /**
+     * Generates a message indicating the total number of items that have expired.
+     *
+     * @param quantity The quantity of items that have expired.
+     * @return A string message describing the items that have expired.
+     */
     private static String reportExpiredHasItemsOpening(int quantity) {
         String isOrAre = quantity == 1 ? "is " : "are ";
         String itemOrItems = quantity == 1 ? " item " : " items ";
         return "There " + isOrAre + quantity + itemOrItems +"that " + isOrAre + "expired!";
     }
 
+    /**
+     * Generates a message detailing the name of an item with its count for the report.
+     *
+     * @param reportItem The item being reported.
+     * @param count      The count or index of the item in the report list.
+     * @return A string message describing the item's name.
+     */
     private static String reportNameMessage(Item reportItem, int count) {
         return count + ". Name: " + reportItem.getName();
     }
 
+    /**
+     * Generates a message detailing the quantity of an item for the report.
+     *
+     * @param reportItem The item being reported.
+     * @return A string message describing the item's quantity.
+     */
     private static String reportQuantityMessage(Item reportItem) {
         return "   Quantity: " + reportItem.getQuantity();
     }
 
+    /**
+     * Generates a message detailing the expiry date of an item for the report.
+     *
+     * @param reportItem The item being reported.
+     * @return A string message describing the item's expiry date.
+     */
     private static String reportExpiryDateMessage(Item reportItem) {
         return "   Expiry Date: " + reportItem.getExpiryDateString();
     }
@@ -207,10 +245,19 @@ public class Ui {
         printIndent(getQuantityMessage(item));
     }
 
+    /**
+     * Generates a message for the report if the inventory has no items.
+     */
     public static void reportNoItems() {
         printIndent(REPORT_INVENTORY_NO_ITEMS);
     }
 
+    /**
+     * Displays a success message based on the report type and the list of reported items.
+     *
+     * @param reportItems The list of items that meet the criteria for the reported.
+     * @param reportType  The type of report (e.g., "low stock", "expiry", "expired").
+     */
     public static void reportCommandSuccess(List<Item> reportItems, String reportType) {
         int numReportItems = reportItems.size();
         switch (reportType) {
@@ -241,6 +288,13 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays a success message for an expiry report, listing items and their expiry dates that are close to the
+     * expiry date (1 week before the expiry date).
+     *
+     * @param reportItems    The list of items that are close to expiry.
+     * @param numReportItems The number of items in the report.
+     */
     private static void expirySuccess(List<Item> reportItems, int numReportItems) {
         int count = 1;
         printIndent(reportExpiryHasItemsOpening(numReportItems));
@@ -251,6 +305,12 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays a success message for items that have already expired, listing items and their expiry dates.
+     *
+     * @param reportItems    The list of items that have expired.
+     * @param numReportItems The number of items in the report.
+     */
     private static void expiredSuccess(List<Item> reportItems, int numReportItems) {
         int count = 1;
         printIndent(reportExpiredHasItemsOpening(numReportItems));
@@ -261,6 +321,12 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays a success message for a low stock report, listing items and their quantities.
+     *
+     * @param reportItems    The list of items reported as low in stock.
+     * @param numReportItems The number of items in the report.
+     */
     private static void lowStockSuccess(List<Item> reportItems, int numReportItems) {
         int count = 1;
         printIndent(reportLowStockOpening(numReportItems));
@@ -280,7 +346,7 @@ public class Ui {
             printFilteredList(filteredList);
             break;
         case TOTAL:
-            printIndent("Total  " + financeType + "  is $" + amountString);
+            printIndent("Total " + financeType + " is $" + amountString);
             printFilteredList(filteredList);
             break;
         case DAY:
@@ -327,6 +393,11 @@ public class Ui {
     }
 
     // author dtaywd
+    /**
+     * Prints a formatted list of transactions with details including name, quantity, price, and transaction date.
+     *
+     * @param filteredList The list of transactions to be printed.
+     */
     private static void printFilteredList(ArrayList<Transaction> filteredList) {
         int count = 1;
         for (Transaction transaction: filteredList) {

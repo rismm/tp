@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 // @@ author dtaywd
+/**
+ * Represents a command to calculate and display expenditure information based on specified criteria.
+ */
 public class ExpenditureCommand implements Command {
     private static final String BUY_FLAG = "b";
     private LocalDate startDate;
@@ -18,12 +21,23 @@ public class ExpenditureCommand implements Command {
     private String task;
     private BigDecimal expenditure;
 
+    /**
+     * Constructs an ExpenditureCommand with the specified task, start date, and end date.
+     *
+     * @param task      The task type (e.g., "today", "total", "day", "range").
+     * @param startDate The start date for filtering transactions.
+     * @param endDate   The end date for filtering transactions (used with "range" task).
+     */
     public ExpenditureCommand(String task, LocalDate startDate, LocalDate endDate) {
         this.task = task;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
+    /**
+     * Executes the expenditure command based on the specified task.
+     * Calculates expenditure and displays relevant information using UI utilities.
+     */
     @Override
     public void execute() {
         switch (task) {
@@ -56,6 +70,11 @@ public class ExpenditureCommand implements Command {
         Ui.printRevenueExpenditure(task, expenditure, startDate, endDate, "expenditure", filteredList);
     }
 
+    /**
+     * Indicates whether executing this command should result in quitting the application.
+     *
+     * @return Always returns false, as executing this command does not trigger application quit.
+     */
     @Override
     public boolean isQuit() {
         return false;

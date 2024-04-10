@@ -15,6 +15,9 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * JUnit test class for testing the behavior of the ReportCommand class.
+ */
 public class ReportCommandTest {
     private static final String INVALID_EX_DATE_FORMAT = "dd-MM-yyyyy";
     private static final DateTimeFormatter VALID_EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -22,6 +25,10 @@ public class ReportCommandTest {
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
+    /**
+     * Sets up the inventory and executes initial commands before running any test.
+     * Initializes inventory items with various expiration dates and quantities.
+     */
     @BeforeAll
     public static void setUp() {
         Inventory.clear();
@@ -42,11 +49,18 @@ public class ReportCommandTest {
         }
     }
 
+    /**
+     * Redirects system output to a PrintStream for capturing output during tests.
+     */
     @BeforeEach
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
     }
 
+    /**
+     * Tests the construction of a low stock report based on a specified threshold.
+     * Verifies that the correct output is printed when executing the corresponding command.
+     */
     @Test
     public void reportCommand_lowStock_correctlyConstructed() throws TrackerException {
         String userInput = "report r/low stock t/20";
@@ -60,6 +74,10 @@ public class ReportCommandTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the construction of an expiry report.
+     * Verifies that the correct expiry report is printed when executing the corresponding command.
+     */
     @Test
     public void reportCommand_expiry_correctlyConstructed() throws TrackerException {
         String userInput = "report r/expiry";
@@ -80,24 +98,52 @@ public class ReportCommandTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Tests the behavior when the user input for report command is incomplete.
+     * Verifies that a TrackerException is thrown when required parameters are missing.
+     */
     @Test
     public void reportCommand_missingParamInput() {
         String userInput = "report";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
+    /**
+     * Tests the behavior when the user input for report command has an empty report parameter.
+     * Verifies that a TrackerException is thrown when the report parameter is empty.
+     */
     @Test
     public void reportCommand_emptyReportParamInput() {
         String userInput = "report r/";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
+    /**
+     * Tests the behavior when the user input for report command lacks threshold parameter when report type
+     * is low stock.
+     * Verifies that a TrackerException is thrown when the threshold parameter is missing.
+     */
     @Test
     public void reportCommand_emptyLowStockThresholdParamInput() {
         String userInput = "report r/low stock";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
+    /**
+     * Tests the behavior when the user input for report command has an invalid threshold when report type
+     * is low stock.
+     * Verifies that a TrackerException is thrown when the threshold parameter is missing.
+     */
+    @Test
+    public void reportCommand_invalidLowStockThresholdParamInput() {
+        String userInput = "report r/low stock, t/-2";
+        assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
+    }
+
+    /**
+     * Tests the behavior when the user input for report command has a threshold parameter when report type is expiry.
+     * Verifies that a TrackerException is thrown when the threshold parameter is invalid.
+     */
     @Test
     public void reportCommand_notEmptyExpiryThresholdParamInput() {
         String userInput = "report r/expiry t/1";
