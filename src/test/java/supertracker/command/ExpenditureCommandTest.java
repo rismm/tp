@@ -99,7 +99,7 @@ public class ExpenditureCommandTest {
         Command c = Parser.parseCommand(userInput);
         c.execute();
 
-        Double amount = (double) (20 + 10 * 0.5 + 5 * 1.5);
+        Double amount = 32.5;
         String amountString = String.format("%.2f", amount);
 
         String expected = "     Total expenditure is $" + amountString + LINE_SEPARATOR +
