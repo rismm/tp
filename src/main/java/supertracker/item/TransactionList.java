@@ -5,29 +5,58 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Represents a list of transactions.
+ */
 public class TransactionList {
     private static final String TODAY = "today";
     private static final String TOTAL = "total";
     private static final String DAY = "day";
     private static final String RANGE = "range";
+
+    // ArrayList to store transactions
     private static ArrayList<Transaction> transactionList = new ArrayList<>();
 
+    /**
+     * Retrieves the transaction at the specified index.
+     *
+     * @param index Index of the transaction to retrieve.
+     * @return Transaction at the specified index.
+     */
     public static Transaction get(int index) {
         return transactionList.get(index);
     }
 
+    /**
+     * Adds a transaction to the list.
+     *
+     * @param transaction Transaction to be added.
+     */
     public static void add(Transaction transaction) {
         transactionList.add(transaction);
     }
 
+    /**
+     * Retrieves the number of transactions in the list.
+     *
+     * @return Number of transactions in the list.
+     */
     public static int size() {
         return transactionList.size();
     }
 
+    /**
+     * Clears all transactions from the list.
+     */
     public static void clear() {
         transactionList.clear();
     }
 
+    /**
+     * Returns an iterator over the transactions in the list.
+     *
+     * @return Iterator over the transactions in the list.
+     */
     public static Iterator<Transaction> iterator() {
         return transactionList.iterator();
     }

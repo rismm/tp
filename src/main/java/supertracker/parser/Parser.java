@@ -288,28 +288,61 @@ public class Parser {
         return p.matcher(commandPattern);
     }
 
+    /**
+     * Rounds a double value to 2 decimal places.
+     *
+     * @param unroundedValue Value to be rounded.
+     * @return Rounded value.
+     */
     private static double roundTo2Dp(double unroundedValue) {
         return Math.round(unroundedValue * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 
+    /**
+     * Validates if the quantity is positive.
+     *
+     * @param quantityString String representation of quantity
+     * @param quantity       Quantity to validate.
+     * @throws TrackerException If quantity is not positive.
+     */
     private static void validatePositiveQuantity(String quantityString, int quantity) throws TrackerException {
         if (!quantityString.isEmpty() && quantity <= 0) {
             throw new TrackerException(ErrorMessage.QUANTITY_NOT_POSITIVE);
         }
     }
 
+    /**
+     * Validates if the quantity is non-negative.
+     *
+     * @param quantityString String representation of quantity
+     * @param quantity       Quantity to validate.
+     * @throws TrackerException If quantity is negative.
+     */
     private static void validateNonNegativeQuantity(String quantityString, int quantity) throws TrackerException {
         if (!quantityString.isEmpty() && quantity < 0) {
             throw new TrackerException(ErrorMessage.QUANTITY_TOO_SMALL);
         }
     }
 
+    /**
+     * Validates if the price is non-negative.
+     *
+     * @param priceString String representation of price
+     * @param price       Price to validate.
+     * @throws TrackerException If price is negative.
+     */
     private static void validateNonNegativePrice(String priceString, double price) throws TrackerException {
         if (!priceString.isEmpty() && price < 0) {
             throw new TrackerException(ErrorMessage.PRICE_TOO_SMALL);
         }
     }
 
+    /**
+     * Validates if the string contains only digits.
+     *
+     * @param string String to validate.
+     * @throws TrackerException If the string does not contain only digits.
+     */
     private static void validateContainsOnlyDigits(String string) throws TrackerException {
         String regex = "\\d+";
         Pattern pattern = Pattern.compile(regex);
@@ -318,6 +351,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Validates if the string represents a number smaller than or equal to the maximum integer value.
+     *
+     * @param string String to validate.
+     * @throws TrackerException If the string represents a number larger than the maximum integer value.
+     */
     private static void validateNotTooLarge(String string) throws TrackerException {
         String maxIntString = String.valueOf(Integer.MAX_VALUE);
         if (string.length() > 10 || (string.length() == 10 && string.compareTo(maxIntString) > 0)) {
@@ -325,6 +364,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the quantity from a string representation.
+     *
+     * @param quantityString String representation of the quantity.
+     * @return Parsed quantity.
+     * @throws TrackerException If the quantity string is invalid.
+     */
     private static int parseQuantity(String quantityString) throws TrackerException {
         int quantity = -1;
         try {
@@ -339,6 +385,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the price from a string representation.
+     *
+     * @param priceString String representation of the price.
+     * @return Parsed price.
+     * @throws TrackerException If the price string is invalid.
+     */
     private static double parsePrice(String priceString) throws TrackerException {
         double price = -1;
         try {
@@ -423,12 +476,28 @@ public class Parser {
     }
     //@@author
 
+    /**
+     * Validates if an item exists in the inventory.
+     *
+     * @param name         Name of the item to check.
+     * @param errorMessage Error message to use if the item does not exist.
+     * @throws TrackerException If the item does not exist in the inventory.
+     */
     private static void validateItemExistsInInventory(String name, String errorMessage) throws TrackerException {
         if (!Inventory.contains(name)) {
             throw new TrackerException(name + errorMessage);
         }
     }
 
+    /**
+     * Validates if an item does not exist in the inventory.
+     * If the item name contains the file delimiter, it replaces the item name
+     * and prints a message to inform the user about the name change.
+     *
+     * @param name Name of the item to validate.
+     * @return Validated item name.
+     * @throws TrackerException If the item already exists in the inventory
+     */
     private static String validateItemNotInInventory(String name) throws TrackerException {
         String itemName = name;
         if (name.contains(FILE_DELIMITER)) {
@@ -442,6 +511,15 @@ public class Parser {
         return itemName;
     }
 
+    /**
+     * Validates if the parameters for updating an item are not all empty.
+     *
+     * @param name           Name of the item.
+     * @param quantityString String representation of the quantity.
+     * @param priceString    String representation of the price.
+     * @param expiryString   String representation of the expiry date.
+     * @throws TrackerException If all parameters are empty.
+     */
     private static void validateNonEmptyParamsUpdate(String name, String quantityString, String priceString,
             String expiryString)
             throws TrackerException {
@@ -450,12 +528,28 @@ public class Parser {
         }
     }
 
+    /**
+     * Validates if a parameter is not empty.
+     *
+     * @param string Parameter to validate.
+     * @throws TrackerException If the parameter is empty.
+     */
     private static void validateNonEmptyParam(String string) throws TrackerException {
         if (string.isEmpty()) {
             throw new TrackerException(ErrorMessage.EMPTY_PARAM_INPUT);
         }
     }
 
+    /**
+     * Adds missing parameters to the input string.
+     *
+     * @param input         Input string.
+     * @param hasParam      Indicates if the input string has an item parameter (q/, p/, e/).
+     * @param hasSortParam  Indicates if the input string has a sort parameter (sq/, sp/, se/).
+     * @param flag          Flag for an item parameter (q/, p/, e/).
+     * @param sortFlag      Flag for a sort parameter (sq/, sp/, se/).
+     * @return Input string with missing parameters added if necessary.
+     */
     private static String addMissingParams(
         String input,
         boolean hasParam,
@@ -470,6 +564,18 @@ public class Parser {
         return input;
     }
 
+    /**
+     * Retrieves the positions of parameters in the input string.
+     *
+     * @param input         Input string.
+     * @param hasQuantity   Indicates if the input string has the quantity parameter.
+     * @param hasPrice      Indicates if the input string has the price parameter.
+     * @param hasExpiry     Indicates if the input string has the expiry parameter.
+     * @param quantityFlag  Flag for the quantity parameter.
+     * @param priceFlag     Flag for the price parameter.
+     * @param expiryFlag    Flag for the expiry parameter.
+     * @return List containing the positions of parameters in the input string.
+     */
     private static ArrayList<Integer> getParamPositions(String input, boolean hasQuantity, boolean hasPrice,
             boolean hasExpiry, String quantityFlag, String priceFlag, String expiryFlag) {
         ArrayList<Integer> paramPositions =  new ArrayList<>();
@@ -498,6 +604,15 @@ public class Parser {
         return paramPositions;
     }
 
+    /**
+     * Extracts a parameter flag from the input string.
+     *
+     * @param input      Input string.
+     * @param paramOrder List containing the positions of parameters in the input string.
+     * @param index      Index of the parameter to extract.
+     * @param isSort     Indicates if the parameter is a sorting parameter.
+     * @return Extracted parameter flag.
+     */
     private static String extractParam(String input, ArrayList<Integer> paramOrder, int index, boolean isSort) {
         try {
             int paramPos = paramOrder.get(index);
@@ -551,6 +666,13 @@ public class Parser {
     }
     //@@author
 
+    /**
+     * Validates if adding the specified quantity to an item will result in integer overflow.
+     *
+     * @param name            Name of the item.
+     * @param quantityToAdd   Quantity to be added.
+     * @throws TrackerException If adding the quantity would result in an integer overflow.
+     */
     private static void validateNoIntegerOverflow(String name, int quantityToAdd) throws TrackerException {
         Item item = Inventory.get(name);
         int currentQuantity = item.getQuantity();
