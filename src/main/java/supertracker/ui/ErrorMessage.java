@@ -76,4 +76,14 @@ public class ErrorMessage {
             "\"exp task/day from/DATE\"";
     public static final String INVALID_EXP_RANGE_FORMAT = "Invalid expenditure command format. "
             + "\"exp task/range from/START_DATE to/END_DATE\"";
+    public static final String INVALID_PROFIT_TODAY_FORMAT = "Invalid profit command format. " +
+            "\"profit task/today\"";
+    public static final String INVALID_PROFIT_TOTAL_FORMAT = "Invalid profit command format. " +
+            "\"profit task/total\"";
+    public static final String INVALID_PROFIT_DAY_FORMAT = "Invalid profit command format. " +
+            "\"profit task/day from/DATE\"";
+    public static final String INVALID_PROFIT_RANGE_FORMAT = "Invalid profit command format. " +
+            "\"profit task/range from/START_DATE to/END_DATE\"";
+    public static final String INVALID_PROFIT_FORMAT = "Invalid profit command format! " +
+            "Follow 'profit type/PROFIT_TYPE [from/START_DATE] [to/END_DATE]'";
 }
