@@ -37,14 +37,12 @@ Given below are my contributions to the project.
   
 - **Code contributed** [RepoSense link](https://nus-cs2113-ay2324s2.github.io/tp-dashboard/?search=vimalapugazhan&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2024-02-23&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other&tabOpen=true&tabType=authorship&tabAuthor=vimalapugazhan&tabRepo=AY2324S2-CS2113-T13-4%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
 
-  <br><br>
 
 - **Documentation**
   - [User Guide](https://ay2324s2-cs2113-t13-4.github.io/tp/UserGuide.html)
     - Added 
   - [Developer Guide:](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
     - Added
-      - Used PlantUML
 <br><br>
     
 - **Contributions to team-based tasks:**
