@@ -429,7 +429,7 @@ public class Parser {
         }
     }
 
-    private static void validateItemDoesNotExistInInventory(String name, String errorMessage) throws TrackerException {
+    private static void validateItemNotInInventory(String name, String errorMessage) throws TrackerException {
         if (Inventory.contains(name)) {
             throw new TrackerException(name + errorMessage);
         }
@@ -835,7 +835,7 @@ public class Parser {
         String newName = matcher.group(NEW_NAME_GROUP).replace(NEW_NAME_FLAG + BASE_FLAG, "").trim();
         validateNonEmptyParam(newName);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_RENAME);
-        validateItemDoesNotExistInInventory(newName, ErrorMessage.ITEM_NAME_ALREADY_EXISTS);
+        validateItemNotInInventory(newName, ErrorMessage.ITEM_NAME_ALREADY_EXISTS);
 
         return new RenameCommand(name, newName);
     }
