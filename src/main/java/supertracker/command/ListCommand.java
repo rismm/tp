@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Represents a command for listing items in the inventory with sorting options.
+ */
 public class ListCommand implements Command {
     private static final String QUANTITY_FLAG = "q";
     private static final String PRICE_FLAG = "p";
@@ -21,6 +24,17 @@ public class ListCommand implements Command {
     private String thirdSortParam;
     private boolean isReverse;
 
+    /**
+     * Constructs a new ListCommand object with the specified parameters.
+     *
+     * @param firstParam      First item parameter (quantity/price/expiry) to be printed out
+     * @param secondParam     Second item parameter (quantity/price/expiry) to be printed out
+     * @param thirdParam      Third item parameter (quantity/price/expiry) to be printed out
+     * @param firstSortParam  Highest priority sorting method (quantity/price/expiry)
+     * @param secondSortParam Second-highest priority sorting method (quantity/price/expiry)
+     * @param thirdSortParam  Third-highest priority sorting method (quantity/price/expiry)
+     * @param isReverse       indicates whether the list should be reversed
+     */
     public ListCommand(
         String firstParam,
         String secondParam,
@@ -39,6 +53,14 @@ public class ListCommand implements Command {
         this.isReverse = isReverse;
     }
 
+    /**
+     * Executes the ListCommand.
+     * <p>
+     * This method first ensures that all provided parameters are valid. Then, it retrieves
+     * the list of items from the inventory and sorts them based on the sorting parameters.
+     * Finally, it iterates through the sorted list, print items based on the ordering of parameters,
+     * and displays each item along with its index and relevant information.
+     */
     @Override
     public void execute() {
         assert isValid(firstParam);
@@ -67,6 +89,12 @@ public class ListCommand implements Command {
         }
     }
 
+    /**
+     * Sorts the list of items based on the provided sorting parameter.
+     *
+     * @param sortParam Sorting parameter (quantity/price/expiry)
+     * @param items     List of items to be sorted
+     */
     private void sortBy(String sortParam, List<Item> items) {
         Comparator<Item> comparator;
 
@@ -88,6 +116,11 @@ public class ListCommand implements Command {
         items.sort(comparator);
     }
 
+    /**
+     * Indicates whether executing this command should result in quitting the application.
+     *
+     * @return Always returns false, as executing this command does not trigger application quit.
+     */
     @Override
     public boolean isQuit() {
         return false;
