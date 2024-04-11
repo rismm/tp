@@ -5,7 +5,10 @@ import supertracker.ui.Ui;
 
 import java.util.Scanner;
 
-//@@author TimothyLKM
+/**
+ * Represents a command that prints a list of functions available in SuperTracker to help the user.
+ */
+// @@author TimothyLKM
 public class HelpCommand implements Command {
     private static final String NEW_COMMAND = "new";
     private static final String LIST_COMMAND = "list";
@@ -27,6 +30,10 @@ public class HelpCommand implements Command {
         return input.substring(0, input.indexOf(" "));
     }
 
+    /**
+     * Executes the Help command to print a list of functions available.
+     * Scans in the next input to then print the needed parameters for the chosen function.
+     */
     @Override
     public void execute() {
         HelpCommandUi.helpCommandSuccess();
@@ -80,6 +87,11 @@ public class HelpCommand implements Command {
         HelpCommandUi.helpClosingMessage();
     }
 
+    /**
+    * Indicates whether executing this command should result in quitting the application.
+    *
+    * @return Always returns false, as executing this command does not trigger application quit.
+    */
     @Override
     public boolean isQuit() {
         return false;
