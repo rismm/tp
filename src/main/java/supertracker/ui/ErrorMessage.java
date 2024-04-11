@@ -38,6 +38,8 @@ public class ErrorMessage {
             " does not exist in inventory. Unable to buy. =(";
     public static final String ITEM_NOT_IN_LIST_SELL =
             " does not exist in inventory. Unable to sell. =(";
+    public static final String ITEM_NAME_ALREADY_EXISTS =
+            " already exists in the inventory. Please choose another new name";
     public static final String ITEM_IN_LIST_NEW = " already exists in inventory. Use the update command instead.";
     public static final String QUANTITY_NOT_INTEGER = "Quantity should be a non-negative integer";
     public static final String INVALID_NUMBER_FORMAT = "Invalid values for price/quantity";

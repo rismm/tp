@@ -489,6 +489,12 @@ public class Parser {
         }
     }
 
+    private static void validateItemDoesNotExistsInInventory(String name, String errorMessage) throws TrackerException {
+        if (Inventory.contains(name)) {
+            throw new TrackerException(name + errorMessage);
+        }
+    }
+
     /**
      * Validates if an item does not exist in the inventory.
      * If the item name contains the file delimiter, it replaces the item name
@@ -951,6 +957,7 @@ public class Parser {
         String newName = matcher.group(NEW_NAME_GROUP).replace(NEW_NAME_FLAG + BASE_FLAG, "").trim();
         validateNonEmptyParam(newName);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_RENAME);
+        validateItemDoesNotExistsInInventory(newName, ErrorMessage.ITEM_NAME_ALREADY_EXISTS);
 
         return new RenameCommand(name, newName);
     }

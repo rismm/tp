@@ -64,6 +64,9 @@ public class HelpCommandUi extends Ui {
     private static final String INVALID_HELP_COMMAND_MESSAGE_SECOND_LINE =
             "You are now back in the main console.";
 
+    /**
+     * Prints a help list of functions available in SuperTracker.
+     */
     private static void printHelpListOfCommands() {
         int index = 1;
         for (String command : HELP_LIST_OF_COMMANDS) {
@@ -72,6 +75,9 @@ public class HelpCommandUi extends Ui {
         }
     }
 
+    /**
+     * Prints message for successful input of help.
+     */
     public static void helpCommandSuccess() {
         printIndent(HELP_SUCCESS_MESSAGE_FIRST_LINE);
         printHelpListOfCommands();
@@ -79,53 +85,89 @@ public class HelpCommandUi extends Ui {
         printLine();
     }
 
+    /**
+     * Displays the necessary parameters for a new item command.
+     */
     public static void printNewCommandParams() {
         printIndent(HELP_NEW_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for a delete item command.
+     */
     public static void printDeleteCommandParams() {
         printIndent(HELP_DELETE_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for add and remove command.
+     */
     public static void printChangeCommandParams() {
         printIndent(HELP_ADD_QUANTITY_PARAMETERS);
         printIndent(HELP_REMOVE_QUANTITY_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for an update command.
+     */
     public static void printUpdateCommandParams() {
         printIndent(HELP_UPDATE_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for Find command.
+     */
     public static void printFindCommandParams() {
         printIndent(HELP_FIND_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for a rename command.
+     */
     public static void printRenameCommandParams() {
         printIndent(HELP_RENAME_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for a list command.
+     */
     public static void printListCommandParams() {
         printIndent(HELP_LIST_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for a report command.
+     */
     public static void printReportCommandParams() {
         printIndent(HELP_LOW_STOCK_REPORT_PARAMETERS);
         printIndent(HELP_EXPIRY_REPORT_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for buy and sell command.
+     */
     public static void printTransactionCommandParams() {
         printIndent(HELP_BUY_TRANSACTION_PARAMETERS);
         printIndent(HELP_SELL_TRANSACTION_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for an expenditure command.
+     */
     public static void printExpenditureCommandParams() {
         printIndent(HELP_EXP_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for a revenue command.
+     */
     public static void printRevenueCommandParams() {
         printIndent(HELP_REV_PARAMETERS);
     }
 
+    /**
+     * Displays the necessary parameters for a clear command.
+     */
     public static void printProfitCommandParams() {
         printIndent(HELP_PROFIT_PARAMETERS);
     }
@@ -134,11 +176,17 @@ public class HelpCommandUi extends Ui {
         printIndent(HELP_CLEAR_PARAMETERS);
     }
 
+    /**
+     * Displays a message to notify user that their input is invalid.
+     */
     public static void printInvalidHelpMessage() {
         printIndent(INVALID_HELP_COMMAND_MESSAGE_FIRST_LINE);
         printIndent(INVALID_HELP_COMMAND_MESSAGE_SECOND_LINE);
     }
 
+    /**
+     * Displays a message to notify users that they have returned to the main console.
+     */
     public static void helpClosingMessage() {
         printIndent(HELP_CLOSING_MESSAGE_FIRST_LINE);
         printIndent(HELP_CLOSING_MESSAGE_SECOND_LINE);

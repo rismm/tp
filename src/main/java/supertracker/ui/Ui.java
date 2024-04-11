@@ -240,6 +240,12 @@ public class Ui {
         printIndent(getQuantityMessage(item));
     }
 
+    /**
+     * Prints message for a successful removal of a specified quantity of the chosen item in the inventory.
+     *
+     * @param item Name of item in inventory whose quantity has been removed.
+     * @param quantityRemoved The amount of quantity that has been removed from the item.
+     */
     public static void removeCommandSuccess(Item item, int quantityRemoved) {
         assert quantityRemoved >= 0;
         printIndent(removeItemOpening(item, quantityRemoved));
