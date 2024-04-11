@@ -49,5 +49,5 @@ Given below are my contributions to the project.
     
 - **Contributions to team-based tasks:**
     - Teammate PR reviewed: 
-    - Contributed to the JUnit tests
+    - Contributed to the JUnit tests, JavaDocs, User Guide and Developer Guide.
     - Helped give improvements and suggestions to my teammates. Resolved bugs immediately.
