@@ -40,7 +40,6 @@ public class NewCommand implements Command {
      * and expiry date. It ensures that the inventory does not already contain an item with the same name,
      * and that the quantity and price are non-negative. After adding the new item to the inventory,
      * it informs the user about the success of the command by displaying a success message.
-     * </p>
      */
     @Override
     public void execute() {

@@ -60,7 +60,6 @@ public class ListCommand implements Command {
      * the list of items from the inventory and sorts them based on the sorting parameters.
      * Finally, it iterates through the sorted list, print items based on the ordering of parameters,
      * and displays each item along with its index and relevant information.
-     * </p>
      */
     @Override
     public void execute() {

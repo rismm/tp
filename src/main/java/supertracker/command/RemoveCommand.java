@@ -36,7 +36,6 @@ public class RemoveCommand implements Command {
      * If the quantity to be removed exceeds the quantity of the item in the inventory,
      * the item's quantity is set to zero. After updating the inventory, the changes are saved
      * to persistent storage. If an IOException occurs while saving data, an error message is printed.
-     * </p>
      *
      * @throws AssertionError If the inventory does not contain the specified item
      *                        or if the quantity is negative
@@ -66,7 +65,6 @@ public class RemoveCommand implements Command {
      * of an item from the inventory using the {@code executeWithoutUi()} method.
      * After that, it informs the user about the success of the command by
      * displaying a success message containing the details of the removed item and quantity.
-     * </p>
      */
     @Override
     public void execute() {

@@ -34,7 +34,6 @@ public class ClearCommand implements Command {
      * before the specified date. If confirmed, it removes transactions from the transaction list
      * that occurred before the specified date. It then informs the user about the success of the command
      * by displaying a success message containing the number of transactions cleared and the specified date.
-     * </p>
      */
     @Override
     public void execute() {

@@ -35,7 +35,6 @@ public class AddCommand implements Command {
      * If the item already exists in the inventory, its quantity is updated accordingly.
      * After updating the inventory, the changes are saved to persistent storage.
      * If an IOException occurs while saving data, an error message is printed.
-     * </p>
      *
      * @throws AssertionError If the inventory does not contain the specified item
      *                        or if the quantity is negative
@@ -63,7 +62,6 @@ public class AddCommand implements Command {
      * of an item to the inventory using the {@code executeWithoutUi()} method.
      * After that, it informs the user about the success of the command by
      * displaying a success message containing the details of the added item and quantity.
-     * </p>
      */
     @Override
     public void execute() {

@@ -39,7 +39,6 @@ public class BuyCommand extends AddCommand {
      * from the AddCommand class. After that, it creates a new transaction record,
      * adds it to the transaction list, and informs the user about the success of the command
      * by displaying a success message containing the details of the bought item and transaction.
-     * </p>
      */
     @Override
     public void execute() {
