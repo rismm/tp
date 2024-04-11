@@ -75,4 +75,26 @@ public class RenameCommandTest {
         String userInput = "rename n/ r/";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
+
+    /**
+     * Tests the behavior of RenameCommand when the new name input already exists in the inventory.
+     * Verifies that a TrackerException is thrown due to new name being used.
+     */
+    @Test
+    public void renameCommand_usedNewNameInput() {
+        String nameA = "Milk";
+        String nameB = "Coconut";
+        int quantity = 100;
+        double price = 5.00;
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse("22-08-2013", dateFormat);
+
+        Command newCommandA = new NewCommand(nameA, quantity, price, date);
+        newCommandA.execute();
+        Command newCommandB = new NewCommand(nameB, quantity, price, date);
+        newCommandB.execute();
+
+        String userInput = "rename n/Milk r/Coconut";
+        assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
+    }
 }
