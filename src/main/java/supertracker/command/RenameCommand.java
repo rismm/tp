@@ -19,7 +19,6 @@ public class RenameCommand implements Command {
         this.newName = newName;
     }
 
-
     @Override
     public void execute() {
         assert Inventory.contains(name);

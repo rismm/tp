@@ -535,4 +535,5 @@ allowing them to fix their mistake.
 | **Clear**       | `clear [b/BEFORE_DATE]`                                            | e.g. `clear b/19-04-2024`                    |
 | **Expenditure** | `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`        | e.g. `exp type/today`                        |
 | **Revenue**     | `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`            | e.g. `rev type/today`                        |
+| **Profit**      | `profit type/PROFIT_TYPE [from/START_DATE] [to/END_DATE]`          | e.g. `profit type/today`                     |
 | **Quit**        | `quit`                                                             | e.g. `quit`                                  |

@@ -18,6 +18,7 @@ public class HelpCommandUi extends Ui {
         "Print a report: type 'report'",
         "Print expenditure: type 'exp'",
         "Print revenue: type 'rev'",
+        "Print profit: type 'profit'",
         "Buy or sell items: type 'transaction'",
         "Clear transactions: type 'clear'"
     };
@@ -54,6 +55,8 @@ public class HelpCommandUi extends Ui {
             "A expenditure command should look like this: exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]";
     private static final String HELP_REV_PARAMETERS =
             "A revenue command should look like this: rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]";
+    private static final String HELP_PROFIT_PARAMETERS =
+            "A profit command should look like this: profit type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]";
     private static final String HELP_CLEAR_PARAMETERS =
             "A clear command should look like this: clear [b/BEFORE_DATE]";
     private static final String INVALID_HELP_COMMAND_MESSAGE_FIRST_LINE =
@@ -149,7 +152,7 @@ public class HelpCommandUi extends Ui {
     }
 
     /**
-     * Displays the necessary parameters for a expenditure command.
+     * Displays the necessary parameters for an expenditure command.
      */
     public static void printExpenditureCommandParams() {
         printIndent(HELP_EXP_PARAMETERS);
@@ -165,6 +168,10 @@ public class HelpCommandUi extends Ui {
     /**
      * Displays the necessary parameters for a clear command.
      */
+    public static void printProfitCommandParams() {
+        printIndent(HELP_PROFIT_PARAMETERS);
+    }
+
     public static void printClearCommandParams() {
         printIndent(HELP_CLEAR_PARAMETERS);
     }
