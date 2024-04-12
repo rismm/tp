@@ -360,7 +360,8 @@ public class Parser {
      */
     private static void validateNotTooLarge(String string) throws TrackerException {
         String maxIntString = String.valueOf(Integer.MAX_VALUE);
-        if (string.length() > MAX_INT_LENGTH || (string.length() == MAX_INT_LENGTH && string.compareTo(maxIntString) > 0)) {
+        if (string.length() > MAX_INT_LENGTH
+                || (string.length() == MAX_INT_LENGTH && string.compareTo(maxIntString) > 0)) {
             throw new TrackerException(ErrorMessage.QUANTITY_TOO_LARGE);
         }
     }
