@@ -40,6 +40,7 @@ public class Parser {
     private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final int MAX_INT_LENGTH = 10;
     private static final double ROUNDING_FACTOR = 100.0;
     private static final String SPACE = " ";
     private static final String QUIT_COMMAND = "quit";
@@ -359,7 +360,8 @@ public class Parser {
      */
     private static void validateNotTooLarge(String string) throws TrackerException {
         String maxIntString = String.valueOf(Integer.MAX_VALUE);
-        if (string.length() > 10 || (string.length() == 10 && string.compareTo(maxIntString) > 0)) {
+        if (string.length() > MAX_INT_LENGTH
+                || (string.length() == MAX_INT_LENGTH && string.compareTo(maxIntString) > 0)) {
             throw new TrackerException(ErrorMessage.QUANTITY_TOO_LARGE);
         }
     }
