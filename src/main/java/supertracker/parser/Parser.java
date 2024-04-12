@@ -489,22 +489,17 @@ public class Parser {
         }
     }
 
-    private static void validateItemDoesNotExistsInInventory(String name, String errorMessage) throws TrackerException {
-        if (Inventory.contains(name)) {
-            throw new TrackerException(name + errorMessage);
-        }
-    }
-
     /**
      * Validates if an item does not exist in the inventory.
      * If the item name contains the file delimiter, it replaces the item name
      * and prints a message to inform the user about the name change.
      *
-     * @param name Name of the item to validate.
+     * @param name         Name of the item to validate.
+     * @param errorMessage Error message to use if the item already exists in the inventory.
      * @return Validated item name.
      * @throws TrackerException If the item already exists in the inventory
      */
-    private static String validateItemNotInInventory(String name) throws TrackerException {
+    private static String validateItemNotInInventory(String name, String errorMessage) throws TrackerException {
         String itemName = name;
         if (name.contains(FILE_DELIMITER)) {
             itemName = name.replace(FILE_DELIMITER, "");
@@ -512,7 +507,7 @@ public class Parser {
         }
 
         if (Inventory.contains(itemName)) {
-            throw new TrackerException(itemName + ErrorMessage.ITEM_IN_LIST_NEW);
+            throw new TrackerException(itemName + errorMessage);
         }
         return itemName;
     }
@@ -897,7 +892,7 @@ public class Parser {
         validateNonEmptyParam(nameInput);
         validateNonEmptyParam(quantityString);
         validateNonEmptyParam(priceString);
-        String name = validateItemNotInInventory(nameInput);
+        String name = validateItemNotInInventory(nameInput, ErrorMessage.ITEM_IN_LIST_NEW);
 
         int quantity = parseQuantity(quantityString);
         double price = parsePrice(priceString);
@@ -957,7 +952,7 @@ public class Parser {
         String newName = matcher.group(NEW_NAME_GROUP).replace(NEW_NAME_FLAG + BASE_FLAG, "").trim();
         validateNonEmptyParam(newName);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_RENAME);
-        validateItemDoesNotExistsInInventory(newName, ErrorMessage.ITEM_NAME_ALREADY_EXISTS);
+        validateItemNotInInventory(newName, ErrorMessage.ITEM_IN_LIST_RENAME);
 
         return new RenameCommand(name, newName);
     }
