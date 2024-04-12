@@ -139,7 +139,7 @@ public class Parser {
             "(?<" + FROM_GROUP + ">(?:" + FROM_FLAG + BASE_FLAG + ".*)?) " +
             "(?<" + TO_GROUP + ">(?:" + TO_FLAG + BASE_FLAG + ".*)?) ";
     private static final String RENAME_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) " +
-            "(?<" + NEW_NAME_GROUP + ">(?:" + NEW_NAME_FLAG + BASE_FLAG + ".*)?) ";
+            NEW_NAME_FLAG + BASE_FLAG + "(?<" + NEW_NAME_GROUP + ">.*) ";
 
     /**
      * Returns the command word specified in the user input string
@@ -939,6 +939,14 @@ public class Parser {
     }
     //@@author
 
+    //@@author TimothyLKM
+    /**
+     * Parses the input string to create a RenameCommand.
+     *
+     * @param input The input string containing the rename command.
+     * @return A rename Command object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the rename command.
+     */
     private static Command parseRenameCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG, NEW_NAME_FLAG};
         Matcher matcher = getPatternMatcher(RENAME_COMMAND_REGEX, input, flags);
@@ -949,13 +957,14 @@ public class Parser {
 
         String name = matcher.group(NAME_GROUP).trim();
         validateNonEmptyParam(name);
-        String newName = matcher.group(NEW_NAME_GROUP).replace(NEW_NAME_FLAG + BASE_FLAG, "").trim();
+        String newName = matcher.group(NEW_NAME_GROUP).trim();
         validateNonEmptyParam(newName);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_RENAME);
-        validateItemNotInInventory(newName, ErrorMessage.ITEM_IN_LIST_RENAME);
+        newName = validateItemNotInInventory(newName, ErrorMessage.ITEM_IN_LIST_RENAME);
 
         return new RenameCommand(name, newName);
     }
+    //@@author
 
     private static Command parseListCommand(String input) throws TrackerException {
         String[] flags = {
@@ -1083,6 +1092,13 @@ public class Parser {
     }
 
     //@@author TimothyLKM
+    /**
+     * Parses the input string to create FindCommand based on the specified format.
+     *
+     * @param input The input string containing the find command.
+     * @return A FindCommand object parsed from the input string.
+     * @throws TrackerException If there is an error parsing or validating the find command.
+     */
     private static Command parseFindCommand(String input) throws TrackerException {
         String[] flags = {NAME_FLAG};
         Matcher matcher = getPatternMatcher(FIND_COMMAND_REGEX, input, flags);
