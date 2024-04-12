@@ -27,6 +27,7 @@ class FileManager {
 
 class TransactionStorage {
     {static}+saveTransaction(transaction:Transaction):void
+    {static}+resaveCurrentTransactions():void
     {static}+loadTransactionData():void
     {static}-getTransactionData(item:Item):String
     {static}-parseTransactionData(data:String):Transaction

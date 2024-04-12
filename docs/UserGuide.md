@@ -2,7 +2,7 @@
 
 ## SuperTracker
 
-SuperTracker is a desktop app for managing a supermarket's inventory,
+SuperTracker is a desktop app for managing a supermarket's inventory and expenditures,
 optimized for use via a Command Line Interface (CLI).
 
 - [Quick Start](#quick-start)
@@ -462,7 +462,7 @@ Format: `quit`
 ### Saving inventory data
 Data in the program is saved to the hard disk in the file path `./data/` in the same directory that
 the `SuperTracker.jar` file is in. Item data will be saved automatically after any command that changes the item data in the inventory.
-Similarly, transaction data will be saved automatically after commands that add transaction data.
+Similarly, transaction data will be saved automatically after commands that add or erases transaction data.
 
 <br>
 
