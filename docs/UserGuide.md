@@ -13,6 +13,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Decrease quantity: `remove`](#decrease-quantity-remove)
   - [Update an item: `update`](#update-an-item-update)
   - [Find an item: `find`](#find-an-item-find)
+  - [Rename an item: `rename`](#rename-an-item-rename)
   - [List all items: `list`](#list-all-items-list)
   - [Print report: `report`](#print-report-report)
   - [Buy items: `buy`](#buy-items-buy)
