@@ -73,7 +73,8 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
-- `EXPIRY_DATE` must be a valid date in the format of `dd-mm-yyyy`
+- `EXPIRY_DATE` must be in the format of `dd-mm-yyyy` and from 01-01-0001 to 31-12-9999. 
+Non-existent dates such as 30-02-2024 are considered invalid
   - e.g. 05-10-2054, 16-07-2245
 
 Example: `new n/Milk q/100 p/5`
@@ -197,7 +198,8 @@ Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `NEW_PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
-- `NEW_EXPIRY_DATE` must be a valid date in the format of `dd-mm-yyyy` or `nil` if expiry date is to be removed
+- `NEW_EXPIRY_DATE` must be in the format of `dd-mm-yyyy` and from 01-01-0001 to 31-12-9999 
+or `nil` if expiry date is to be removed. Non-existent dates such as 30-02-2024 are considered invalid
   - e.g. 05-10-2054, 16-07-2245
 - At least one of the optional parameters must be present
 
@@ -353,7 +355,9 @@ Clear all transactions *before* a specified date
 Format `clear [b/BEFORE_DATE]`
 - If the optional parameter `[b/BEFORE_DATE]` is not specified or `BEFORE_DATE` is empty,
 the current date will be taken as the before date
-- If `BEFORE_DATE` is invalid, an error would be thrown
+- `BEFORE_DATE` must be in the format of `dd-mm-yyyy` and from 01-01-0001 to 31-12-9999.
+  Non-existent dates such as 30-02-2024 are considered invalid
+  - e.g. 05-10-2054, 16-07-2245
 > Note: This command does **NOT** clear transactions that occurred on `BEFORE_DATE`
 
 - If the initial command is successful, an additional confirmation message will be shown to the user
