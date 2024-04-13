@@ -73,8 +73,9 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` already exists in the inventory, use the [update](#update-an-item-update) command instead
-- If `NAME` contains the character sequence `" ,,, "`, it will be passed without the character sequence
-  - e.g. `"Ba ,,, ll"` will be passed as `"Ball"` instead
+- If `NAME` contains the character sequence `",,,"`, it will be replaced by a "_" character
+  - e.g. `"Ba,,,ll"` will be passed as `"Ba_ll"` instead
+  - Please do avoid using `",,,"` as it is the program's file delimiter
 - `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
@@ -181,6 +182,9 @@ Format: `rename n/NAME r/NEW_NAME`
 - `NAME` is case-insensitive
 - `NEW_NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
+- If `NEW_NAME` contains the character sequence `",,,"`, it will be replaced by a "_" character
+  - e.g. `"Ba,,,ll"` will be passed as `"Ba_ll"` instead
+  - Please do avoid using `",,,"` as it is the program's file delimiter
 - If no items containing NAME is found, an error would be thrown
 - If there already exists an item with NEW_NAME, an error would be thrown
 
@@ -560,13 +564,17 @@ If there is no data file, the program will the skip loading process.
 
 ### Editing the data file
 Data of the `SuperTracker` program is stored in a text files in the path `./data/` relative to 
-the directory the `SuperTracker.jar` file is in. Users can edit and update the inventory data directly through the data file
-if they would like to do so. Inventory data is stored in `items.txt`, and transaction data is stored in `transactions.txt`.
+the directory the `SuperTracker.jar` file is in. Inventory data is stored in `items.txt`, and transaction data is stored in `transactions.txt`.
+You are **strongly discouraged** from editing and updating the inventory or transaction data directly through the data file.
 > Note 1: **Edit the data file at your own caution.** If the changes made to the data file are in an invalid format, the program
-> will ignore those changes on its next load. The corrupted changes will be erased, so do keep a backup of the data 
+> will ignore those changes on its next load. The corrupted changes **will be erased**, so do keep a backup of the data 
 > file before editing.
 > 
-> Note 2: Edited transaction data with dates that have not happened yet **will be treated as corrupted data**, so do avoid adding
+> Note 2: If the program detects duplicate item names in the save file `items.txt`, among all lines of data that share the same
+> item name, the bottom most data line will **overwrite** all previous occurrences of the item data that share the same item name.
+> The rest of the overwritten lines **will be erased**.
+> 
+> Note 3: Edited transaction data with dates that have not happened yet **will be treated as corrupted data**, so do avoid adding
 > transactions that have not happened yet.
 
 --------------------------------------------------------------------------------------------------------------------

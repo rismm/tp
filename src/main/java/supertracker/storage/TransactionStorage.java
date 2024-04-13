@@ -145,6 +145,8 @@ public class TransactionStorage extends FileManager {
                 hasCorruptedData = true;
             }
         }
+        fileScanner.close();
+
         if (hasCorruptedData) {
             Ui.printError(ErrorMessage.TRANSACTION_FILE_CORRUPTED_ERROR);
             if (hasDateAfterToday) {
@@ -152,7 +154,6 @@ public class TransactionStorage extends FileManager {
             }
             saveAllTransactions();
         }
-        fileScanner.close();
     }
 
     /**
@@ -181,7 +182,7 @@ public class TransactionStorage extends FileManager {
 
         int quantity = Integer.parseInt(data[QUANTITY_INDEX]);
         double price = Double.parseDouble(data[PRICE_INDEX]);
-        if (quantity < 0 && price < 0) {
+        if (quantity < 0 || price < 0) {
             throw new Exception();
         }
 
