@@ -22,22 +22,22 @@ public class RevenueCommandTest {
     private static final String INVALID_EX_DATE = "01-01-99999";
     private static final DateTimeFormatter VALID_EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private static final LocalDate currDate = LocalDate.now();
-    private static final String currDateFormatted = currDate.format(VALID_EX_DATE_FORMAT);
-    private static final LocalDate oneDayAheadDate = currDate.plusDays(1);
-    private static final String oneDayAheadFormatted = oneDayAheadDate.format(VALID_EX_DATE_FORMAT);
-    private static final String oneDayAheadUserInput = oneDayAheadDate.format(VALID_USER_INPUT_EX_DATE_FORMAT);
-    private static final LocalDate twoDaysAgoDate = currDate.minusDays(2);
-    private static final String twoDaysAgoDateFormatted = twoDaysAgoDate.format(VALID_EX_DATE_FORMAT);
-    private static final String twoDaysAgoUserInput = twoDaysAgoDate.format(VALID_USER_INPUT_EX_DATE_FORMAT);
-    private static final LocalDate threeDaysAgoDate = currDate.minusDays(3);
-    private static final String threeDayAgoFormatted = threeDaysAgoDate.format(VALID_EX_DATE_FORMAT);
-    private static final String threeDayAgoUserInput = threeDaysAgoDate.format(VALID_USER_INPUT_EX_DATE_FORMAT);
-    private static final LocalDate twoWeeksAgoDate = currDate.minusWeeks(2);
-    private static final String twoWeeksAgoDateFormatted = twoWeeksAgoDate.format(VALID_EX_DATE_FORMAT);
-    private static final LocalDate invalidDate = LocalDate.parse
+    private static final LocalDate CURR_DATE = LocalDate.now();
+    private static final String CURR_DATE_FORMATTED = CURR_DATE.format(VALID_EX_DATE_FORMAT);
+    private static final LocalDate CURR_PLUS_ONE = CURR_DATE.plusDays(1);
+    private static final String CURR_PLUS_ONE_FORMATTED = CURR_PLUS_ONE.format(VALID_EX_DATE_FORMAT);
+    private static final String CURR_PLUS_ONE_INPUT = CURR_PLUS_ONE.format(VALID_USER_INPUT_EX_DATE_FORMAT);
+    private static final LocalDate CURR_MINUS_TWO = CURR_DATE.minusDays(2);
+    private static final String CURR_MINUS_TWO_FORMATTED = CURR_MINUS_TWO.format(VALID_EX_DATE_FORMAT);
+    private static final String CURR_MINUS_TWO_INPUT = CURR_MINUS_TWO.format(VALID_USER_INPUT_EX_DATE_FORMAT);
+    private static final LocalDate CURR_MINUS_THREE = CURR_DATE.minusDays(3);
+    private static final String CURR_MINUS_THREE_FORMATTED = CURR_MINUS_THREE.format(VALID_EX_DATE_FORMAT);
+    private static final String CURR_MINUS_THREE_INPUT = CURR_MINUS_THREE.format(VALID_USER_INPUT_EX_DATE_FORMAT);
+    private static final LocalDate CURR_MINUS_TWO_WEEK = CURR_DATE.minusWeeks(2);
+    private static final String CURR_MINUS_TWO_WEEK_FORMATTED = CURR_MINUS_TWO_WEEK.format(VALID_EX_DATE_FORMAT);
+    private static final LocalDate INVALID_DATE = LocalDate.parse
             (INVALID_EX_DATE, DateTimeFormatter.ofPattern(INVALID_EX_DATE_FORMAT));
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream OUT_CONTENT = new ByteArrayOutputStream();
 
     /**
      * Sets up the inventory and executes initial commands before running any test.
@@ -49,12 +49,12 @@ public class RevenueCommandTest {
         TransactionList.clear();
 
         Command[] commands = {
-            new NewCommand("orange", 20, 2.00, invalidDate),
-            new NewCommand("apple", 10, 1.00, invalidDate),
-            new NewCommand("banana", 5, 3.00, invalidDate),
-            new SellCommand("orange", 20, currDate),
-            new SellCommand("apple", 10, twoDaysAgoDate),
-            new SellCommand("banana", 5, twoWeeksAgoDate),
+            new NewCommand("orange", 20, 2.00, INVALID_DATE),
+            new NewCommand("apple", 10, 1.00, INVALID_DATE),
+            new NewCommand("banana", 5, 3.00, INVALID_DATE),
+            new SellCommand("orange", 20, CURR_DATE),
+            new SellCommand("apple", 10, CURR_MINUS_TWO),
+            new SellCommand("banana", 5, CURR_MINUS_TWO_WEEK),
         };
         for (Command c : commands) {
             c.execute();
@@ -66,7 +66,7 @@ public class RevenueCommandTest {
      */
     @BeforeEach
     public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
+        System.setOut(new PrintStream(OUT_CONTENT));
     }
 
     /**
@@ -86,8 +86,8 @@ public class RevenueCommandTest {
                 "     1. Name: orange" + LINE_SEPARATOR +
                 "        Quantity: 20" + LINE_SEPARATOR +
                 "        Price: $2.00" + LINE_SEPARATOR +
-                "        Transaction Date: " + currDateFormatted + LINE_SEPARATOR;
-        String actual = outContent.toString();
+                "        Transaction Date: " + CURR_DATE_FORMATTED + LINE_SEPARATOR;
+        String actual = OUT_CONTENT.toString();
         assertEquals(expected, actual);
     }
 
@@ -108,17 +108,17 @@ public class RevenueCommandTest {
                 "     1. Name: orange" + LINE_SEPARATOR +
                 "        Quantity: 20" + LINE_SEPARATOR +
                 "        Price: $2.00" + LINE_SEPARATOR +
-                "        Transaction Date: " + currDateFormatted + LINE_SEPARATOR +
+                "        Transaction Date: " + CURR_DATE_FORMATTED + LINE_SEPARATOR +
                 "     2. Name: apple" + LINE_SEPARATOR +
                 "        Quantity: 10" + LINE_SEPARATOR +
                 "        Price: $1.00" + LINE_SEPARATOR +
-                "        Transaction Date: " + twoDaysAgoDateFormatted + LINE_SEPARATOR +
+                "        Transaction Date: " + CURR_MINUS_TWO_FORMATTED + LINE_SEPARATOR +
                 "     3. Name: banana" + LINE_SEPARATOR +
                 "        Quantity: 5" + LINE_SEPARATOR +
                 "        Price: $3.00" + LINE_SEPARATOR +
-                "        Transaction Date: " + twoWeeksAgoDateFormatted + LINE_SEPARATOR;
+                "        Transaction Date: " + CURR_MINUS_TWO_WEEK_FORMATTED + LINE_SEPARATOR;
 
-        String actual = outContent.toString();
+        String actual = OUT_CONTENT.toString();
         assertEquals(expected, actual);
     }
 
@@ -128,20 +128,20 @@ public class RevenueCommandTest {
      */
     @Test
     public void revenueCommand_day_correctlyConstructed() throws TrackerException {
-        String userInput = "rev type/day from/" + twoDaysAgoUserInput;
+        String userInput = "rev type/day from/" + CURR_MINUS_TWO_INPUT;
         Command c = Parser.parseCommand(userInput);
         c.execute();
 
         Double amount = (double) (10 * 1);
         String amountString = String.format("%.2f", amount);
 
-        String expected = "     revenue on " + twoDaysAgoDateFormatted + " was $" + amountString + LINE_SEPARATOR +
+        String expected = "     revenue on " + CURR_MINUS_TWO_FORMATTED + " was $" + amountString + LINE_SEPARATOR +
                 "     1. Name: apple" + LINE_SEPARATOR +
                 "        Quantity: 10" + LINE_SEPARATOR +
                 "        Price: $1.00" + LINE_SEPARATOR +
-                "        Transaction Date: " + twoDaysAgoDateFormatted + LINE_SEPARATOR;
+                "        Transaction Date: " + CURR_MINUS_TWO_FORMATTED + LINE_SEPARATOR;
 
-        String actual = outContent.toString();
+        String actual = OUT_CONTENT.toString();
         assertEquals(expected, actual);
     }
 
@@ -151,25 +151,25 @@ public class RevenueCommandTest {
      */
     @Test
     public void revenueCommand_range_correctlyConstructed() throws TrackerException {
-        String userInput = "rev type/range from/" + threeDayAgoUserInput + " to/" + oneDayAheadUserInput;
+        String userInput = "rev type/range from/" + CURR_MINUS_THREE_INPUT + " to/" + CURR_PLUS_ONE_INPUT;
         Command c = Parser.parseCommand(userInput);
         c.execute();
 
         Double amount = (double) (20 * 2 + 10 * 1);
         String amountString = String.format("%.2f", amount);
 
-        String expected = "     revenue between " + threeDayAgoFormatted + " and " + oneDayAheadFormatted
+        String expected = "     revenue between " + CURR_MINUS_THREE_FORMATTED + " and " + CURR_PLUS_ONE_FORMATTED
                 + " was $" + amountString + LINE_SEPARATOR +
                 "     1. Name: orange" + LINE_SEPARATOR +
                 "        Quantity: 20" + LINE_SEPARATOR +
                 "        Price: $2.00" + LINE_SEPARATOR +
-                "        Transaction Date: " + currDateFormatted + LINE_SEPARATOR +
+                "        Transaction Date: " + CURR_DATE_FORMATTED + LINE_SEPARATOR +
                 "     2. Name: apple" + LINE_SEPARATOR +
                 "        Quantity: 10" + LINE_SEPARATOR +
                 "        Price: $1.00" + LINE_SEPARATOR +
-                "        Transaction Date: " + twoDaysAgoDateFormatted + LINE_SEPARATOR;
+                "        Transaction Date: " + CURR_MINUS_TWO_FORMATTED + LINE_SEPARATOR;
 
-        String actual = outContent.toString();
+        String actual = OUT_CONTENT.toString();
         assertEquals(expected, actual);
     }
 
@@ -179,7 +179,7 @@ public class RevenueCommandTest {
      */
     @Test
     public void revenueCommand_missingParamInput() {
-        String userInput = "exp type/";
+        String userInput = "rev type/";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
@@ -189,7 +189,7 @@ public class RevenueCommandTest {
      */
     @Test
     public void revenueCommand_tooManyParamInput() {
-        String userInput = "exp type/total from/";
+        String userInput = "rev type/total from/";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
@@ -199,7 +199,7 @@ public class RevenueCommandTest {
      */
     @Test
     public void revenueCommand_missingDayFlag() {
-        String userInput = "exp type/day";
+        String userInput = "rev type/day";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 
@@ -209,7 +209,7 @@ public class RevenueCommandTest {
      */
     @Test
     public void revenueCommand_missingRangeFlag() {
-        String userInput = "exp type/range from/" + threeDayAgoUserInput;
+        String userInput = "rev type/range from/" + CURR_MINUS_THREE_INPUT;
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
 }
