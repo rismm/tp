@@ -84,7 +84,6 @@ activate HelpCommandUi #fbffb2
 HelpCommandUi --> HelpCommand
 deactivate HelpCommandUi
 
-
 HelpCommand --> SuperTracker
 deactivate HelpCommand
 @enduml
