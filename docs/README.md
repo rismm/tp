@@ -1,6 +1,6 @@
 # SuperTracker
 
-SuperTracker is a desktop app for managing a supermarket’s inventory, 
+SuperTracker is a desktop app for managing a supermarket’s inventory and transactions, 
 optimized for use via a Command Line Interface (CLI).
 
 Useful links:
