@@ -9,7 +9,10 @@ import supertracker.ui.Ui;
 import java.io.IOException;
 import java.time.LocalDate;
 
-// @@ author TimothyLKM
+/**
+ * Represents a command that rename an existing item in the inventory.
+ */
+// @@author TimothyLKM
 public class RenameCommand implements Command {
     private String name;
     private String newName;
@@ -19,6 +22,11 @@ public class RenameCommand implements Command {
         this.newName = newName;
     }
 
+    /**
+     * Executes the Rename command to create a new item with the new name and transfers over
+     * the price, quantity and expiry date of the item.
+     * Deletes the old item.
+     */
     @Override
     public void execute() {
         assert Inventory.contains(name);
@@ -41,6 +49,11 @@ public class RenameCommand implements Command {
         }
     }
 
+    /**
+     * Indicates whether executing this command should result in quitting the application.
+     *
+     * @return Always returns false, as executing this command does not trigger application quit.
+     */
     @Override
     public boolean isQuit() {
         return false;
