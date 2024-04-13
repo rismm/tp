@@ -93,9 +93,9 @@ the item list and will call `ItemStorage+saveData()` at the end of `CommandClass
 Item data is saved into a text file in `./data/items.txt` by generating a string for each `Item` in the list, containing the attributes of the `item`.
 The string generated will have the attributes in the format and order of `NAME,QUANTITY,PRICE,EXPIRY_DATE`. Since an `Item`'s expiry date is
 optional, `EXPIRY_DATE` can be the string `"no date"` if the expiry date is determined to not exist. This string will be written to the text file as mentioned.
-> For example, suppose the program wants to save the `Item` with attributes `name = "Apple"`, `quantity = 5`, `price = 2.50`, `expiryDate = 19-04-2024`
+> For example, suppose the program wants to save the `Item` with attributes `name = "Apple"`, `quantity = 5`, `price = 2.55`, `expiryDate = 19-04-2024`
 > and the program uses `",,,"` as a file delimiter between groups.\
-> The program generates the string `"Apple ,,, 5 ,,, 2.50 ,,, 19-04-2024 ,,, end"` with `end` signifying the end of the data string.\
+> The program generates the string `"Apple ,,, 5 ,,, 2.55 ,,, 19-04-2024 ,,, end"` with `end` signifying the end of the data string.\
 > Do note that the `end` is only a placeholder and can be any string of characters.
 > > If for some reason the user was able to enter the file delimiter, such as `",,,"`, as an item name using the `new` or `rename` commands,
 > > when the program saves, it will replace every occurrence of the file delimiter in the name to a placeholder character sequence, like `"*&_"`,
