@@ -97,7 +97,7 @@ public class Parser {
     private static final String RANGE = "range";
 
     // Do note that the file delimiter constant needs to follow the separator constant in the FileManager class
-    private static final String FILE_DELIMITER = " ,,, ";
+    private static final String FILE_DELIMITER = ",,,";
 
     // To be used in getPatternMatcher to split the input into its respective parameter groups
     private static final String NEW_COMMAND_REGEX = NAME_FLAG + BASE_FLAG + "(?<" + NAME_GROUP + ">.*) "
@@ -504,7 +504,10 @@ public class Parser {
     private static String validateItemNotInInventory(String name, String errorMessage) throws TrackerException {
         String itemName = name;
         if (name.contains(FILE_DELIMITER)) {
-            itemName = name.replace(FILE_DELIMITER, "");
+            while (itemName.contains(FILE_DELIMITER)) {
+                itemName = itemName.replace(FILE_DELIMITER, "_").trim();
+            }
+
             Ui.printItemNameLimitation(name, FILE_DELIMITER, itemName);
         }
 

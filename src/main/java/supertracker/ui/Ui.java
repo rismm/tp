@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class Ui {
@@ -580,5 +581,17 @@ public class Ui {
         String plural = transactionsCleared == 1 ? "" : "s";
         printIndent(transactionsCleared + " transaction" + plural
                 + " before " + dateString + " successfully cleared!");
+    }
+
+    public static void printDuplicatesInSavefile(HashSet<String> duplicates) {
+        StringBuilder duplicateItemNames = new StringBuilder();
+        for (String dup : duplicates) {
+            duplicateItemNames.append(dup);
+            duplicateItemNames.append(", ");
+        }
+        printIndent("SuperTracker has detected the following duplicate item names in the save file:");
+        printIndent(duplicateItemNames.toString());
+        printIndent("Only the latest occurrence of data lines with these item names in");
+        printIndent("the save file will be loaded into the inventory list.");
     }
 }
