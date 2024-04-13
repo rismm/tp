@@ -47,7 +47,9 @@ public class SellCommand extends RemoveCommand {
             currentDate,
             SELL_FLAG
         );
-        TransactionList.add(transaction);
+        if (quantityRemoved > 0) {
+            TransactionList.add(transaction);
+        }
         Ui.sellCommandSuccess(newItem, transaction);
 
         try {

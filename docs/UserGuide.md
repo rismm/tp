@@ -352,6 +352,7 @@ Format: `sell n/NAME q/QUANTITY`
 - `QUANTITY` must be a positive integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - If `QUANTITY` exceeds the current quantity of the item, the new quantity would be set to 0
+- If the quantity sold is 0, no transaction would be added to the transaction list
 
 Example: `sell n/Milk q/10`
 ```
