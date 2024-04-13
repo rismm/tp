@@ -2,7 +2,7 @@
 
 ## SuperTracker
 
-SuperTracker is a desktop app for managing a supermarket's inventory and expenditures,
+SuperTracker is a desktop app for managing a supermarket's inventory and transactions,
 optimized for use via a Command Line Interface (CLI).
 
 - [Quick Start](#quick-start)
@@ -27,6 +27,8 @@ optimized for use via a Command Line Interface (CLI).
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
   - [Editing the data file](#editing-the-data-file)
+- [FAQ](#faq)
+- [Command Summary](#command-summary)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -54,6 +56,12 @@ optimized for use via a Command Line Interface (CLI).
 > - If the command has multiple of the same parameters, it uses the first occurrence of that parameter
 >   - e.g. if the command specifies `new n/Milk q/100 p/5 n/Cheese`, it will be interpreted as `new n/Milk q/100 p/5`
 > - If any of the compulsory parameters are empty an error is thrown
+> - The value of a parameter would be interpreted as the trimmed substring after `/` up to the space right before the next valid parameter
+>   - e.g. if the command specifies `add n/Milk q/10q/10`, the command would be invalid as `QUANTITY` would be interpreted as `10q/10`, 
+>   since there is no space before the second occurrence of `q/`
+>   - e.g. if the command specifies `add n/Milk q/10 p/10`, the command would be invalid as `QUANTITY` would be interpreted as `10 p/10`, 
+>   since `p/` is not a valid parameter for the add command
+>   - e.g. if the command specifies `add n/Milk q/  10   q/20`, the command would be valid as `QUANTITY` would be interpreted as `10`
 
 <br>
 
@@ -65,8 +73,9 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
 - `NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
 - If `NAME` already exists in the inventory, use the [update](#update-an-item-update) command instead
-- If `NAME` contains the character sequence `" ,,, "`, it will be passed without the character sequence
-  - e.g. `"Ba ,,, ll"` will be passed as `"Ball"` instead
+- If `NAME` contains the character sequence `",,,"`, it will be replaced by a "_" character
+  - e.g. `"Ba,,,ll"` will be passed as `"Ba_ll"` instead
+  - Please do avoid using `",,,"` as it is the program's file delimiter
 - `QUANTITY` must be a non-negative integer and less than or equal to 2147483647
   - e.g. 1, 10, 100
 - `PRICE` must be a non-negative integer or decimal number and less than or equal to 2147483647
@@ -173,6 +182,9 @@ Format: `rename n/NAME r/NEW_NAME`
 - `NAME` is case-insensitive
 - `NEW_NAME` is case-insensitive
   - e.g. `Cheese` will be interpreted as `cheese`
+- If `NEW_NAME` contains the character sequence `",,,"`, it will be replaced by a "_" character
+  - e.g. `"Ba,,,ll"` will be passed as `"Ba_ll"` instead
+  - Please do avoid using `",,,"` as it is the program's file delimiter
 - If no items containing NAME is found, an error would be thrown
 - If there already exists an item with NEW_NAME, an error would be thrown
 
@@ -478,7 +490,7 @@ Nice! You have a profit.
 <br>
 
 ### Print a help list: `help`
-Print a help list which displays all functions of SuperTracker which the user can then choose to see it's parameters.
+Print a help list which displays all functions of SuperTracker which the user can then choose to see its parameters
 
 There are 13 different inputs the user can key in after the help list is printed.
 1. `new`: prints the parameters to create a new item
@@ -493,7 +505,7 @@ There are 13 different inputs the user can key in after the help list is printed
 10. `rev`: prints the parameters to print revenue
 11. `profit`: prints the parameters to print profit
 12. `transaction`: prints the parameters to buy or sell an item
-13. `clear`:prints the parameters to clear transactions
+13. `clear`: prints the parameters to clear transactions
 
 As shown above, a user can choose to input any of these 13 commands or else the user will return to the main console.
 >Note: If the input consists of many words, SuperTracker will only take in the first word.
@@ -552,13 +564,17 @@ If there is no data file, the program will the skip loading process.
 
 ### Editing the data file
 Data of the `SuperTracker` program is stored in a text files in the path `./data/` relative to 
-the directory the `SuperTracker.jar` file is in. Users can edit and update the inventory data directly through the data file
-if they would like to do so. Inventory data is stored in `items.txt`, and transaction data is stored in `transactions.txt`.
+the directory the `SuperTracker.jar` file is in. Inventory data is stored in `items.txt`, and transaction data is stored in `transactions.txt`.
+You are **strongly discouraged** from editing and updating the inventory or transaction data directly through the data file.
 > Note 1: **Edit the data file at your own caution.** If the changes made to the data file are in an invalid format, the program
-> will ignore those changes on its next load. The corrupted changes will be erased, so do keep a backup of the data 
+> will ignore those changes on its next load. The corrupted changes **will be erased**, so do keep a backup of the data 
 > file before editing.
 > 
-> Note 2: Edited transaction data with dates that have not happened yet **will be treated as corrupted data**, so do avoid adding
+> Note 2: If the program detects duplicate item names in the save file `items.txt`, among all lines of data that share the same
+> item name, the bottom most data line will **overwrite** all previous occurrences of the item data that share the same item name.
+> The rest of the overwritten lines **will be erased**.
+> 
+> Note 3: Edited transaction data with dates that have not happened yet **will be treated as corrupted data**, so do avoid adding
 > transactions that have not happened yet.
 
 --------------------------------------------------------------------------------------------------------------------

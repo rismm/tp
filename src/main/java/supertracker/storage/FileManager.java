@@ -17,6 +17,10 @@ public class FileManager {
     protected static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     protected static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
 
+    /**
+     * Checks whether the data directory exists.
+     * If it does not exist, the directory will be created
+     */
     protected static void checkDataDirectory() {
         File directory = new File(DATA_PATH);
         if (!directory.exists()) {
@@ -24,6 +28,14 @@ public class FileManager {
         }
     }
 
+    /**
+     * Takes an item and returns a String array of the name, quantity and price of the item.
+     * The last element in the array is a string to signify the end of the array, for use in the respective data to
+     * string conversion methods.
+     *
+     * @param item an Item object to extract the name, quantity and price from
+     * @return a String array of size 4 with item name, quantity, price and excess in this order
+     */
     protected static String[] getNameQtyPriceStrings(Item item) {
         String name = item.getName();
         String excess = "end";
@@ -32,6 +44,10 @@ public class FileManager {
         if (name.contains(SEPARATOR)) {
             excess = "bad end";
             name = name.replace(SEPARATOR, PLACEHOLDER);
+        }
+        if (name.contains(SEPARATOR.trim())) {
+            excess = "worse end";
+            name = name.replace(SEPARATOR.trim(), PLACEHOLDER);
         }
 
         String quantity = String.valueOf(item.getQuantity());

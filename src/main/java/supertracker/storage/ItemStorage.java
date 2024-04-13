@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+import java.util.HashSet;
 
 public class ItemStorage extends FileManager {
     protected static final String SAVE_FILE_NAME = "items.txt";
@@ -67,23 +68,40 @@ public class ItemStorage extends FileManager {
         Inventory.clear();
         Scanner fileScanner = new Scanner(saveFile);
         String itemData;
+
+        HashSet<String> duplicates = new HashSet<>();
         boolean hasCorruptedData = false;
         while (fileScanner.hasNext()) {
             try {
                 itemData = fileScanner.nextLine();
                 Item item = parseItemData(itemData);
+                if (Inventory.contains(item.getName())) {
+                    duplicates.add(item.getName().toLowerCase());
+                }
                 Inventory.put(item.getName(), item);
             } catch (Exception e) {
                 hasCorruptedData = true;
             }
         }
+        fileScanner.close();
+
         if (hasCorruptedData) {
             Ui.printError(ErrorMessage.ITEM_FILE_CORRUPTED_ERROR);
             saveData();
         }
-        fileScanner.close();
+        if (!duplicates.isEmpty()) {
+            Ui.printDuplicatesInSavefile(duplicates);
+            saveData();
+        }
     }
 
+    /**
+     * Takes an Item object and converts its attributes to a String to be saved in a data file.
+     * String is in the format of "(name) DELIMITER (qty) DELIMITER (price) DELIMITER (expiry date) DELIMITER end"
+     *
+     * @param item an Item object to convert its attributes to a String
+     * @return a String containing the Item object's attributes
+     */
     private static String getItemData(Item item) {
         String[] itemDataStrings = getNameQtyPriceStrings(item);
         assert itemDataStrings.length == 4;
@@ -103,6 +121,14 @@ public class ItemStorage extends FileManager {
                 + date + SEPARATOR + excess + System.lineSeparator();
     }
 
+    /**
+     * Takes string data from a line extracted from the data file and parses it to an Item object
+     *
+     * @param itemData a String containing the data of an Item object's attributes
+     * @return an Item object parsed from the data string
+     * @throws Exception if the relevant attributes are unable to be extracted from the data string or the attributes
+     *     are invalid (i.e. the quantity is negative)
+     */
     private static Item parseItemData(String itemData) throws Exception {
         String[] data = itemData.split(SEPARATOR, MAX_NUMBER_OF_PARAMS);
 
@@ -117,7 +143,7 @@ public class ItemStorage extends FileManager {
         double price;
         quantity = Integer.parseInt(data[QUANTITY_INDEX].trim());
         price = Double.parseDouble(data[PRICE_INDEX].trim());
-        if (quantity < 0 && price < 0) {
+        if (quantity < 0 || price < 0) {
             throw new Exception();
         }
 
