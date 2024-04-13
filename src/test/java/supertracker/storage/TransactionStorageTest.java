@@ -24,6 +24,8 @@ class TransactionStorageTest {
             new Transaction("cool beans", 50, 12.21, CURR_DATE.plusMonths(1), "s"),
             new Transaction("cool,,,beans,,,,", 50, 12.21, CURR_DATE, "s"),
             new Transaction("cool beans", 50, 88.912, CURR_DATE, "s"),
+            new Transaction("cool beans", -50, 88.912, CURR_DATE, "s"),
+            new Transaction("cool beans", 50, -88.912, CURR_DATE, "s"),
             new Transaction("@#!!@#(         )*889.pp", 50, 88.912, CURR_DATE, "b"),
             new Transaction("@#!!@#(         )*889.pp", 50, 88.912, CURR_DATE.minusYears(1), "b")
         };
@@ -44,7 +46,7 @@ class TransactionStorageTest {
             new Transaction("apple", 10, 2.00, CURR_DATE, "b"),
             new Transaction("orange", 10, 2.00, CURR_DATE.minusDays(1), "b"),
             new Transaction("cool*&_grapes", 50, 0.91, CURR_DATE, "s"),
-            new Transaction("cool,,,beans,,,,", 50, 12.21, CURR_DATE, "s"),
+            new Transaction("cool*&_beans*&_,", 50, 12.21, CURR_DATE, "s"),
             new Transaction("cool beans", 50, 88.912, CURR_DATE, "s"),
             new Transaction("@#!!@#(         )*889.pp", 50, 88.912, CURR_DATE, "b"),
             new Transaction("@#!!@#(         )*889.pp", 50, 88.912, CURR_DATE.minusYears(1), "b")

@@ -45,6 +45,10 @@ public class FileManager {
             excess = "bad end";
             name = name.replace(SEPARATOR, PLACEHOLDER);
         }
+        if (name.contains(SEPARATOR.trim())) {
+            excess = "worse end";
+            name = name.replace(SEPARATOR.trim(), PLACEHOLDER);
+        }
 
         String quantity = String.valueOf(item.getQuantity());
         String price = String.valueOf(item.getPrice());
