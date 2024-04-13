@@ -35,7 +35,7 @@ public class ProfitCommandTest {
     private static final LocalDate CURR_MINUS_TWO_WEEK = CURR_DATE.minusWeeks(2);
     private static final LocalDate INVALID_DATE = LocalDate.parse
             (INVALID_EX_DATE, DateTimeFormatter.ofPattern(INVALID_EX_DATE_FORMAT));
-    private final ByteArrayOutputStream outcontent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     /**
      * Sets up the inventory and executes initial commands before running any test.
@@ -67,7 +67,7 @@ public class ProfitCommandTest {
      */
     @BeforeEach
     public void setUpStreams() {
-        System.setOut(new PrintStream(outcontent));
+        System.setOut(new PrintStream(outContent));
     }
 
     /**
@@ -85,7 +85,7 @@ public class ProfitCommandTest {
 
         String expected = "     Today's profit is $" + amountString + LINE_SEPARATOR +
                 "     Nice! You have a profit." + LINE_SEPARATOR;
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
@@ -105,7 +105,7 @@ public class ProfitCommandTest {
         String expected = "     Total profit is $" + amountString + LINE_SEPARATOR +
                 "     Nice! You have a profit." + LINE_SEPARATOR;
 
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
@@ -125,7 +125,7 @@ public class ProfitCommandTest {
         String expected = "     Your profit on " + CURR_MINUS_TWO_FORMATTED + " was $" + amountString + LINE_SEPARATOR +
                 "     You lost money." + LINE_SEPARATOR;
 
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
@@ -145,7 +145,7 @@ public class ProfitCommandTest {
         String expected = "     Your profit between " + CURR_MINUS_THREE_FORMATTED + " and " + CURR_PLUS_ONE_FORMATTED
                 + " was $" + amountString + LINE_SEPARATOR + "     Nice! You have a profit." + LINE_SEPARATOR;;
 
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
