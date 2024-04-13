@@ -70,7 +70,7 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the construction of expenditure report for today's transactions.
+     * Tests the construction of revenue report for today's transactions.
      * Verifies that the correct output is printed based on executed commands.
      */
     @Test
@@ -92,8 +92,8 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the construction of total expenditure report.
-     * Verifies that the correct total expenditure report is printed based on executed commands.
+     * Tests the construction of total revenue report.
+     * Verifies that the correct total revenue report is printed based on executed commands.
      */
     @Test
     public void revenueCommand_total_correctlyConstructed() throws TrackerException {
@@ -123,8 +123,8 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the construction of expenditure report for a specific day.
-     * Verifies that the correct expenditure report for a given day is printed.
+     * Tests the construction of revenue report for a specific day.
+     * Verifies that the correct revenue report for a given day is printed.
      */
     @Test
     public void revenueCommand_day_correctlyConstructed() throws TrackerException {
@@ -146,8 +146,8 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the construction of expenditure report for a date range.
-     * Verifies that the correct expenditure report for a given date range is printed.
+     * Tests the construction of revenue report for a date range.
+     * Verifies that the correct revenue report for a given date range is printed.
      */
     @Test
     public void revenueCommand_range_correctlyConstructed() throws TrackerException {
@@ -174,7 +174,7 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the behavior when the user input for expenditure command is incomplete.
+     * Tests the behavior when the user input for revenue command is incomplete.
      * Verifies that a TrackerException is thrown when required parameters are missing.
      */
     @Test
@@ -184,7 +184,7 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the behavior when the user input for expenditure command has too many parameters.
+     * Tests the behavior when the user input for revenue command has too many parameters.
      * Verifies that a TrackerException is thrown when unexpected parameters are provided.
      */
     @Test
@@ -194,7 +194,7 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the behavior when the user input for expenditure command is missing the flags for day task.
+     * Tests the behavior when the user input for revenue command is missing the flags for day task.
      * Verifies that a TrackerException is thrown when essential flags are absent.
      */
     @Test
@@ -204,7 +204,7 @@ public class RevenueCommandTest {
     }
 
     /**
-     * Tests the behavior when the user input for expenditure command is missing the flag for range task.
+     * Tests the behavior when the user input for revenue command is missing the flag for range task.
      * Verifies that a TrackerException is thrown when the range flag is missing.
      */
     @Test

@@ -189,13 +189,4 @@ public class ProfitCommandTest {
         String userInput = "profit type/range from/" + CURR_MINUS_THREE_INPUT;
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
-
-    /**
-     * Clears the inventory after executing the tests.
-     */
-    @AfterAll
-    public static void clearLists() {
-        Inventory.clear();
-        TransactionList.clear();
-    }
 }
