@@ -242,6 +242,29 @@ The following sequence diagram shows the execution of a FindCommand<br>
 6. If the item contains the word, the `foundItem` method of the Ui class is called and the `isFound` variable is assigned a true value
 7. After the loop ends, if the `isFound` variable is still false, the `noItemFound` method of the Ui class is called to notify that no item has been found containing the word
 
+### Rename Command
+The following is a class diagram of the RenameCommand and its relevant dependencies<br>
+![RenameCommandClass](uml-diagrams/RenameCommandClass.png)
+
+The `RenameCommand` class implements the `Command` interface and is responsible for renaming an item chosen by the user.
+A RenameCommand instance is created by the `parseRenameCommand` method called by `Parser`, which ensures that the provided parameter (name and newName) is valid.
+
+#### Dependencies
+- `Inventory`: For getting the chosen item in the inventory
+- `Ui`: To notify the user about the successful execution of `RenameCommand`
+
+The following sequence diagram shows the execution of a RenameCommand<br>  
+![RenameCommandSequence](uml-diagrams/RenameCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `RenameCommand`
+2. The item object of the item to be renamed is obtained from `inventory`
+3. The quantity, price and expiry date are obtained from the item
+4. A new `Item` object with the given parameters (newName, quantity, price, expiry date) is created and returned to `RenameCommand`
+5. The `put` method of the `Inventory` class is called to put the new item in the inventory
+6. The `delete` method of the `Inventory` class is called to delete the old item
+7. The `RenameCommandSuccess` method of the `Ui` class is called to notify that `RenameCommand` has been successfully executed
+8. The `saveData` method of the `FileManager` class is called to save renamed item onto the hard disk
+
 ### List Command
 The following is a class diagram of the FindCommand and its relevant dependencies<br>
 ![ListCommandClass](uml-diagrams/ListCommandClass.png)
@@ -295,6 +318,26 @@ The following sequence diagram shows the execution of a ListCommand<br>
 4. The private method `sortBy` is called 4 times with different input parameters to sort the `ArrayList` of items according to alphabet, quantity, price and/or expiry date 
 5. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
 6. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
+
+### Help Command
+The following is a class diagram of the HelpCommand and its relevant dependencies<br>
+![HelpCommandClass](uml-diagrams/HelpCommandClass.png)
+
+The HelpCommand class implements the Command interface and is responsible for assisting users with various tasks.
+A HelpCommand instance is created by the parseHelpCommand method called by Parser, which ensures that the provided parameter (task) is valid.
+
+#### Dependencies
+- `Ui`: To print out a line
+- `HelpCommandUi`: To print various messages and parameters
+
+The following sequence diagram shows the execution of a HelpCommand<br>  
+![HelpCommandSequence](uml-diagrams/HelpCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `HelpCommand` 
+2. The `helpCommandSuccess` method of the `HelpCommandUi` class is called to notify that the help command has been successfully executed
+3. `helpCommandSuccess` will also print a list of functions available for user to input
+4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
+5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has return to the main console
 
 ## Product scope
 ### Target user profile

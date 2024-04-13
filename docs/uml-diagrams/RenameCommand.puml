@@ -48,6 +48,7 @@ class Parser {
 class Inventory {
     {static}+get(name:String):Item
     {static}+put(name:String, item:Item):void
+    {static}+delete(name:String):void
 }
 
 class FileManager {
@@ -89,6 +90,11 @@ RenameCommand -> Item: getExpiryDate()
 activate Item #fbffb2
 Item --> RenameCommand: expiryDate
 deactivate Item
+
+RenameCommand -> Inventory : delete(name:String)
+activate Inventory #d5eac2
+Inventory --> RenameCommand
+deactivate Inventory
 
 RenameCommand -> Inventory : put(newName:String, newItem:Item)
 activate Inventory #d5eac2
