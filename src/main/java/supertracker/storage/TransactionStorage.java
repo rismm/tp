@@ -162,7 +162,7 @@ public class TransactionStorage extends FileManager {
      * @return a Transaction object parsed from the data string
      * @throws Exception if the relevant attributes are unable to be extracted from the data string
      * @throws TrackerException if the transaction date extracted from the string data is of a date that has not
-     * occurred yet
+     *     occurred yet
      */
     private static Transaction parseTransactionData(String transactionData) throws Exception {
         String[] data = transactionData.split(SEPARATOR, MAX_NUMBER_OF_PARAMS);
