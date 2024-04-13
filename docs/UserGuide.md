@@ -22,6 +22,7 @@ optimized for use via a Command Line Interface (CLI).
   - [Print expenditure: `exp`](#print-expenditure-exp)
   - [Print revenue: `rev`](#print-revenue-rev)
   - [Print profit: `profit`](#print-profit-profit)
+  - [Print a help list: `help`](#print-a-help-list-help)
   - [Quit the program: `quit`](#quit-the-program-quit)
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
@@ -72,7 +73,8 @@ Format: `new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
-- `EXPIRY_DATE` must be a valid date in the format of `dd-mm-yyyy`
+- `EXPIRY_DATE` must be in the format of `dd-mm-yyyy` and from 01-01-0001 to 31-12-9999. 
+Non-existent dates such as 30-02-2024 are considered invalid
   - e.g. 05-10-2054, 16-07-2245
 
 Example: `new n/Milk q/100 p/5`
@@ -164,6 +166,25 @@ Here are your found items:
 ```
 <br>
 
+### Rename an item: `rename`
+Rename an existing item with a new name.
+
+Format: `rename n/NAME r/NEW_NAME`
+- `NAME` is case-insensitive
+- `NEW_NAME` is case-insensitive
+  - e.g. `Cheese` will be interpreted as `cheese`
+- If no items containing NAME is found, an error would be thrown
+- If there already exists an item with NEW_NAME, an error would be thrown
+
+Example: `rename n/Cheese r/Mozzerella`
+```
+Cheese has been successfully renamed to Mozzerella.
+Name: Mozzerella
+Quantity: 30
+Price: $4.00
+```
+<br>
+
 ### Update an item: `update`
 Update the quantity, price and/or expiry date of an item
 
@@ -177,7 +198,8 @@ Format: `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]`
   - e.g. 1, 0.20, 12.3, 12.345
 - If the `NEW_PRICE` given has more than 2 decimal places, it will be rounded off to the nearest 2 decimal places
   - e.g. 12.345 ≈ 12.35
-- `NEW_EXPIRY_DATE` must be a valid date in the format of `dd-mm-yyyy` or `nil` if expiry date is to be removed
+- `NEW_EXPIRY_DATE` must be in the format of `dd-mm-yyyy` and from 01-01-0001 to 31-12-9999 
+or `nil` if expiry date is to be removed. Non-existent dates such as 30-02-2024 are considered invalid
   - e.g. 05-10-2054, 16-07-2245
 - At least one of the optional parameters must be present
 
@@ -333,7 +355,9 @@ Clear all transactions *before* a specified date
 Format `clear [b/BEFORE_DATE]`
 - If the optional parameter `[b/BEFORE_DATE]` is not specified or `BEFORE_DATE` is empty,
 the current date will be taken as the before date
-- If `BEFORE_DATE` is invalid, an error would be thrown
+- `BEFORE_DATE` must be in the format of `dd-mm-yyyy` and from 01-01-0001 to 31-12-9999.
+  Non-existent dates such as 30-02-2024 are considered invalid
+  - e.g. 05-10-2054, 16-07-2245
 > Note: This command does **NOT** clear transactions that occurred on `BEFORE_DATE`
 
 - If the initial command is successful, an additional confirmation message will be shown to the user
@@ -453,6 +477,59 @@ Nice! You have a profit.
 
 <br>
 
+### Print a help list: `help`
+Print a help list which displays all functions of SuperTracker which the user can then choose to see it's parameters.
+
+There are 13 different inputs the user can key in after the help list is printed.
+1. `new`: prints the parameters to create a new item
+2. `delete`: prints the parameters to delete an item
+3. `change`: prints the parameters to change quantity of an item
+4. `update`: prints the parameters to update an item
+5. `find`: prints the parameters to find an item
+6. `rename`: prints the parameters to rename an item
+7. `list`: prints the parameters to list out items
+8. `report`: prints the parameters to print a report
+9. `exp`: prints the parameters to print expenditure
+10. `rev`: prints the parameters to print revenue
+11. `profit`: prints the parameters to print profit
+12. `transaction`: prints the parameters to buy or sell an item
+13. `clear`:prints the parameters to clear transactions
+
+As shown above, a user can choose to input any of these 13 commands or else the user will return to the main console.
+>Note: If the input consists of many words, SuperTracker will only take in the first word.
+>
+>e.g. "delete new" will be interpreted as "delete" and delete parameters will be printed
+
+Format: `help`
+
+Example: `help`
+
+```
+Hello! These are the list of commands that I can help you with:
+1. Create a new item: type 'new' to show parameters
+2. Delete an item: type 'delete' to show parameters
+3. Change quantity of an item: type 'change' to show parameters
+4. Update an item: type 'update' to show parameters
+5. Find an item: type 'find' to show parameters
+6. Rename an item: type 'rename' to show parameters
+7. List all items: type 'list' to show parameters
+8. Print a report: type 'report' to show parameters
+9. Print expenditure: type 'exp' to show parameters
+10. Print revenue: type 'rev' to show parameters
+11. Print profit: type 'profit' to show parameters
+12. Buy or sell items: type 'transaction' to show parameters
+13. Clear transactions: type 'clear' to show parameters
+** Any other invalid input will bring you back to the main console
+```
+Next input: `new`
+```
+A new item command should look like this: new n/NAME q/QUANTITY p/PRICE [e/EXPIRY_DATE]
+** Refer to UserGuide for further explanation
+** DO NOTE that you have been returned to the main console
+```
+
+<br>
+
 ### Quit the program: `quit`
 Quits the program
 
@@ -529,6 +606,7 @@ allowing them to fix their mistake.
 | **Remove**      | `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`                    |
 | **Update**      | `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113` |
 | **Find**        | `find n/NAME`                                                      | e.g. `find n/apple`                          |
+| **Rename**      | `rename n/NAME r/NEW_NAME`                                         | e.g. `rename n/Milk r/Chocolote Milk`        |
 | **List**        | `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`                     |
 | **Report**      | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
 | **Buy**         | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |
@@ -537,4 +615,5 @@ allowing them to fix their mistake.
 | **Expenditure** | `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`        | e.g. `exp type/today`                        |
 | **Revenue**     | `rev type/REVENUE_TYPE [from/START_DATE] [to/END_DATE]`            | e.g. `rev type/today`                        |
 | **Profit**      | `profit type/PROFIT_TYPE [from/START_DATE] [to/END_DATE]`          | e.g. `profit type/today`                     |
+| **Help**        | `help`                                                             | e.g. `help`                                  |
 | **Quit**        | `quit`                                                             | e.g. `quit`                                  |
