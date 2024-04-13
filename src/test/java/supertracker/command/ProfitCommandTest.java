@@ -1,6 +1,5 @@
 package supertracker.command;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,7 @@ public class ProfitCommandTest {
     private static final LocalDate CURR_MINUS_TWO_WEEK = CURR_DATE.minusWeeks(2);
     private static final LocalDate INVALID_DATE = LocalDate.parse
             (INVALID_EX_DATE, DateTimeFormatter.ofPattern(INVALID_EX_DATE_FORMAT));
-    private final ByteArrayOutputStream OUT_CONTENT = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outcontent = new ByteArrayOutputStream();
 
     /**
      * Sets up the inventory and executes initial commands before running any test.
@@ -48,15 +47,15 @@ public class ProfitCommandTest {
         TransactionList.clear();
 
         Command[] commands = {
-                new NewCommand("orange", 20, 2.00, INVALID_DATE),
-                new NewCommand("apple", 10, 1.00, INVALID_DATE),
-                new NewCommand("banana", 5, 3.00, INVALID_DATE),
-                new BuyCommand("orange", 60, 1.20, CURR_DATE),
-                new BuyCommand("apple", 41, 1, CURR_MINUS_TWO),
-                new BuyCommand("banana", 30, 1.50, CURR_MINUS_TWO_WEEK),
-                new SellCommand("orange", 50, CURR_DATE),
-                new SellCommand("apple", 40, CURR_MINUS_TWO),
-                new SellCommand("banana", 10, CURR_MINUS_TWO_WEEK),
+            new NewCommand("orange", 20, 2.00, INVALID_DATE),
+            new NewCommand("apple", 10, 1.00, INVALID_DATE),
+            new NewCommand("banana", 5, 3.00, INVALID_DATE),
+            new BuyCommand("orange", 60, 1.20, CURR_DATE),
+            new BuyCommand("apple", 41, 1, CURR_MINUS_TWO),
+            new BuyCommand("banana", 30, 1.50, CURR_MINUS_TWO_WEEK),
+            new SellCommand("orange", 50, CURR_DATE),
+            new SellCommand("apple", 40, CURR_MINUS_TWO),
+            new SellCommand("banana", 10, CURR_MINUS_TWO_WEEK),
         };
         for (Command c : commands) {
             c.execute();
@@ -68,7 +67,7 @@ public class ProfitCommandTest {
      */
     @BeforeEach
     public void setUpStreams() {
-        System.setOut(new PrintStream(OUT_CONTENT));
+        System.setOut(new PrintStream(outcontent));
     }
 
     /**
@@ -86,7 +85,7 @@ public class ProfitCommandTest {
 
         String expected = "     Today's profit is $" + amountString + LINE_SEPARATOR +
                 "     Nice! You have a profit." + LINE_SEPARATOR;
-        String actual = OUT_CONTENT.toString();
+        String actual = outcontent.toString();
         assertEquals(expected, actual);
     }
 
@@ -106,7 +105,7 @@ public class ProfitCommandTest {
         String expected = "     Total profit is $" + amountString + LINE_SEPARATOR +
                 "     Nice! You have a profit." + LINE_SEPARATOR;
 
-        String actual = OUT_CONTENT.toString();
+        String actual = outcontent.toString();
         assertEquals(expected, actual);
     }
 
@@ -126,7 +125,7 @@ public class ProfitCommandTest {
         String expected = "     Your profit on " + CURR_MINUS_TWO_FORMATTED + " was $" + amountString + LINE_SEPARATOR +
                 "     You lost money." + LINE_SEPARATOR;
 
-        String actual = OUT_CONTENT.toString();
+        String actual = outcontent.toString();
         assertEquals(expected, actual);
     }
 
@@ -146,7 +145,7 @@ public class ProfitCommandTest {
         String expected = "     Your profit between " + CURR_MINUS_THREE_FORMATTED + " and " + CURR_PLUS_ONE_FORMATTED
                 + " was $" + amountString + LINE_SEPARATOR + "     Nice! You have a profit." + LINE_SEPARATOR;;
 
-        String actual = OUT_CONTENT.toString();
+        String actual = outcontent.toString();
         assertEquals(expected, actual);
     }
 
