@@ -27,6 +27,8 @@ optimized for use via a Command Line Interface (CLI).
   - [Saving inventory data](#saving-inventory-data)
   - [Loading inventory data](#loading-inventory-data)
   - [Editing the data file](#editing-the-data-file)
+- [FAQ](#faq)
+- [Command Summary](#command-summary)
 
 --------------------------------------------------------------------------------------------------------------------
 
