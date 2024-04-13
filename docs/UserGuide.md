@@ -478,7 +478,7 @@ Nice! You have a profit.
 <br>
 
 ### Print a help list: `help`
-Print a help list which displays all functions of SuperTracker which the user can then choose to see it's parameters.
+Print a help list which displays all functions of SuperTracker which the user can then choose to see its parameters
 
 There are 13 different inputs the user can key in after the help list is printed.
 1. `new`: prints the parameters to create a new item
@@ -493,7 +493,7 @@ There are 13 different inputs the user can key in after the help list is printed
 10. `rev`: prints the parameters to print revenue
 11. `profit`: prints the parameters to print profit
 12. `transaction`: prints the parameters to buy or sell an item
-13. `clear`:prints the parameters to clear transactions
+13. `clear`: prints the parameters to clear transactions
 
 As shown above, a user can choose to input any of these 13 commands or else the user will return to the main console.
 >Note: If the input consists of many words, SuperTracker will only take in the first word.
