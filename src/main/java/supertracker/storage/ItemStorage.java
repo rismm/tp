@@ -84,6 +84,13 @@ public class ItemStorage extends FileManager {
         fileScanner.close();
     }
 
+    /**
+     * Takes an Item object and converts its attributes to a String to be saved in a data file.
+     * String is in the format of "(name) DELIMITER (qty) DELIMITER (price) DELIMITER (expiry date) DELIMITER end"
+     *
+     * @param item an Item object to convert its attributes to a String
+     * @return a String containing the Item object's attributes
+     */
     private static String getItemData(Item item) {
         String[] itemDataStrings = getNameQtyPriceStrings(item);
         assert itemDataStrings.length == 4;
@@ -103,6 +110,13 @@ public class ItemStorage extends FileManager {
                 + date + SEPARATOR + excess + System.lineSeparator();
     }
 
+    /**
+     * Takes string data from a line extracted from the data file and parses it to an Item object
+     *
+     * @param itemData a String containing the data of an Item object's attributes
+     * @return an Item object parsed from the data string
+     * @throws Exception if the relevant attributes are unable to be extracted from the data string
+     */
     private static Item parseItemData(String itemData) throws Exception {
         String[] data = itemData.split(SEPARATOR, MAX_NUMBER_OF_PARAMS);
 

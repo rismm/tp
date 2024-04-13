@@ -87,6 +87,14 @@ public class TransactionStorage extends FileManager {
         fw.close();
     }
 
+    /**
+     * Takes a Transaction object and converts its attributes to a String to be saved in a data file.
+     * String is in the format of "NAME: (name) DELIMITER QTY: (qty) DELIMITER PRICE: (price) DELIMITER DATE: (date)
+     * DELIMITER T: (type) DELIMITER end"
+     *
+     * @param transaction a Transaction object to convert its attributes to a String
+     * @return a String containing the Transaction object's attributes
+     */
     private static String getTransactionData(Transaction transaction) {
         String[] itemDataStrings = getNameQtyPriceStrings(transaction);
         assert itemDataStrings.length == 4;
@@ -147,6 +155,15 @@ public class TransactionStorage extends FileManager {
         fileScanner.close();
     }
 
+    /**
+     * Takes string data from a line extracted from the data file and parses it to a Transaction object
+     *
+     * @param transactionData a String containing the data of a Transaction object's attributes
+     * @return a Transaction object parsed from the data string
+     * @throws Exception if the relevant attributes are unable to be extracted from the data string
+     * @throws TrackerException if the transaction date extracted from the string data is of a date that has not
+     * occurred yet
+     */
     private static Transaction parseTransactionData(String transactionData) throws Exception {
         String[] data = transactionData.split(SEPARATOR, MAX_NUMBER_OF_PARAMS);
 
