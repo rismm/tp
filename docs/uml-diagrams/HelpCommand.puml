@@ -1,0 +1,89 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+
+interface Command
+class HelpCommandUi
+class HelpCommand
+class Parser
+class Ui
+
+Ui <|- HelpCommandUi
+HelpCommand <.. Parser
+Command <|. HelpCommand
+Ui <.. HelpCommand
+HelpCommandUi <.. HelpCommand
+
+interface Command <<interface>> {
+    +execute():void
+    +isQuit():boolean
+}
+class HelpCommand {
+    -getHelpCommandReply():String
+    +execute():void
+    +isQuit():boolean
+}
+
+class Ui {
+    {static}+printLine(): void
+}
+
+class HelpCommandUi {
++helpCommandSuccess():void
++printNewCommandParams():void
++printDeleteCommandParams():void
++printChangeCommandParams():void
++printUpdateCommandParams():void
++helpClosingMessage():void
+}
+
+class Parser {
+    {static}-ParseRenameCommand():RenameCommand
+}
+
+note "Some parameters and methods \nomitted for brevity" as n1
+
+@enduml
+
+@startuml
+hide footbox
+participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
+participant ":HelpCommand" as HelpCommand #cbf7f4
+participant "Ui" as Ui <<class>> #e5c2ea
+participant "HelpCommandUi" as HelpCommandUi <<class>> #fbffb2
+
+SuperTracker -> HelpCommand : execute()
+activate HelpCommand #cbf7f4
+
+HelpCommand -> HelpCommandUi : helpCommandSuccess()
+activate HelpCommandUi #fbffb2
+HelpCommandUi --> HelpCommand
+deactivate HelpCommandUi
+
+HelpCommand -> Ui : printLine()
+activate Ui #e5c2ea
+Ui --> HelpCommand
+deactivate Ui
+
+alt Valid command word
+HelpCommand -> HelpCommandUi : printCommandParams()
+activate HelpCommandUi #fbffb2
+HelpCommandUi --> HelpCommand
+deactivate HelpCommandUi
+else Invalid command word
+HelpCommand -> HelpCommandUi : printInvalidHelpMessage()
+activate HelpCommandUi #fbffb2
+HelpCommandUi --> HelpCommand
+deactivate HelpCommandUi
+end
+
+HelpCommand -> HelpCommandUi : helpClosingMessage()
+activate HelpCommandUi #fbffb2
+HelpCommandUi --> HelpCommand
+deactivate HelpCommandUi
+
+HelpCommand --> SuperTracker
+deactivate HelpCommand
+@enduml
