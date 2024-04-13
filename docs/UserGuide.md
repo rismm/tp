@@ -54,6 +54,12 @@ optimized for use via a Command Line Interface (CLI).
 > - If the command has multiple of the same parameters, it uses the first occurrence of that parameter
 >   - e.g. if the command specifies `new n/Milk q/100 p/5 n/Cheese`, it will be interpreted as `new n/Milk q/100 p/5`
 > - If any of the compulsory parameters are empty an error is thrown
+> - The value of a parameter would be interpreted as the trimmed substring after `/` up to the space right before the next valid parameter
+>   - e.g. if the command specifies `add n/Milk q/10q/10`, the command would be invalid as `QUANTITY` would be interpreted as `10q/10`, 
+>   since there is no space before the second occurrence of `q/`
+>   - e.g. if the command specifies `add n/Milk q/10 p/10`, the command would be invalid as `QUANTITY` would be interpreted as `10 p/10`, 
+>   since `p/` is not a valid parameter for the add command
+>   - e.g. if the command specifies `add n/Milk q/  10   q/20`, the command would be valid as `QUANTITY` would be interpreted as `10`
 
 <br>
 
