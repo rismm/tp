@@ -27,12 +27,12 @@ interface Command <<interface>> {
 
 class UpdateCommand {
     -name:String
-    -newQuantity: int
-    -newPrice: double
-    -newExpiryDate : LocalDate
+    -newQuantity:int
+    -newPrice:double
+    -newExpiryDate:LocalDate
     +UpdateCommand()
-    +execute(): void
-    +isQuit(): boolean
+    +execute():void
+    +isQuit():boolean
 }
 
 class Item {
@@ -40,11 +40,11 @@ class Item {
 }
 
 class Ui {
-    {static}+updateCommandSuccess(item:Item): void
+    {static}+updateCommandSuccess(item:Item):void
 }
 
 class Parser {
-    {static}-ParseUpdateCommand(input:String):NewCommand
+    {static}-parseUpdateCommand(input:String):NewCommand
 }
 
 class Inventory {
