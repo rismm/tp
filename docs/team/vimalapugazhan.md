@@ -45,8 +45,8 @@ Given below are my contributions to the project.
     - Added documentation for Delete, Revenue and Profit commands.
     - Updated documentation for New, List and update commands to handle expiry dates.
   - [Developer Guide:](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
-    - Added documentation for Delete command
-    - Used PlantUML do make class and sequence diagrams for DeleteCommand.
+    - Added documentation for Delete, Revenue and Profit Commands
+    - Used PlantUML do make class and sequence diagrams for DeleteCommand, RevenueCommand and ProfitCommand.
   <br><br>
     
 - **Contributions to team-based tasks:**
