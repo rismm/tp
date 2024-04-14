@@ -43,6 +43,10 @@ class Inventory {
 
 class Item {
     +Item()
+    +getName():String
+    +getQuantity():int
+    +getPrice():double
+    +getExpiryDate():LocalDate
 }
 
 class Ui {
@@ -74,7 +78,7 @@ participant ":Item" as Item #fbffb2
 SuperTracker -> RemoveCommand : execute()
 activate RemoveCommand #cbf7f4
 
-group sd [execute remove command without Ui]
+group sd execute remove command without Ui
 
 RemoveCommand -> RemoveCommand : executeWithoutUi()
 activate RemoveCommand #cbf7f4
@@ -101,7 +105,7 @@ deactivate oldItem
 
 RemoveCommand -> oldItem : getExpiry()
 activate oldItem #ffa1a1
-oldItem --> RemoveCommand : LocalDate
+oldItem --> RemoveCommand : :LocalDate
 deactivate oldItem
 
 RemoveCommand -> Item ** : new Item(name:String, quantity:int, price:double, expiryDate:LocalDate)

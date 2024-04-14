@@ -92,7 +92,10 @@ Given below are my contributions to the project.
 - **Contributions to team-based tasks:**
   - Refactored code in `Parser` as many of the commands were using the same error checking methods
   - Refactored code in `HelpCommandUi` to make it less repetitive and more scalable
+  - Refactored code for `parseExpenditureCommand`, `parseRevenueCommand` and `parseProfitCommand` by 
+  creating a generic class `Triple`
   - Fixed UML diagrams in developer guide according to feedback from TA
+  - Helped to check and fix some of my teammates' incorrect UML diagrams
   - Helped to create new issues and close completed issues on the issue tracker
   - Reviewed PRs and provided suggestions on fixing bugs, improving code quality etc.
   - Teammate PRs reviewed: [#75](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/75), [#104](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/104), [#212](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/212)

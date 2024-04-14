@@ -10,15 +10,15 @@ class Inventory
 class Item
 class RenameCommand
 class Parser
-class FileManager
+class ItemStorage
 
 RenameCommand <.. Parser
 Command <|. RenameCommand
 Ui <.. RenameCommand
 Inventory <.. RenameCommand
 Item <.. RenameCommand
-FileManager <.. RenameCommand
-Inventory <.. FileManager
+ItemStorage <.. RenameCommand
+Inventory <.. ItemStorage
 
 interface Command <<interface>> {
     +execute():void
@@ -35,10 +35,14 @@ class RenameCommand {
 
 class Item {
     +Item()
+    +getName():String
+    +getQuantity():int
+    +getPrice():double
+    +getExpiryDate():LocalDate
 }
 
 class Ui {
-    {static}+renameCommandSuccess(): void
+    {static}+renameCommandSuccess():void
 }
 
 class Parser {
@@ -51,7 +55,7 @@ class Inventory {
     {static}+delete(name:String):void
 }
 
-class FileManager {
+class ItemStorage {
     {static}+saveData():void
 }
 
@@ -63,10 +67,11 @@ note "Some parameters and methods \nomitted for brevity" as n1
 hide footbox
 participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
 participant ":RenameCommand" as RenameCommand #cbf7f4
-participant "FileManager" as FileManager <<class>> #bcf7cf
+participant "ItemStorage" as ItemStorage <<class>> #bcf7cf
 participant "Inventory" as Inventory <<class>> #d5eac2
 participant "Ui" as Ui <<class>> #e5c2ea
-participant "oldItem:Item" as Item #fbffb2
+participant "oldItem:Item" as oldItem #ffa1a1
+participant ":Item" as Item #fbffb2
 
 SuperTracker -> RenameCommand : execute()
 activate RenameCommand #cbf7f4
@@ -76,19 +81,24 @@ activate Inventory #d5eac2
 Inventory --> RenameCommand : oldItem:Item
 deactivate Inventory
 
-RenameCommand -> Item: getQuantity()
-activate Item #fbffb2
-Item --> RenameCommand: quantity
-deactivate Item
+RenameCommand -> oldItem: getQuantity()
+activate oldItem #ffa1a1
+oldItem --> RenameCommand: quantity:int
+deactivate oldItem
 
-RenameCommand -> Item: getPrice()
-activate Item #fbffb2
-Item --> RenameCommand: price
-deactivate Item
+RenameCommand -> oldItem: getPrice()
+activate oldItem #ffa1a1
+oldItem --> RenameCommand: price:double
+deactivate oldItem
 
-RenameCommand -> Item: getExpiryDate()
+RenameCommand -> oldItem: getExpiryDate()
+activate oldItem #ffa1a1
+oldItem --> RenameCommand: expiryDate:LocalDate
+deactivate oldItem
+
+RenameCommand -> Item ** : new Item(name:String, quantity:int, price:double, expiryDate:LocalDate)
 activate Item #fbffb2
-Item --> RenameCommand: expiryDate
+Item --> RenameCommand : newItem:Item
 deactivate Item
 
 RenameCommand -> Inventory : delete(name:String)
@@ -106,10 +116,10 @@ activate Ui #e5c2ea
 Ui --> RenameCommand
 deactivate Ui
 
-RenameCommand -> FileManager : saveData()
-activate FileManager #bcf7cf
-FileManager --> RenameCommand
-deactivate FileManager
+RenameCommand -> ItemStorage : saveData()
+activate ItemStorage #bcf7cf
+ItemStorage --> RenameCommand
+deactivate ItemStorage
 
 RenameCommand --> SuperTracker
 deactivate RenameCommand

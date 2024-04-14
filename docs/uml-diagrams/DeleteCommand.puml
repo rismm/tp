@@ -19,29 +19,29 @@ DeleteCommand <.. Parser
 Ui <.. DeleteCommand
 
 interface Command <<interface>> {
-    + execute(): void
-    + isQuit(): boolean
+    + execute():void
+    + isQuit():boolean
 }
 
 class DeleteCommand {
-    - name: String
-    + DeleteCommand(name: String)
-    + execute(): void
-    + isQuit(): boolean
+    - name:String
+    + DeleteCommand(name:String)
+    + execute():void
+    + isQuit():boolean
 }
 
 class Inventory {
-    {static} + contains(name: String): boolean
-    {static} + delete(name: String): void
+    {static} + contains(name:String):boolean
+    {static} + delete(name:String):void
 }
 
 class ItemStorage {
-    {static} + saveData(): void
+    {static} + saveData():void
 }
 
 class Ui {
-    {static} + deleteCommandSuccess(name: String): void
-    {static} + printError(message: String): void
+    {static} + deleteCommandSuccess(name:String):void
+    {static} + printError(message:String):void
 }
 
 class Parser {
@@ -60,17 +60,17 @@ participant "Ui" as Ui <<class>> #e5c2ea
 SuperTracker -> DeleteCommand : execute()
 activate DeleteCommand #cbf7f4
 
-DeleteCommand -> Inventory : contains(name: String)
+DeleteCommand -> Inventory : contains(name:String)
 activate Inventory #d5eac2
 Inventory --> DeleteCommand :
 deactivate Inventory
 
-DeleteCommand -> Inventory : delete(name: String)
+DeleteCommand -> Inventory : delete(name:String)
 activate Inventory
 Inventory --> DeleteCommand
 deactivate Inventory
 
-DeleteCommand -> Ui : deleteCommandSuccess(name: String)
+DeleteCommand -> Ui : deleteCommandSuccess(name:String)
 activate Ui #e5c2ea
 Ui --> DeleteCommand
 deactivate Ui

@@ -208,7 +208,7 @@ A NewCommand instance is created by the `parseNewCommand` method called by Parse
 - `Item`: For creating the new item
 - `Inventory`: For adding the new item into the inventory
 - `Ui`: To notify the user about the successful execution of `NewCommand`
-- `FileManager`: To save the new item added onto the hard disk
+- `ItemStorage`: To save the new item added onto the hard disk
 
 The following sequence diagram shows the execution of a NewCommand<br>
 ![NewCommandSequence](uml-diagrams/NewCommandSequence.png)
@@ -217,7 +217,7 @@ The following sequence diagram shows the execution of a NewCommand<br>
 2. A new `Item` object with the given parameters (name, quantity, price, expiry date) is created and returned to `NewCommand`
 3. The `put` method of the `Inventory` class is called to add the newly created item into the inventory
 4. The `newCommandSuccess` method of the `Ui` class is called to notify that `NewCommand` has been successfully executed
-5. The `saveData` method of the `FileManager` class is called to save the new item added onto the hard disk
+5. The `saveData` method of the `ItemStorage` class is called to save the new item added onto the hard disk
 
 > Note that if the user inputs a name parameter that contains the file delimiter of the save file, the file delimiter in the name will be
 > replaced. e.g. If the file delimiter is determined to be `",,,"`, the item name `"app,,,le` will be renamed to `"app_le"`
@@ -226,29 +226,33 @@ The following sequence diagram shows the execution of a NewCommand<br>
 The following is a class diagram of the UpdateCommand and its relevant dependencies<br>
 ![UpdateCommandClass](uml-diagrams/UpdateCommandClass.png)
 
-The `UpdateCommand` class implements the `Command` interface and is responsible for updating existing items in the 
+The `UpdateCommand` class implements the `Command` interface and is responsible for updating an existing item in the 
 `Inventory`. A UpdateCommand instance is created by the `parseUpdateCommand` method called by Parser, which ensures 
-that the provided parameters (name, quantity, price) are valid. While it is optional to include quantity and price, one
-of the aforementioned parameters must be provided.
+that the provided parameters (name, quantity, price, expiryDate) are valid. At least one of the optional parameters 
+(quantity, price, expiryDate) must be provided.
 
 #### Dependencies
-- `Item`: For getting the quantity and price of the to be updated item
-- `Inventory`: For updating the item in the inventory
+- `Item`: To create a new instance of the updated item
+- `Inventory`: For adding the updated item into the inventory
 - `Ui`: To notify the user about the successful execution of `UpdateCommand`
+- `ItemStorage`: To save the updated item onto the hard disk
 
 The following sequence diagram shows the execution of a UpdateCommand<br>
 ![UpdateCommandSequence](uml-diagrams/UpdateCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `UpdateCommand`
-2. The item object of the item to be updated is obtained from `inventory`
+2. The `get` method of `Inventory` is called to return the old instance of the item
 3. There is an optional check for newQuantity being -1 (an invalid value that indicates that quantity should not be 
 updated). If the condition holds true it retrieves the item's previous quantity.
-4. There is another optional check for newPrice being -1 (an invalid value that indicates that price should not be
-   updated). If the condition holds true it retrieves the item's previous price.
-5. A new `Item` object with the given parameters (name, new quantity, new price, old expiry date) is created and returned to `UpdateCommand`
-6. The `put` method of the `Inventory` class is called to update the item in the inventory
-7. The `UpdateCommandSuccess` method of the `Ui` class is called to notify that `UpdateCommand` has been successfully executed
-8. The `saveData` method of the `FileManager` class is called to save updated item onto the hard disk
+4. There is an optional check for newPrice being -1 (an invalid value that indicates that price should not be
+updated). If the condition holds true it retrieves the item's previous price.
+5. There is an optional check for newExpiryDate being "1-1-1" (an invalid value that indicates that expiry date should not be
+updated). If the condition holds true it retrieves the item's previous expiry date.
+6. The `getName` method of the old instance of the item is called to retrieve the item's previous name
+7. A new `Item` object with the updated parameters (quantity, price expiryDate) is created and returned to `UpdateCommand`
+8. The `put` method of the `Inventory` class is called to add the updated item into the inventory
+9. The `UpdateCommandSuccess` method of the `Ui` class is called to notify that `UpdateCommand` has been successfully executed
+10. The `saveData` method of the `ItemStorage` class is called to save updated item onto the hard disk
 
 ### Add Command
 The following is a class diagram of the AddCommand and its relevant dependencies<br>
@@ -256,7 +260,7 @@ The following is a class diagram of the AddCommand and its relevant dependencies
 
 The `AddCommand` class implements the `Command` interface and is responsible for increasing the quantity of an item.
 An AddCommand instance is created by `parseAddCommand` method called by Parser, which ensures that the provided parameters (name, quantity) are valid.
-This command is inherited by the `BuyCommand` class.
+This command is inherited by the [BuyCommand](#buy-command) class.
 
 #### Dependencies
 - `Item`: To create a new instance of the updated item
@@ -265,9 +269,7 @@ This command is inherited by the `BuyCommand` class.
 - `ItemStorage`: To save the updated item onto the hard disk
 
 The following sequence diagram shows the execution of an AddCommand<br>
-<a name="addcommandsequence">
 ![AddCommandSequence](uml-diagrams/AddCommandSequence.png)
-</a>
 
 1. The `SuperTracker` class calls the `execute` method of `AddCommand`
 2. The private method `executeWithoutUi` is called to execute the command excluding Ui outputs
@@ -279,7 +281,7 @@ quantity, name, price, expiry date of the old item respectively
 7. The `saveData` method of the `ItemStorage` class is called to save the updated item onto the hard disk
 8. The `addCommandSuccess` method of the `Ui` class is called to notify that `AddCommand` has been successfully executed
 
-> Note: The execute add command without Ui block will be referenced by the sequence diagram of BuyCommand
+> Note: The execute add command without Ui block will be referenced by the sequence diagram of [BuyCommand](#buy-command)
 
 ### Remove Command
 The following is a class diagram of the RemoveCommand and its relevant dependencies<br>
@@ -287,7 +289,7 @@ The following is a class diagram of the RemoveCommand and its relevant dependenc
 
 The `RemoveCommand` class implements the `Command` interface and is responsible for decreasing the quantity of an item.
 A RemoveCommand instance is created by `parseRemoveCommand` method called by Parser, which ensures that the provided parameters (name, quantity) are valid.
-This command is inherited by the `SellCommand` class.
+This command is inherited by the [SellCommand](#sell-command) class.
 
 #### Dependencies
 - `Item`: To create a new instance of the updated item
@@ -308,7 +310,7 @@ The following sequence diagram shows the execution of a RemoveCommand<br>
 7. The `saveData` method of the `ItemStorage` class is called to save the updated item onto the hard disk
 8. The `removeCommandSuccess` method of the `Ui` class is called to notify that `RemoveCommand` has been successfully executed
 
-> Note: The execute remove command without Ui block will be referenced by the sequence diagram of SellCommand
+> Note: The execute remove command without Ui block will be referenced by the sequence diagram of [SellCommand](#sell-command)
 
 ### Delete Command
 The following is a class diagram of the DeleteCommand and its relevant dependencies<br>
@@ -321,17 +323,18 @@ method in the class will call the `delete` method from `Inventory` class to remo
 the `saveData` method from `ItemStorage` class to save changes to the inventory.
 
 #### Dependencies
-- `Inventory`: Checking and deleting item from inventory
+- `Inventory`: To check if an item exists and delete it from the inventory
 - `Ui`: To notify the user about the successful execution of `DeleteCommand`
+- `ItemStorage`: To remove the deleted item from the hard disk
 
 The following sequence diagram shows the execution of a DeleteCommand<br>
 ![DeleteCommandSequence](uml-diagrams/DeleteCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `DeleteCommand`
 2. The `contains` method of `Inventory` to check if the item exists in the inventory
-3. If item exists, the `delete` method of `Inventory` is called to remove the item from inventory
-4. Subsequently, the `deleteCommandSuccess` method of `Ui` is called to print the delete message
-5. The `saveData` method of `ItemStorage` is called to save the change to the text file containing inventory information
+3. If item exists, the `delete` method of `Inventory` is called to delete the item from inventory
+4. Subsequently, the `deleteCommandSuccess` method of `Ui` is called to notify that `DeleteCommand` has been successfully executed
+5. The `saveData` method of `ItemStorage` is called to remove the deleted item from the hard disk
 
 ### Find Command
 The following is a class diagram of the FindCommand and its relevant dependencies<br>
@@ -363,20 +366,22 @@ The `RenameCommand` class implements the `Command` interface and is responsible 
 A RenameCommand instance is created by the `parseRenameCommand` method called by `Parser`, which ensures that the provided parameters (name and newName) are valid.
 
 #### Dependencies
+- `Item`: To create a new instance of the renamed item
 - `Inventory`: For getting the chosen item in the inventory
 - `Ui`: To notify the user about the successful execution of `RenameCommand`
+- `ItemStorage`: To save the renamed item onto the hard disk
 
 The following sequence diagram shows the execution of a RenameCommand<br>  
 ![RenameCommandSequence](uml-diagrams/RenameCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `RenameCommand`
-2. The item object of the item to be renamed is obtained from `inventory`
+2. The item object of the item to be renamed is obtained from `Inventory`
 3. The quantity, price and expiry date are obtained from the item
 4. A new `Item` object with the given parameters (newName, quantity, price, expiry date) is created and returned to `RenameCommand`
-5. The `put` method of the `Inventory` class is called to put the new item in the inventory
-6. The `delete` method of the `Inventory` class is called to delete the old item
+5. The `delete` method of the `Inventory` class is called to delete the old item
+6. The `put` method of the `Inventory` class is called to put the new item into the inventory
 7. The `RenameCommandSuccess` method of the `Ui` class is called to notify that `RenameCommand` has been successfully executed
-8. The `saveData` method of the `FileManager` class is called to save renamed item onto the hard disk
+8. The `saveData` method of the `ItemStorage` class is called to save the renamed item onto the hard disk
 
 ### List Command
 The following is a class diagram of the FindCommand and its relevant dependencies<br>
@@ -436,7 +441,7 @@ The following sequence diagram shows the execution of a ListCommand<br>
 The following is a class diagram of the ReportCommand and its relevant dependencies<br>
 ![ReportCommandClass](uml-diagrams/ReportCommandClass.png)
 
-The `ReportCommand` class implements the `Command` interface and is responsible for printing out a report to the output.
+The `ReportCommand` class implements the `Command` interface and is responsible for printing a report to the output.
 A ReportCommand instance is created by the `parseReportCommand` method called by Parser, which parses the user input to determine how the report should be printed out.
 
 #### Dependencies
