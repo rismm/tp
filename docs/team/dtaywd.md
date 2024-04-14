@@ -25,8 +25,13 @@ Given below are my contributions to the project.
 - **Feature:** Expenditure Command
   - What it does: Allows supermarket managers to check their expenditures over a period of time.
   - Justification: This function is necessary to see what is the cash outflow of the supermarket. Moreover, this 
-  function is necessary to calculate the profit of the supermarket
+  function is necessary to calculate the profit of the supermarket.
   - Highlights: The expenditure command unifies what the revenue commands uses to reduce the amount of repeated code.
+
+- **Enhancement to existing features:** Add error checking for invalid inputs to expenditure and revenue command
+  - What it does: Ensure that the commands still work as expected when invalid inputs are given.
+  - Justification: The transaction related commands have many different types and each type needs specific inputs.
+  - Highlights: Breaks it down to the type of task to check for the various conditions that each type requires.
 
 
 - **Code contributed** [RepoSense link](https://nus-cs2113-ay2324s2.github.io/tp-dashboard/?search=dtaywd&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2024-02-23&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other)
@@ -36,10 +41,10 @@ Given below are my contributions to the project.
   - [User Guide](https://ay2324s2-cs2113-t13-4.github.io/tp/UserGuide.html)
     - Added documentation for update, report and expenditure command
   - [Developer Guide:](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
-    - Added implementation details of update command
+    - Added implementation details of update, report and expenditure command
     - Used PlantUML to create the UML class and sequence diagrams for update, report and expenditure command
 
 - **Contributions to team-based tasks:**
   - Teammate PR reviewed: [40](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/40), [71](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/71), [85](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/85), [240](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/240)
   - Contributed to the JUnit tests for update, report, revenue and expenditure command
-  - Helped suggest improvements
+  - Helped suggest improvements and create new issues on Github
