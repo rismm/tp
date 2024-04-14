@@ -76,4 +76,22 @@ public class SellCommandTest {
         String userInput = "sell n/Milk q/0";
         assertThrows(TrackerException.class, () -> Parser.parseCommand(userInput));
     }
+
+    @Test
+    public void sellCommand_nothingSold() {
+        String name = "Cake";
+        int quantity = 0;
+        double price = 5.00;
+        LocalDate date = LocalDate.parse("01-01-2113", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        Command newCommand = new NewCommand(name, quantity, price, date);
+        newCommand.execute();
+
+        int quantityToSell = 50;
+        LocalDate sellDate = LocalDate.parse("12-04-2024", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        Command sellCommand = new SellCommand(name, quantityToSell, sellDate);
+        sellCommand.execute();
+        assertEquals(0, TransactionList.size());
+    }
 }

@@ -100,6 +100,10 @@ public class Ui {
         return quantityRemoved + " " + item.getName() + " removed from inventory!";
     }
 
+    private static String nothingRemovedOpening(Item item) {
+        return "No " + item.getName() + " removed as you don't have any!";
+    }
+
     private static String buyItemOpening(Transaction transaction) {
         return transaction.getQuantity() + " " + transaction.getName() + " bought at "
                 + transaction.getPriceString() + " each for "
@@ -110,6 +114,10 @@ public class Ui {
         return transaction.getQuantity() + " " + transaction.getName() + " sold at "
                 + transaction.getPriceString() + " each for "
                 + transaction.getTotalPriceString() + " in total";
+    }
+
+    private static String nothingSoldOpening(Item item) {
+        return "No " + item.getName() + " sold as you don't have any!";
     }
 
     /**
@@ -249,6 +257,10 @@ public class Ui {
      */
     public static void removeCommandSuccess(Item item, int quantityRemoved) {
         assert quantityRemoved >= 0;
+        if (quantityRemoved == 0) {
+            printIndent(nothingRemovedOpening(item));
+            return;
+        }
         printIndent(removeItemOpening(item, quantityRemoved));
         printIndent(getQuantityMessage(item));
     }
@@ -259,6 +271,10 @@ public class Ui {
     }
 
     public static void sellCommandSuccess(Item item, Transaction transaction) {
+        if (transaction.getQuantity() == 0) {
+            printIndent(nothingSoldOpening(item));
+            return;
+        }
         printIndent(sellItemOpening(transaction));
         printIndent(getQuantityMessage(item));
     }
