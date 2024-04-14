@@ -37,9 +37,9 @@ Given below are my contributions to the project.
     - Added documentation for update, report and expenditure command
   - [Developer Guide:](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
     - Added implementation details of update command
-    - Used PlantUML to create the UML class and sequence diagrams for update command
+    - Used PlantUML to create the UML class and sequence diagrams for update, report and expenditure command
 
 - **Contributions to team-based tasks:**
-  - Teammate PR reviewed: [40](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/40), [71](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/71), [85](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/85)
+  - Teammate PR reviewed: [40](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/40), [71](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/71), [85](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/85), [240](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/240)
   - Contributed to the JUnit tests for update, report, revenue and expenditure command
   - Helped suggest improvements
