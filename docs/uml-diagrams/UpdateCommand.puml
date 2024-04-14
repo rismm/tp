@@ -98,8 +98,7 @@ opt newExpiryDate == "1-1-1"
     deactivate Item
 end
 
-UpdateCommand -> Item : new Item()
-note left : some parameters \nare omitted for brevity
+UpdateCommand -> Item : new Item(name:String, newQuantity:int, newPrice:double, newExpiryDate:LocalDate)
 activate Item #fbffb2
 Item -> UpdateCommand : newItem:Item
 deactivate Item
