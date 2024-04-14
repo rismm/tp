@@ -60,7 +60,7 @@ Thus, it would be necessary to convert the user's input into a consistent format
 >    - "grp1": apple
 >    - "grp2": bear
 >    - "grp3": coconut
->    - "grp4" is empty
+>    - "grp4": is empty
 
 The `Matcher` will detect whether this input string pattern match the given regex pattern given to it
 and extract out the necessary information if there is a match. 
@@ -343,7 +343,7 @@ The following sequence diagram shows the execution of a HelpCommand<br>
 2. The `helpCommandSuccess` method of the `HelpCommandUi` class is called to notify that the help command has been successfully executed
 3. `helpCommandSuccess` will also print a list of functions available for user to input
 4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
-5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has return to the main console
+5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has been returned to the main console
 
 ## Product scope
 ### Target user profile
