@@ -80,25 +80,31 @@ deactivate Inventory
 opt newQuantity == -1
     UpdateCommand -> Item: getQuantity()
     activate Item #fbffb2
-    Item --> UpdateCommand: oldItemQuantity
+    Item --> UpdateCommand: oldItemQuantity:int
     deactivate Item
 end
 
 opt newPrice == -1
     UpdateCommand -> Item: getPrice()
     activate Item #fbffb2
-    Item --> UpdateCommand: oldItemPrice
+    Item --> UpdateCommand: oldItemPrice:double
     deactivate Item
 end
 
 opt newExpiryDate == "1-1-1"
     UpdateCommand -> Item: getExpiryDate()
     activate Item #fbffb2
-    Item --> UpdateCommand: oldExpiryDate
+    Item --> UpdateCommand: oldExpiryDate:LocalDate
     deactivate Item
 end
 
-UpdateCommand -> Inventory : put(name:String, item:Item)
+UpdateCommand -> Item : new Item(name:String, newQuantity:int, newPrice:double, newExpiryDate:LocalDate)
+activate Item #fbffb2
+Item -> UpdateCommand : newItem:Item
+deactivate Item
+
+
+UpdateCommand -> Inventory : put(name:String, newItem:Item)
 activate Inventory #d5eac2
 Inventory --> UpdateCommand
 deactivate Inventory
