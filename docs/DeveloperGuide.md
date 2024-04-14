@@ -1,11 +1,14 @@
 # Developer Guide
 
 ## Acknowledgements
-
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+- [CS2113 Website](https://nus-cs2113-ay2324s2.github.io/website/index.html)
+- [AB-3 User Guide](https://se-education.org/addressbook-level3/UserGuide.html)
+- [AB-3 Developer Guide](https://se-education.org/addressbook-level3/DeveloperGuide.html)
+- [PlantUML Docs](https://plantuml.com)
+- and most importantly our Professor **Akshay Narayan** and TA **Vishruti Ranjan** who guided us along this project :D
 
 ## Design & implementation
-This section describes how certain features are implemented
+
 
 ### Input Parsing
 The program handles user inputs in the Parser class where inputs are parsed into command classes that implement the Command interface. 
@@ -60,7 +63,7 @@ Thus, it would be necessary to convert the user's input into a consistent format
 >    - "grp1": apple
 >    - "grp2": bear
 >    - "grp3": coconut
->    - "grp4" is empty
+>    - "grp4": is empty
 
 The `Matcher` will detect whether this input string pattern match the given regex pattern given to it
 and extract out the necessary information if there is a match. 
@@ -404,7 +407,7 @@ The following sequence diagram shows the execution of a HelpCommand<br>
 2. The `helpCommandSuccess` method of the `HelpCommandUi` class is called to notify that the help command has been successfully executed
 3. `helpCommandSuccess` will also print a list of functions available for user to input
 4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
-5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has return to the main console
+5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has been returned to the main console
 
 ## Product scope
 ### Target user profile
