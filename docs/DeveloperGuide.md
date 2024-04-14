@@ -414,11 +414,11 @@ The following sequence diagram shows the execution of a RevenueCommandCommand<br
 6. `printRevenueExpenditure` method of class Ui is called and the list of filtered transactions is printed out.
 
 ### Profit Command
-The following is a class diagram of the RevenueCommand and its relevant dependencies<br>
-![RevenueCommandClass](uml-diagrams/ProfitCommandClass.png)
+The following is a class diagram of the ProfitCommand and its relevant dependencies<br>
+![ProfitCommandClass](uml-diagrams/ProfitCommandClass.png)
 
-The `RevenueCommand` class implements the `Command` interface and for calculating and printing out the revenue generated using Sell Command.
-A RevenueCommand instance is called by the parseRevenueCommand method in parser which parses the user input to determine the taskType and time frame of revenue to print out.
+The `ProfitCommand` class implements the `Command` interface and for calculating and printing out the profit generated using Sell and Buy Commands.
+A ProfitCommand instance is called by the parseProfitCommand method in parser which parses the user input to determine the taskType and time frame of profit to print out.
 
 #### Dependencies
 - `TransactionList`: List of buy and sell transactions.
@@ -427,7 +427,7 @@ A RevenueCommand instance is called by the parseRevenueCommand method in parser 
 The following sequence diagram shows the execution of a ProfitCommandCommand<br>  
 ![ProfitCommandSequence](uml-diagrams/ProfitCommandSequence.png)
 
-1. The `SuperTracker` class calls the `execute` method of `RevenueCommand`
+1. The `SuperTracker` class calls the `execute` method of `ProfitCommand`
 2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the
    method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
    which returns expenditure and revenue of type BigDecimal for calculation of profit. 
