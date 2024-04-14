@@ -269,7 +269,7 @@ The following is a class diagram of the RenameCommand and its relevant dependenc
 ![RenameCommandClass](uml-diagrams/RenameCommandClass.png)
 
 The `RenameCommand` class implements the `Command` interface and is responsible for renaming an item chosen by the user.
-A RenameCommand instance is created by the `parseRenameCommand` method called by `Parser`, which ensures that the provided parameter (name and newName) is valid.
+A RenameCommand instance is created by the `parseRenameCommand` method called by `Parser`, which ensures that the provided parameters (name and newName) are valid.
 
 #### Dependencies
 - `Inventory`: For getting the chosen item in the inventory
@@ -372,6 +372,30 @@ If it is, it is added to the report. At the end, the report is sorted by quantit
 and adds the item to 2 different reports if the respective requirements are met. At the end, both reports are sorted by their expiry dates
 using the ArrayList sort method and 2 instances of the method `reportCommandSuccess` of the `ReportCommand` class is called for each report.
 
+### Clear Command
+The following is a class diagram of the ClearCommand as its relevant dependencies<br>
+![ClearCommandClass](uml-diagrams/ClearCommandClass.png)
+
+The `ClearCommand` class implements the `Command` interface and is responsible for clearing all transactions before a specified date.
+A ClearCommand instance is created by the `parseClearCommand` method called by Parser, which ensures that the provided date is valid.
+
+#### Dependencies
+- `TransactionList`: To iterate through the list and clear all transactions before the specified date
+- `TransactionStorage`: To remove the cleared transactions from the hard disk
+- `Ui`: To confirm with the user if they want to proceed with the clear operation, 
+and to notify the user if the operation has been cancelled or completed successfully
+
+The following sequence diagrams shows the execution of a ClearCommand<br>
+![ClearCommandSequence](uml-diagrams/ClearCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `ClearCommand`
+2. The `clearCommandConfirmation` method of the `Ui` class is called to confirm with the user if they want to proceed with the clear operation
+3. The User then inputs his/her response
+4. If the input is not `y` or `Y`, the `clearCommandCancelled` method of the `Ui` class is called to notify the user that the clear operation has been cancelled
+5. Else if the input is 'y' or 'Y', the private method `clearOldTransactions` is called to clear all transactions before the specified date, 
+and the number of transactions cleared is returned
+6. The `resaveCurrentTransactions` method of the `TransactionStorage` class is called to remove the cleared transactions from the hard disk
+
 ### Expenditure Command
 The following is a class diagram of the ExpenditureCommand and its relevant dependencies<br>
 ![ExpenditureCommandClass](uml-diagrams/ExpenditureCommandClass.png)
@@ -381,7 +405,7 @@ A ExpenditureCommand instance is created by the `parseExpenditureCommand` method
 
 #### Dependencies
 - `Item`: For getting the comparator needed to sort the list of transactions
-- `TransactionsList`: For getting the list of transactions
+- `TransactionList`: For getting the list of transactions
 - `Ui`: To print the list of items in the inventory to the output
 
 There are 4 types of expenditures that can be requested:

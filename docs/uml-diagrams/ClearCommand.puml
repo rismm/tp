@@ -48,6 +48,8 @@ class TransactionStorage {
     {static}+resaveCurrentTransactions():void
 }
 
+note "Some parameters and methods \nomitted for brevity" as n1
+
 @enduml
 
 @startuml
@@ -82,7 +84,7 @@ activate ClearCommand #cbf7f4
 ClearCommand --> ClearCommand : transactionsCleared:int
 deactivate ClearCommand
 
-ClearCommand -> Ui : clearCommandSuccess()
+ClearCommand -> Ui : clearCommandSuccess(transactionsCleared:int, beforeDate:LocalDate)
 activate Ui #e5c2ea
 Ui --> ClearCommand
 deactivate Ui
