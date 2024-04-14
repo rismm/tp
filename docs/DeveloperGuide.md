@@ -9,8 +9,21 @@
 
 ## Design & implementation
 
+### Architecture
+![ArchitectureDiagram](uml-diagrams/ArchitectureDiagram.png)\
+The architecture diagram shown above explains the high-level design of SuperTracker
 
-### Input Parsing
+A quick overview of the main components:
+- `Main`: In charge of program launch and shut down. Takes in user input and sends it to the `Parser` component.
+Represented by the main class `SuperTracker`
+- `Parser`: Parses user input into a command. Represented by the `Parser` class
+- `Storage`: Reads data from and writes data to the hard disk
+- `Ui`: Handles and prints output messages onto the CLI.
+- `Command`: List of various commands. Classes in this component all implement the `Command` interface
+- `Items`: Holds item and transaction data of the program in memory
+  - Consists of `Item`, `Inventory`, `Transaction` and `TransactionList` classes
+
+### Parser Component
 The program handles user inputs in the Parser class where inputs are parsed into command classes that implement the Command interface. 
 The Parser class only contains static methods as we have determined that it would be more practical instead of instantiating an instance of a Parser class.
 
@@ -70,7 +83,7 @@ and extract out the necessary information if there is a match.
 This will be used by each command's respective parsing method and returns the relevant parsed `Command`
 object to `SuperTracker+handleCommands()`
 
-### File Saving and Loading
+### Storage Component
 Currently, the program handles 2 classes of save data, `Item` and `Transaction`.
 Saving and loading data of these objects is performed by the `ItemStorage` and `TransactionStorage` classes that inherit
 from the `FileManager` class. As the program is running, `Item` objects will be stored in the `Inventory` class,
@@ -214,7 +227,7 @@ The `DeleteCommand` class implements the `Command` interface and is responsible 
 inventory. A DeleteCommand instance is created when calling the `parseDeleteCommand` method called in Parser class.
 This method parses the input and ensures that the command parameter (item name) exists in the inventory. The `execute()`
 method in the class will call the `delete` method from `Inventory` class to remove the item. It will then execute
-the `saveData` method from `FileManager` class to save changes to the inventory.
+the `saveData` method from `ItemStorage` class to save changes to the inventory.
 
 #### Dependencies
 - `Inventory`: Checking and deleting item from inventory
@@ -227,7 +240,7 @@ The following sequence diagram shows the execution of a DeleteCommand<br>
 2. The `contains` method of `Inventory` to check if the item exists in the inventory
 3. If item exists, the `delete` method of `Inventory` is called to remove the item from inventory
 4. Subsequently, the `deleteCommandSuccess` method of `Ui` is called to print the delete message
-5. The `saveData` method of `FileManager` is called to save the change to the text file containing inventory information
+5. The `saveData` method of `ItemStorage` is called to save the change to the text file containing inventory information
 
 ### Find Command
 The following is a class diagram of the FindCommand and its relevant dependencies<br>
@@ -453,16 +466,27 @@ The following sequence diagram shows the execution of a HelpCommand<br>
 4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
 5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has been returned to the main console
 
-## Product scope
-### Target user profile
+## Appendix
+### Product scope
+#### Target user profile
+* Works as a supermarket inventory manager
+* Has a need to manage a significant amount of items in an inventory
+* Has a need to manage a significant amount of transactions
+* Can type fast
+* Prefers typing to mouse interactions with GUIs
+* Is comfortable using Command Line Interface (CLI) applications
 
-{Describe the target user profile}
+#### Value proposition:
+**SuperTracker** is designed to provide the following benefits for inventory management:
+1. Fast and easy access to inventory information
+2. Efficient tracking of product stocks
+3. Efficient tracking of expiring goods
+4. Recording transactional data (buying and selling of goods)
+5. Generation of expenditure and revenue reports
+6. Calculating overall profit
+7. Improved user experience for managers who prefer typing
 
-### Value proposition
-
-{Describe the value proposition: what problem does it solve?}
-
-## User Stories
+### User Stories
 
 | Version | As a ...                          | I want to ...                                                         | So that I can ...                                                                                         |
 |---------|-----------------------------------|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
@@ -486,14 +510,49 @@ The following sequence diagram shows the execution of a HelpCommand<br>
 | v2.1    | user                              | know my expenditure, revenue and profit                               | check and keep track of how much money I am spending/earning                                              |
 | v2.1    | user                              | rename an existing item in the inventory                              | update the name of a product item without having to delete it                                             |
 
-## Non-Functional Requirements
+### Non-Functional Requirements
 
-{Give non-functional requirements}
+1. Should work on any _mainstream OS_ as long as it has Java `11` installed.
+2. Should be able to hold up to 1000 items or transactions without a noticeable sluggishness in performance 
+for typical usage.
+3. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) 
+should be able to accomplish most of the tasks faster using commands than using the mouse.
 
-## Glossary
+### Glossary
 
-* *glossary item* - Definition
+* ***Mainstream OS*** - Windows, Linux, MacOS, Unix
 
-## Instructions for manual testing
+### Instructions for manual testing
 
-{Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
+#### Saving data
+Dealing with corrupted data files
+- Prerequisite: Existing data files `items.txt` and `transactions.txt` in the `./data/` directory. Multiple valid lines of data in text files.
+- **For item data:**\
+In the text file `items.txt`, with valid lines of data being `name ,,, quantity ,,, price ,,, dd-MM-yyyy ,,, end`
+  - For corrupted data
+    1. Remove a file delimiter (the `,,,` character sequence) on any valid data line
+    2. Replace an existing number in any data line (quantity or price) with a negative number
+    3. In any data line with an existing expiry date, replace the `"-"` with `"/"`
+    - Expected behaviour: Relaunch the program. On start, the program should output an error message
+    indicating that there were corrupted lines of data. Re-open `items.txt` and the lines that were edited should be
+    deleted.
+  - For duplicate item data,
+    1. Take an existing valid line of data and duplicate it to the bottom of the text file
+    2. Replace its quantity and price with any valid positive number different from the original
+    - Expected behaviour: Relaunch the program. On start, the program should output a message indicating that
+    it detected duplicate item data, and the name of the duplicated item is specified. Use `find n/NAME` with name
+    being the name of the duplicated item. The displayed item should have the quantity and price of the duplicated line of data.
+    - Can also try: adding multiple duplicated items to the text file
+- **For transaction data:**\
+In the text file `transaction.txt`, with valid lines of data being `NAME: name ,,, QTY: quantity ,,, PRICE: price ,,, DATE: date ,,, T: type ,,, end`
+  - For corrupted data
+    1. Can use the test cases from item data text file, `items.txt` data corruption as well
+    2. Replace the type in any valid line of data to anything that is not `b` or `s`
+    3. Delete any one of `NAME:`, `QTY:`, `PRICE:` `DATE:`, `T:` in any valid line of data
+    - Expected behaviour: Relaunch the program. On start, the program should output an error message
+    indicating that there were corrupted lines of data. Re-open `transactions.txt` and the lines that were edited should be
+    deleted.
+  - Additionally, to any valid line of data, replace the transaction date to a date far into the future, i.e. `01-01-2999`
+    - Expected behaviour: Relaunch the program. Similarly, the program should output an error message
+    indicating that there were corrupted lines of data. There should also be an additional message that tells the user
+    that the date edited is a date that has not happened yet. The edited line of data should also be deleted from `transactions.txt`

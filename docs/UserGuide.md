@@ -577,6 +577,8 @@ You are **strongly discouraged** from editing and updating the inventory or tran
 > 
 > Note 3: Edited transaction data with dates that have not happened yet **will be treated as corrupted data**, so do avoid adding
 > transactions that have not happened yet.
+> 
+> Note 4: The program is **NOT** responsible for any data loss if you were to delete the save files while the program is running
 
 --------------------------------------------------------------------------------------------------------------------
 

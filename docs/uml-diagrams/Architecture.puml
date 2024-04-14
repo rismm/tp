@@ -1,0 +1,28 @@
+@startuml
+title Architecture Diagram
+
+skinparam component {
+    BackgroundColor lightgrey
+}
+
+[Main]
+[Parser]
+[Command]
+[Storage]
+[Items]
+[Ui]
+interface "user"
+
+user -[hidden] Command
+
+Main --> Parser : Parses user input
+Main --> Command : Executes
+Main --> Ui
+Parser --> Command : Instantiates a command
+Command --> Items : Modifies
+Command --> Ui : Output message
+Storage -> Items : Saves
+Command --> Storage
+user -[#red].> Main : Enter command inputs
+
+@enduml
