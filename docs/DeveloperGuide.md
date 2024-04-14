@@ -325,6 +325,35 @@ The following sequence diagram shows the execution of a ListCommand<br>
 5. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
 6. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
 
+
+
+
+### Revenue Command
+The following is a class diagram of the RevenueCommand and its relevant dependencies<br>
+![]()
+
+The `RevenueCommand` class implements the `Command` interface.
+
+
+#### Dependencies
+- `Transaction`: Sell type transactions that will be listed.
+- `TransactionList`: List of buy and sell transactions.
+- `TransactionStorage`: 
+- `Ui`: To print various messages and parameters
+
+The following sequence diagram shows the execution of a HelpCommand<br>  
+![HelpCommandSequence](uml-diagrams/HelCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `HelpCommand`
+2. The `helpCommandSuccess` method of the `HelpCommandUi` class is called to notify that the help command has been successfully executed
+3. `helpCommandSuccess` will also print a list of functions available for user to input
+4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
+5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has return to the main console
+
+
+
+
+
 ### Help Command
 The following is a class diagram of the HelpCommand and its relevant dependencies<br>
 ![HelpCommandClass](uml-diagrams/HelpCommandClass.png)
