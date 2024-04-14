@@ -28,6 +28,7 @@ class ReportCommand {
     -reportHasItemsExecute():void
     -createExpiryReport():void
     -createLowStockReport():void
+    +ReportCommand()
     +execute():void
     +isQuit():boolean
 }
@@ -41,7 +42,7 @@ class Item {
 }
 
 class Parser {
-    {static}-parseReportCommand(input:String):NewCommand
+    {static}-parseReportCommand(input:String):ReportCommand
 }
 
 class Inventory {
