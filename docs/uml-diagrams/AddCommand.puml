@@ -1,0 +1,133 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+
+abstract class Command
+class Inventory
+class Item
+class AddCommand
+class Parser
+class Ui
+class ItemStorage
+
+Command <|. AddCommand
+Item <--- AddCommand
+Ui <.. AddCommand
+Inventory <.. AddCommand
+AddCommand <.. Parser
+ItemStorage <.. AddCommand
+Inventory <.. ItemStorage
+
+interface Command <<interface>> {
+    +execute():void
+    +isQuit():boolean
+}
+
+class AddCommand {
+    #name:String
+    #quantity:int
+    #newItem:Item
+    +AddCommand()
+    #executeWithoutUi():void
+    +execute():void
+    +isQuit():boolean
+}
+
+class Inventory {
+    {static}+get(name:String):Item
+    {static}+put(name:String, item:Item):void
+}
+
+class Item {
+    +Item()
+}
+
+class Ui {
+    {static}+addCommandSuccess():void
+}
+
+class Parser {
+    {static}-parseAddCommand(input:String):AddCommand
+}
+
+class ItemStorage {
+    {static}+saveData():void
+}
+
+note "Some parameters and methods \nomitted for brevity" as n1
+
+@enduml
+
+@startuml
+hide footbox
+participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
+participant ":AddCommand" as AddCommand #cbf7f4
+participant "ItemStorage" as ItemStorage <<class>> #bcf7cf
+participant "Inventory" as Inventory <<class>> #d5eac2
+participant "Ui" as Ui <<class>> #e5c2ea
+participant "oldItem:Item" as oldItem #ffa1a1
+participant ":Item" as Item #fbffb2
+
+SuperTracker -> AddCommand : execute()
+activate AddCommand #cbf7f4
+
+group sd execute add command without Ui
+
+AddCommand -> AddCommand : executeWithoutUi()
+activate AddCommand #cbf7f4
+
+AddCommand -> Inventory : get(name:String)
+activate Inventory #d5eac2
+Inventory -> AddCommand : oldItem:Item
+deactivate Inventory
+
+AddCommand -> oldItem : getQuantity()
+activate oldItem #ffa1a1
+oldItem --> AddCommand : :int
+deactivate oldItem
+
+AddCommand -> oldItem : getName()
+activate oldItem #ffa1a1
+oldItem --> AddCommand : :String
+deactivate oldItem
+
+AddCommand -> oldItem : getPrice()
+activate oldItem #ffa1a1
+oldItem --> AddCommand : :double
+deactivate oldItem
+
+AddCommand -> oldItem : getExpiry()
+activate oldItem #ffa1a1
+oldItem --> AddCommand : LocalDate
+deactivate oldItem
+
+AddCommand -> Item ** : new Item(name:String, quantity:int, price:double, expiryDate:LocalDate)
+activate Item #fbffb2
+Item --> AddCommand : newItem:Item
+deactivate Item
+
+AddCommand -> Inventory : put(name:String, item:Item)
+activate Inventory #d5eac2
+Inventory --> AddCommand
+deactivate Inventory
+
+AddCommand -> ItemStorage : saveData()
+activate ItemStorage #bcf7cf
+ItemStorage --> AddCommand
+deactivate ItemStorage
+
+AddCommand --> AddCommand
+deactivate AddCommand
+
+end
+
+AddCommand -> Ui : addCommandSuccess(newItem:Item, quantity:int)
+activate Ui #e5c2ea
+Ui --> AddCommand
+deactivate Ui
+
+AddCommand --> SuperTracker
+deactivate AddCommand
+@enduml

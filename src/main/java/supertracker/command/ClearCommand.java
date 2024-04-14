@@ -28,6 +28,24 @@ public class ClearCommand implements Command {
     }
 
     /**
+     * Removes old transactions from the TransactionList before a specified date.
+     *
+     * @return Number of transactions removed from the TransactionList.
+     */
+    private int clearOldTransactions() {
+        int oldTransactionListSize = TransactionList.size();
+        Iterator<Transaction> iterator = TransactionList.iterator();
+        while (iterator.hasNext()) {
+            Transaction transaction = iterator.next();
+            if (transaction.getTransactionDate().isBefore(beforeDate)) {
+                iterator.remove();
+            }
+        }
+        int newTransactionListSize = TransactionList.size();
+        return oldTransactionListSize - newTransactionListSize;
+    }
+
+    /**
      * Executes the ClearCommand
      * <p>
      * This method confirms with the user whether they want to clear transactions
@@ -47,18 +65,7 @@ public class ClearCommand implements Command {
             return;
         }
 
-        int oldTransactionListSize = TransactionList.size();
-
-        Iterator<Transaction> iterator = TransactionList.iterator();
-        while (iterator.hasNext()) {
-            Transaction transaction = iterator.next();
-            if (transaction.getTransactionDate().isBefore(beforeDate)) {
-                iterator.remove();
-            }
-        }
-
-        int newTransactionListSize = TransactionList.size();
-        int transactionsCleared = oldTransactionListSize - newTransactionListSize;
+        int transactionsCleared = clearOldTransactions();
         Ui.clearCommandSuccess(transactionsCleared, beforeDate);
 
         try {

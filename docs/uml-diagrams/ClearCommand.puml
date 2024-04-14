@@ -1,0 +1,101 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+
+class Command
+class ClearCommand
+class Parser
+class TransactionList
+class TransactionStorage
+class Ui
+
+Command <|. ClearCommand
+Ui <.. ClearCommand
+TransactionList <.. ClearCommand
+ClearCommand <.. Parser
+TransactionStorage <.. ClearCommand
+TransactionList <.. TransactionStorage
+
+interface Command <<interface>> {
+    +execute():void
+    +isQuit():boolean
+}
+
+class ClearCommand {
+    -beforeDate:LocalDate
+    +ClearCommand(beforeDate:LocalDate)
+    -clearOldTransactions():int
+    +execute():void
+}
+
+class TransactionList {
+    {static}+iterator():Iterator<Transaction>
+}
+
+class Ui {
+    {static}+clearCommandConfirmation():void
+    {static}+clearCommandCancelled():void
+    {static}+clearCommandSuccess():void
+}
+
+class Parser {
+    {static}-parseClearCommand(input:String):clearCommand
+}
+
+class TransactionStorage {
+    {static}+resaveCurrentTransactions():void
+}
+
+note "Some parameters and methods \nomitted for brevity" as n1
+
+@enduml
+
+@startuml
+hide footbox
+actor User as User
+participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
+participant ":ClearCommand" as ClearCommand #cbf7f4
+participant "TransactionStorage" as TransactionStorage <<class>> #bcf7cf
+participant "Ui" as Ui <<class>> #e5c2ea
+
+SuperTracker -> ClearCommand : execute()
+activate ClearCommand #cbf7f4
+
+ClearCommand -> Ui : clearCommandConfirmation(beforeDate:LocalDate)
+activate Ui #e5c2ea
+Ui --> ClearCommand
+deactivate Ui
+
+User -> ClearCommand : input:String
+
+alt input != "y" && input != "Y"
+
+ClearCommand -> Ui : clearCommandCancelled()
+activate Ui #e5c2ea
+Ui --> ClearCommand
+deactivate Ui
+
+else input == "y" || input == "Y"
+
+ClearCommand -> ClearCommand : clearOldTransactions()
+activate ClearCommand #cbf7f4
+ClearCommand --> ClearCommand : transactionsCleared:int
+deactivate ClearCommand
+
+ClearCommand -> Ui : clearCommandSuccess(transactionsCleared:int, beforeDate:LocalDate)
+activate Ui #e5c2ea
+Ui --> ClearCommand
+deactivate Ui
+
+ClearCommand -> TransactionStorage : resaveCurrentTransactions()
+activate TransactionStorage #bcf7cf
+TransactionStorage --> ClearCommand
+deactivate TransactionStorage
+
+end
+
+ClearCommand --> SuperTracker
+deactivate ClearCommand
+@enduml
