@@ -1,5 +1,34 @@
 # Developer Guide
 
+- [Acknowledgements](#acknowledgements)
+- [Design & implementation](#design--implementation)
+  - [Architecture](#architecture)
+  - [Parser Component](#parser-component)
+  - [Storage Component](#storage-component)
+- [Commands](#commands)
+  - [New Command](#new-command)
+  - [Update Command](#update-command)
+  - [Add Command](#add-command)
+  - [Remove Command](#remove-command)
+  - [Delete Command](#delete-command)
+  - [Find Command](#find-command)
+  - [Rename Command](#rename-command)
+  - [List Command](#list-command)
+  - [Report Command](#report-command)
+  - [Buy Command](#buy-command)
+  - [Sell Command](#sell-command)
+  - [Clear Command](#clear-command)
+  - [Expenditure Command](#expenditure-command)
+  - [Revenue Command](#revenue-command)
+  - [Profit Command](#profit-command)
+  - [Help Command](#help-command)
+- [Appendix](#appendix)
+  - [Product Scope](#product-scope)
+  - [User Stories](#user-stories)
+  - [Non Functional Requirements](#non-functional-requirements)
+  - [Glossary](#glossary)
+  - [Instructions for Manual Testing](#instructions-for-manual-testing)
+
 ## Acknowledgements
 - [CS2113 Website](https://nus-cs2113-ay2324s2.github.io/website/index.html)
 - [AB-3 User Guide](https://se-education.org/addressbook-level3/UserGuide.html)
@@ -165,6 +194,8 @@ of a `Transaction` is extracted from the line and a new `Transaction` object is 
 corrupted `Transaction` data will be dealt with accordingly.
 > Note: Including the criteria for corrupted data in `Item` data, if a transaction date has been edited such that the new date is of a date that has not occurred yet,
 > _(e.g. changing a date from today to 1 year from today)_, this will also be treated as corrupted 'Transaction' data.
+
+## Commands
 
 ### New Command
 The following is a class diagram of the NewCommand and its relevant dependencies<br>
