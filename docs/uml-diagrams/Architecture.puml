@@ -13,14 +13,15 @@ skinparam component {
 [Ui]
 interface "user"
 
-user -[hidden]-- Command
+user -[hidden] Command
 
-Main --> Parser : Makes sense of input
-Parser --> Command : Parses command
-Command --> Items : Executes command
-Command -> Ui : Output message
-Command --> Main : Get next user input
-Storage -> Items
+Main --> Parser : Parses user input
+Main --> Command : Executes
+Main --> Ui
+Parser --> Command : Instantiates a command
+Command --> Items : Modifies
+Command --> Ui : Output message
+Storage -> Items : Saves
 Command --> Storage
 user -[#red].> Main : Enter command inputs
 

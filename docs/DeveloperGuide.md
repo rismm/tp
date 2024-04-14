@@ -10,8 +10,20 @@
 ## Design & implementation
 
 ### Architecture
+![ArchitectureDiagram](uml-diagrams/ArchitectureDiagram.png)\
+The architecture diagram shown above explains the high-level design of SuperTracker
 
-### Input Parsing
+A quick overview of the main components:
+- `Main`: In charge of program launch and shut down. Takes in user input and sends it to the `Parser` component.
+Represented by the main class `SuperTracker`
+- `Parser`: Parses user input into a command. Represented by the `Parser` class
+- `Storage`: Reads data from and writes data to the hard disk
+- `Ui`: Handles and prints output messages onto the CLI.
+- `Command`: List of various commands. Classes in this component all implement the `Command` interface
+- `Items`: Holds item and transaction data of the program in memory
+  - Consists of `Item`, `Inventory`, `Transaction` and `TransactionList` classes
+
+### Parser Component
 The program handles user inputs in the Parser class where inputs are parsed into command classes that implement the Command interface. 
 The Parser class only contains static methods as we have determined that it would be more practical instead of instantiating an instance of a Parser class.
 
@@ -71,7 +83,7 @@ and extract out the necessary information if there is a match.
 This will be used by each command's respective parsing method and returns the relevant parsed `Command`
 object to `SuperTracker+handleCommands()`
 
-### File Saving and Loading
+### Storage Component
 Currently, the program handles 2 classes of save data, `Item` and `Transaction`.
 Saving and loading data of these objects is performed by the `ItemStorage` and `TransactionStorage` classes that inherit
 from the `FileManager` class. As the program is running, `Item` objects will be stored in the `Inventory` class,
