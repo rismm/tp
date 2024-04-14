@@ -44,7 +44,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseUpdateCommand(input:String):NewCommand
+    {static}-parseUpdateCommand(input:String):Command
 }
 
 class Inventory {

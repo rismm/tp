@@ -389,35 +389,49 @@ which returns expenditure of type BigDecimal.
 5. The `reverse` method of class `Collections` is called on filteredList
 6. `printRevenueExpenditure` method of class Ui is called and the list of filtered transactions is printed out.
 
-
-
-
-
 ### Revenue Command
 The following is a class diagram of the RevenueCommand and its relevant dependencies<br>
-![]()
+![RevenueCommandClass](uml-diagrams/RevenueCommandClass.png)
 
-The `RevenueCommand` class implements the `Command` interface.
-
+The `RevenueCommand` class implements the `Command` interface and for calculating and printing out the revenue generated using Sell Command.
+A RevenueCommand instance is called by the parseRevenueCommand method in parser which parses the user input to determine the taskType and time frame of revenue to print out.
 
 #### Dependencies
-- `Transaction`: Sell type transactions that will be listed.
+- `Item`: Comparator for sorting the lists of transactions.
 - `TransactionList`: List of buy and sell transactions.
-- `TransactionStorage`:
 - `Ui`: To print various messages and parameters
 
-The following sequence diagram shows the execution of a HelpCommand<br>  
-![HelpCommandSequence](uml-diagrams/HelCommandSequence.png)
+The following sequence diagram shows the execution of a RevenueCommandCommand<br>  
+![RevenueCommandSequence](uml-diagrams/RevenueCommandSequence.png)
 
-1. The `SuperTracker` class calls the `execute` method of `HelpCommand`
-2. The `helpCommandSuccess` method of the `HelpCommandUi` class is called to notify that the help command has been successfully executed
-3. `helpCommandSuccess` will also print a list of functions available for user to input
-4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
-5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has return to the main console
+1. The `SuperTracker` class calls the `execute` method of `RevenueCommand`
+2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the
+   method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
+   which returns revenue of type BigDecimal.
+3. The method `getFilteredTransactionList` of class `TransactionList` is then called which returns filteredList of ArrayList<Transaction>.
+4. filteredList is then sorted by calling sort from the ArrayList class and sorted by the transaction date.
+5. The `reverse` method of class `Collections` is called on filteredList
+6. `printRevenueExpenditure` method of class Ui is called and the list of filtered transactions is printed out.
 
+### Profit Command
+The following is a class diagram of the RevenueCommand and its relevant dependencies<br>
+![RevenueCommandClass](uml-diagrams/ProfitCommandClass.png)
 
+The `RevenueCommand` class implements the `Command` interface and for calculating and printing out the revenue generated using Sell Command.
+A RevenueCommand instance is called by the parseRevenueCommand method in parser which parses the user input to determine the taskType and time frame of revenue to print out.
 
+#### Dependencies
+- `TransactionList`: List of buy and sell transactions.
+- `Ui`: To print various messages and parameters
 
+The following sequence diagram shows the execution of a ProfitCommandCommand<br>  
+![ProfitCommandSequence](uml-diagrams/ProfitCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `RevenueCommand`
+2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the
+   method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
+   which returns expenditure and revenue of type BigDecimal for calculation of profit. 
+3. `printProfit` method of class Ui is called and the profit over the specified period is printed out.
 
 ### Help Command
 The following is a class diagram of the HelpCommand and its relevant dependencies<br>

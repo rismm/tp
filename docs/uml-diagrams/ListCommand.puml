@@ -52,7 +52,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseListCommand(input:String):ListCommand
+    {static}-parseListCommand(input:String):Command
 }
 
 note "Some parameters and methods \nomitted for brevity" as n1

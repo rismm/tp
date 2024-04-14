@@ -42,7 +42,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-ParseRenameCommand(input:String):RenameCommand
+    {static}-ParseRenameCommand(input:String):Command
 }
 
 class Inventory {

@@ -45,7 +45,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseDeleteCommand(input:String):DeleteCommand
+    {static}-parseDeleteCommand(input:String):Command
 }
 @enduml
 

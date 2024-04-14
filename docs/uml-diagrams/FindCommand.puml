@@ -37,7 +37,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseFindCommand(input:String):FindCommand
+    {static}-parseFindCommand(input:String):Command
 }
 @enduml
 
