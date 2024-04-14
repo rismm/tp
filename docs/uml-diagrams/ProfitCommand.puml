@@ -35,7 +35,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseProfitCommand(input:String):Command
+    {static}-parseProfitCommand(input:String):ProfitCommand
 }
 
 class TransactionList {

@@ -40,7 +40,7 @@ class HelpCommandUi {
 }
 
 class Parser {
-    {static}-ParseRenameCommand():Command
+    {static}-ParseRenameCommand():HelpCommand
 }
 
 note "Some parameters and methods \nomitted for brevity" as n1

@@ -37,7 +37,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseRevenueCommand(input:String):Command
+    {static}-parseRevenueCommand(input:String):RevenueCommand
 }
 
 class TransactionList {

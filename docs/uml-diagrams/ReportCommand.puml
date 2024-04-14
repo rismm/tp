@@ -42,7 +42,7 @@ class Item {
 }
 
 class Parser {
-    {static}-parseReportCommand(input:String):Command
+    {static}-parseReportCommand(input:String):ReportCommand
 }
 
 class Inventory {

@@ -48,7 +48,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseNewCommand(input:String):Command
+    {static}-parseNewCommand(input:String):NewCommand
 }
 
 class FileManager {
