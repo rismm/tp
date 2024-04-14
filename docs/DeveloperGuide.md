@@ -338,8 +338,8 @@ A ReportCommand instance is created by the `parseReportCommand` method called by
 - `Ui`: To print the list of items in the inventory to the output
 
 There are 2 types of reports:
-1. `report r/low stock t/threshold`: creates a list of items that are low on stock based on the threshold
-2. `report r/expiry`: creates a list of items that have expired or are 1 week to expiring
+1. `report r/low stock t/threshold`: Lists all items that are low on stock based on the threshold
+2. `report r/expiry`: Lists all items that have expired or are 1 week to expiring
 
 The following sequence diagram shows the execution of a ReportCommand<br>
 ![ReportCommandSequence](uml-diagrams/ReportCommandSequence.png)
@@ -351,10 +351,40 @@ If it is `ReportCommand` calls the method `reportNoItems` of the `Ui` class. If 
 4. In the `reportHasItemsExecute` method, there is an alternative path check for the type of report. 
 If its of type "low stock" it calls the method `createLowStockReport` of `ReportCommand` class. If its of type "expiry" it calls the method `createExpiryReport` of the `ReportCommand` class.
 5. In `createLowStockReport`, for each item in items it checks if the item's quantity is below the threshold requirement. 
-If it is, it is added to the report. At the end, the report is sorted by quantity and the method `reportCommandSuccess` of the `Ui` class is called for the report.
+If it is, it is added to the report. At the end, the report is sorted by quantity using the ArrayList sort method and the method `reportCommandSuccess` of the `Ui` class is called for the report.
 6. In `createExpiryReport`, for each item in items it checks if the item's expiry date is between the present day and a week later or has already passed 
 and adds the item to 2 different reports if the respective requirements are met. At the end, both reports are sorted by their expiry dates
-and 2 instances of the method `reportCommandSuccess` of the `ReportCommand` class is called for each report.
+using the ArrayList sort method and 2 instances of the method `reportCommandSuccess` of the `ReportCommand` class is called for each report.
+
+### Expenditure Command
+The following is a class diagram of the ExpenditureCommand and its relevant dependencies<br>
+![ExpenditureCommandClass](uml-diagrams/ExpenditureCommandClass.png)
+
+The `ExpenditureCommand` class implements the `Command` interface and is responsible for printing out the expenditures to the output.
+A ExpenditureCommand instance is created by the `parseExpenditureCommand` method called by Parser, which parses the user input to determine the range of dates that the expenditure is supposed to print out.
+
+#### Dependencies
+- `Item`: For getting the comparator needed to sort the list of transactions
+- `TransactionsList`: For getting the list of transactions
+- `Ui`: To print the list of items in the inventory to the output
+
+There are 4 types of expenditures that can be requested:
+1. `exp type/today`: Lists all the expenditures made today
+2. `exp type/total`: Lists all expenditures that have been made
+3. `exp type/day from/{startDate}`: Lists all expenditures made on that particular day
+4. `exp type/range from/{startDate} to/{endDate}`: Lists all expenditures within the range of dates not inclusive of the start and end dates
+
+The following sequence diagram shows the execution of a ExpenditureCommand<br>
+![ExpenditureCommandSequence](uml-diagrams/ExpenditureCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `ExpenditureCommand`
+2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the 
+method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
+which returns expenditure of type BigDecimal.
+3. The method `getFilteredTransactionList` of class `TransactionList` is then called which returns filteredList of ArrayList<Transaction>.
+4. filteredList is then sorted by calling sort from the ArrayList class and sorted by the transactions expiry date.
+5. The `reverse` method of class `Collections` is called on filteredList
+6. `printRevenueExpenditure` method of class Ui is called and the list of filtered transactions is printed out.
 
 ### Help Command
 The following is a class diagram of the HelpCommand and its relevant dependencies<br>
