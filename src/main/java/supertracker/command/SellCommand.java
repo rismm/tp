@@ -49,13 +49,12 @@ public class SellCommand extends RemoveCommand {
         );
         if (quantityRemoved > 0) {
             TransactionList.add(transaction);
+            try {
+                TransactionStorage.saveTransaction(transaction);
+            } catch (IOException e) {
+                Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
+            }
         }
         Ui.sellCommandSuccess(newItem, transaction);
-
-        try {
-            TransactionStorage.saveTransaction(transaction);
-        } catch (IOException e) {
-            Ui.printError(ErrorMessage.FILE_SAVE_ERROR);
-        }
     }
 }

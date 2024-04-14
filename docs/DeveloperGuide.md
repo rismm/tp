@@ -219,7 +219,67 @@ updated). If the condition holds true it retrieves the item's previous quantity.
 7. The `UpdateCommandSuccess` method of the `Ui` class is called to notify that `UpdateCommand` has been successfully executed
 8. The `saveData` method of the `FileManager` class is called to save updated item onto the hard disk
 
-### DeleteCommand
+### Add Command
+The following is a class diagram of the AddCommand and its relevant dependencies<br>
+![AddCommandClass](uml-diagrams/AddCommandClass.png)
+
+The `AddCommand` class implements the `Command` interface and is responsible for increasing the quantity of an item.
+An AddCommand instance is created by `parseAddCommand` method called by Parser, which ensures that the provided parameters (name, quantity) are valid.
+This command is inherited by the `BuyCommand` class.
+
+#### Dependencies
+- `Item`: To create a new instance of the updated item
+- `Inventory`: For adding the updated item into the inventory
+- `Ui`: To notify the user about the successful execution of `AddCommand`
+- `ItemStorage`: To save the updated item onto the hard disk
+
+The following sequence diagram shows the execution of an AddCommand<br>
+<a name="addcommandsequence">
+![AddCommandSequence](uml-diagrams/AddCommandSequence.png)
+</a>
+
+1. The `SuperTracker` class calls the `execute` method of `AddCommand`
+2. The private method `executeWithoutUi` is called to execute the command excluding Ui outputs
+3. The `get` method of `Inventory` is called to return the old instance of the item
+4. The `getQuantity`, `getName`, `getPrice`, `getExpiry` methods of the old instance of the item are called to obtain the 
+quantity, name, price, expiry date of the old item respectively
+5. A new `Item` object with the increased quantity is created and returned to `AddCommand`
+6. The `put` method of the `Inventory` class is called to add the updated item into the inventory
+7. The `saveData` method of the `ItemStorage` class is called to save the updated item onto the hard disk
+8. The `addCommandSuccess` method of the `Ui` class is called to notify that `AddCommand` has been successfully executed
+
+> Note: The execute add command without Ui block will be referenced by the sequence diagram of BuyCommand
+
+### Remove Command
+The following is a class diagram of the RemoveCommand and its relevant dependencies<br>
+![RemoveCommandClass](uml-diagrams/RemoveCommandClass.png)
+
+The `RemoveCommand` class implements the `Command` interface and is responsible for decreasing the quantity of an item.
+A RemoveCommand instance is created by `parseRemoveCommand` method called by Parser, which ensures that the provided parameters (name, quantity) are valid.
+This command is inherited by the `SellCommand` class.
+
+#### Dependencies
+- `Item`: To create a new instance of the updated item
+- `Inventory`: For adding the updated item into the inventory
+- `Ui`: To notify the user about the successful execution of `RemoveCommand`
+- `ItemStorage`: To save the updated item onto the hard disk
+
+The following sequence diagram shows the execution of a RemoveCommand<br>
+![RemoveCommandSequence](uml-diagrams/RemoveCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `RemoveCommand`
+2. The private method `executeWithoutUi` is called to execute the command excluding Ui outputs
+3. The `get` method of `Inventory` is called to return the old instance of the item
+4. The `getQuantity`, `getName`, `getPrice`, `getExpiry` methods of the old instance of the item are called to obtain the
+   quantity, name, price, expiry date of the old item respectively
+5. A new `Item` object with the decreased quantity is created and returned to `AddCommand`
+6. The `put` method of the `Inventory` class is called to add the updated item into the inventory
+7. The `saveData` method of the `ItemStorage` class is called to save the updated item onto the hard disk
+8. The `removeCommandSuccess` method of the `Ui` class is called to notify that `RemoveCommand` has been successfully executed
+
+> Note: The execute remove command without Ui block will be referenced by the sequence diagram of SellCommand
+
+### Delete Command
 The following is a class diagram of the DeleteCommand and its relevant dependencies<br>
 ![DeleteCommandClass](uml-diagrams/DeleteCommandClass.png)
 
@@ -372,6 +432,54 @@ If it is, it is added to the report. At the end, the report is sorted by quantit
 and adds the item to 2 different reports if the respective requirements are met. At the end, both reports are sorted by their expiry dates
 using the ArrayList sort method and 2 instances of the method `reportCommandSuccess` of the `ReportCommand` class is called for each report.
 
+### Buy Command
+The following is a class diagram of the BuyCommand as its relevant dependencies<br>
+![BuyCommandClass](uml-diagrams/BuyCommandClass.png)
+
+The `BuyCommand` class inherits from the `AddCommand` class and is responsible for increasing the quantity of an item and creating a new buy transaction.
+A BuyCommand instance is created by the `parseBuyCommand` method called by Parser, which ensures that the provided parameters (name, quantity, price) are valid.
+
+#### Dependencies
+- `Transaction`: For creating the new buy transaction
+- `TransactionList`: For adding the new buy transaction to the transaction list
+- `TransactionStorage`: To save the new buy transaction onto the hard disk
+- `Ui`: To notify the user about the successful execution of `BuyCommand`
+- Other dependencies inherited from `AddCommand`
+
+The following sequence diagram shows the execution of a BuyCommand<br>
+![BuyCommandSequence](uml-diagrams/BuyCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `BuyCommand`
+2. The methods in the reference frame execute add command without Ui are executed, more details can be found in the sequence diagram of [AddCommand](#add-command)
+3. A new `Transaction` object is created and returned to `BuyCommand`
+4. The `add` method of the `TransactionList` class is called to add the newly created buy transaction into the transaction list
+5. The `buyCommandSuccess` method of the `Ui` class is called to notify that `BuyCommand` has been successfully executed
+6. The `saveTransaction` method of the `TransactionStorage` class is called to save the new buy transaction onto the hard disk
+
+### Sell Command
+The following is a class diagram of the SellCommand as its relevant dependencies<br>
+![SellCommandClass](uml-diagrams/SellCommandClass.png)
+
+The `SellCommand` class inherits from the `RemoveCommand` class and is responsible for decreasing the quantity of an item and creating a new sell transaction.
+A SellCommand instance is created by the `parseSellCommand` method called by Parser, which ensures that the provided parameters (name, quantity) are valid.
+
+#### Dependencies
+- `Transaction`: For creating the new sell transaction
+- `TransactionList`: For adding the new sell transaction to the transaction list
+- `TransactionStorage`: To save the new sell transaction onto the hard disk
+- `Ui`: To notify the user about the successful execution of `SellCommand`
+- Other dependencies inherited from `RemoveCommand`
+
+The following sequence diagram shows the execution of a SellCommand<br>
+![SellCommandSequence](uml-diagrams/SellCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `SellCommand`
+2. The methods in the reference frame execute remove command without Ui are executed, more details can be found in the sequence diagram of [RemoveCommand](#remove-command)
+3. A new `Transaction` object is created and returned to `SellCommand`
+4. If the quantity of items sold is more than 0, the `add` method of the `TransactionList` class is called to add the newly created sell transaction into the transaction list
+5. The `saveTransaction` method of the `TransactionStorage` class is called to save the new sell transaction onto the hard disk
+6. The `sellCommandSuccess` method of the `Ui` class is called to notify that `SellCommand` has been successfully executed
+
 ### Clear Command
 The following is a class diagram of the ClearCommand as its relevant dependencies<br>
 ![ClearCommandClass](uml-diagrams/ClearCommandClass.png)
@@ -385,7 +493,7 @@ A ClearCommand instance is created by the `parseClearCommand` method called by P
 - `Ui`: To confirm with the user if they want to proceed with the clear operation, 
 and to notify the user if the operation has been cancelled or completed successfully
 
-The following sequence diagrams shows the execution of a ClearCommand<br>
+The following sequence diagram shows the execution of a ClearCommand<br>
 ![ClearCommandSequence](uml-diagrams/ClearCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `ClearCommand`

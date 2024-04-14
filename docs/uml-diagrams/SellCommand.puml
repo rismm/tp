@@ -87,17 +87,17 @@ activate TransactionList #d5eac2
 TransactionList --> SellCommand
 deactivate TransactionList
 
+SellCommand -> TransactionStorage : saveTransaction(transaction:Transaction)
+activate TransactionStorage #bcf7cf
+TransactionStorage --> SellCommand
+deactivate TransactionStorage
+
 end
 
 SellCommand -> Ui : sellCommandSuccess(newItem:Item, transaction:Transaction)
 activate Ui #e5c2ea
 Ui --> SellCommand
 deactivate Ui
-
-SellCommand -> TransactionStorage : saveTransaction(transaction:Transaction)
-activate TransactionStorage #bcf7cf
-TransactionStorage --> SellCommand
-deactivate TransactionStorage
 
 SellCommand --> SuperTracker
 deactivate SellCommand
