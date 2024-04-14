@@ -1,0 +1,104 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+
+class RemoveCommand
+class SellCommand
+class Parser
+class Transaction
+class TransactionList
+class TransactionStorage
+class Ui
+
+RemoveCommand <|. SellCommand
+Transaction <.. SellCommand
+Ui <.. SellCommand
+TransactionList <.. SellCommand
+SellCommand <.. Parser
+TransactionStorage <.. SellCommand
+TransactionList <.. TransactionStorage
+
+class RemoveCommand {
+    #name:String
+    #quantity:int
+    #quantityRemoved:int
+    #newItem:Item
+    +RemoveCommand()
+    #executeWithoutUi():void
+    +execute():void
+    +isQuit():boolean
+}
+
+class SellCommand {
+    -currentDate:LocalDate
+    +SellCommand()
+    +execute():void
+}
+
+class Transaction {
+    +Transaction()
+}
+
+class TransactionList {
+    {static}+add(transaction:Transaction):void
+}
+
+class Ui {
+    {static}+sellCommandSuccess():void
+}
+
+class Parser {
+    {static}-parseSellCommand(input:String):sellCommand
+}
+
+class TransactionStorage {
+    {static}+saveTransaction(transaction:Transaction):void
+}
+
+note "Some parameters and methods \nomitted for brevity" as n1
+
+@enduml
+
+@startuml
+hide footbox
+participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
+participant ":SellCommand" as SellCommand #cbf7f4
+participant "TransactionStorage" as TransactionStorage <<class>> #bcf7cf
+participant "TransactionList" as TransactionList <<class>> #d5eac2
+participant "Ui" as Ui <<class>> #e5c2ea
+participant ":Transaction" as Transaction #fbffb2
+
+SuperTracker -> SellCommand : execute()
+activate SellCommand #cbf7f4
+
+ref over SellCommand : execute remove command without Ui
+
+SellCommand -> Transaction ** : new Transaction(parameters omitted for brevity)
+activate Transaction #fbffb2
+Transaction --> SellCommand : transaction:Transaction
+deactivate Transaction
+
+opt quantityRemoved > 0
+
+SellCommand -> TransactionList : add(transaction:Transaction)
+activate TransactionList #d5eac2
+TransactionList --> SellCommand
+deactivate TransactionList
+
+end
+
+SellCommand -> Ui : sellCommandSuccess(newItem:Item, transaction:Transaction)
+activate Ui #e5c2ea
+Ui --> SellCommand
+deactivate Ui
+
+SellCommand -> TransactionStorage : saveTransaction(transaction:Transaction)
+activate TransactionStorage #bcf7cf
+TransactionStorage --> SellCommand
+deactivate TransactionStorage
+
+SellCommand --> SuperTracker
+deactivate SellCommand
+@enduml
