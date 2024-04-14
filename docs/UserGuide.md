@@ -623,7 +623,7 @@ allowing them to fix their mistake.
 | **Remove**      | `remove n/NAME q/QUANTITY`                                         | e.g. `remove n/Milk q/10`                    |
 | **Update**      | `update n/NAME [q/NEW_QUANTITY] [p/NEW_PRICE] [e/NEW_EXPIRY_DATE]` | e.g. `update n/Milk q/200 p/10 e/05-08-2113` |
 | **Find**        | `find n/NAME`                                                      | e.g. `find n/apple`                          |
-| **Rename**      | `rename n/NAME r/NEW_NAME`                                         | e.g. `rename n/Milk r/Chocolote Milk`        |
+| **Rename**      | `rename n/NAME r/NEW_NAME`                                         | e.g. `rename n/Milk r/Chocolate Milk`        |
 | **List**        | `list [q/] [p/] [e/] [sq/] [sp/] [se/] [r/]`                       | e.g. `list q/ p/ sp/ r/`                     |
 | **Report**      | `report r/REPORT_TYPE [t/THRESHOLD_VALUE]`                         | e.g. `report r/low stock t/10`               |
 | **Buy**         | `buy n/NAME q/QUANTITY p/PRICE`                                    | e.g. `buy n/Milk q/10 p/3`                   |

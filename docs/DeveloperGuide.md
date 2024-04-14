@@ -1,11 +1,14 @@
 # Developer Guide
 
 ## Acknowledgements
-
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+- [CS2113 Website](https://nus-cs2113-ay2324s2.github.io/website/index.html)
+- [AB-3 User Guide](https://se-education.org/addressbook-level3/UserGuide.html)
+- [AB-3 Developer Guide](https://se-education.org/addressbook-level3/DeveloperGuide.html)
+- [PlantUML Docs](https://plantuml.com)
+- and most importantly our Professor **Akshay Narayan** and TA **Vishruti Ranjan** who guided us along this project :D
 
 ## Design & implementation
-This section describes how certain features are implemented
+
 
 ### Input Parsing
 The program handles user inputs in the Parser class where inputs are parsed into command classes that implement the Command interface. 
@@ -60,7 +63,7 @@ Thus, it would be necessary to convert the user's input into a consistent format
 >    - "grp1": apple
 >    - "grp2": bear
 >    - "grp3": coconut
->    - "grp4" is empty
+>    - "grp4": is empty
 
 The `Matcher` will detect whether this input string pattern match the given regex pattern given to it
 and extract out the necessary information if there is a match. 
@@ -325,6 +328,68 @@ The following sequence diagram shows the execution of a ListCommand<br>
 5. If `isReverse` is true, the `reverse` method of the `Collections` class is called to reverse the `ArrayList` of items
 6. For each item in the list, the `listItem` method of the `Ui` class is called to print each item to the output
 
+### Report Command
+The following is a class diagram of the ReportCommand and its relevant dependencies<br>
+![ReportCommandClass](uml-diagrams/ReportCommandClass.png)
+
+The `ReportCommand` class implements the `Command` interface and is responsible for printing out a report to the output.
+A ReportCommand instance is created by the `parseReportCommand` method called by Parser, which parses the user input to determine how the report should be printed out.
+
+#### Dependencies
+- `Item`: For getting the comparator needed to sort the list of items
+- `Inventory`: For getting the list of items in the inventory
+- `Ui`: To print the list of items in the inventory to the output
+
+There are 2 types of reports:
+1. `report r/low stock t/threshold`: Lists all items that are low on stock based on the threshold
+2. `report r/expiry`: Lists all items that have expired or are 1 week to expiring
+
+The following sequence diagram shows the execution of a ReportCommand<br>
+![ReportCommandSequence](uml-diagrams/ReportCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `ReportCommand`
+2. The `getItems` method of the `Inventory` class is called to get an `ArrayList` of items in the inventory
+3. There is an alternative path check for whether the list of items is empty. 
+If it is `ReportCommand` calls the method `reportNoItems` of the `Ui` class. If it is not it calls `reportHasItemsExecute` of the `Ui` class.
+4. In the `reportHasItemsExecute` method, there is an alternative path check for the type of report. 
+If its of type "low stock" it calls the method `createLowStockReport` of `ReportCommand` class. If its of type "expiry" it calls the method `createExpiryReport` of the `ReportCommand` class.
+5. In `createLowStockReport`, for each item in items it checks if the item's quantity is below the threshold requirement. 
+If it is, it is added to the report. At the end, the report is sorted by quantity using the ArrayList sort method and the method `reportCommandSuccess` of the `Ui` class is called for the report.
+6. In `createExpiryReport`, for each item in items it checks if the item's expiry date is between the present day and a week later or has already passed 
+and adds the item to 2 different reports if the respective requirements are met. At the end, both reports are sorted by their expiry dates
+using the ArrayList sort method and 2 instances of the method `reportCommandSuccess` of the `ReportCommand` class is called for each report.
+
+### Expenditure Command
+The following is a class diagram of the ExpenditureCommand and its relevant dependencies<br>
+![ExpenditureCommandClass](uml-diagrams/ExpenditureCommandClass.png)
+
+The `ExpenditureCommand` class implements the `Command` interface and is responsible for printing out the expenditures to the output.
+A ExpenditureCommand instance is created by the `parseExpenditureCommand` method called by Parser, which parses the user input to determine the range of dates that the expenditure is supposed to print out.
+
+#### Dependencies
+- `Item`: For getting the comparator needed to sort the list of transactions
+- `TransactionsList`: For getting the list of transactions
+- `Ui`: To print the list of items in the inventory to the output
+
+There are 4 types of expenditures that can be requested:
+1. `exp type/today`: Lists all the expenditures made today
+2. `exp type/total`: Lists all expenditures that have been made
+3. `exp type/day from/{startDate}`: Lists all expenditures made on that particular day
+4. `exp type/range from/{startDate} to/{endDate}`: Lists all expenditures within the range of dates not inclusive of the start and end dates
+
+The following sequence diagram shows the execution of a ExpenditureCommand<br>
+![ExpenditureCommandSequence](uml-diagrams/ExpenditureCommandSequence.png)
+
+1. The `SuperTracker` class calls the `execute` method of `ExpenditureCommand`
+2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the 
+method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
+which returns expenditure of type BigDecimal.
+3. The method `getFilteredTransactionList` of class `TransactionList` is then called which returns filteredList of ArrayList<Transaction>.
+4. filteredList is then sorted by calling sort from the ArrayList class and sorted by the transactions expiry date.
+5. The `reverse` method of class `Collections` is called on filteredList
+6. `printRevenueExpenditure` method of class Ui is called and the list of filtered transactions is printed out.
+
+
 
 
 
@@ -338,7 +403,7 @@ The `RevenueCommand` class implements the `Command` interface.
 #### Dependencies
 - `Transaction`: Sell type transactions that will be listed.
 - `TransactionList`: List of buy and sell transactions.
-- `TransactionStorage`: 
+- `TransactionStorage`:
 - `Ui`: To print various messages and parameters
 
 The following sequence diagram shows the execution of a HelpCommand<br>  
@@ -372,7 +437,7 @@ The following sequence diagram shows the execution of a HelpCommand<br>
 2. The `helpCommandSuccess` method of the `HelpCommandUi` class is called to notify that the help command has been successfully executed
 3. `helpCommandSuccess` will also print a list of functions available for user to input
 4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
-5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has return to the main console
+5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has been returned to the main console
 
 ## Product scope
 ### Target user profile

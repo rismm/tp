@@ -1,0 +1,141 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+
+interface Command
+class Ui
+class Inventory
+class Item
+class ReportCommand
+class Parser
+
+ReportCommand <.. Parser
+Command <|. ReportCommand
+Ui <.. ReportCommand
+Inventory <.. ReportCommand
+Item <.. ReportCommand
+
+interface Command <<interface>> {
+    +execute():void
+    +isQuit():boolean
+}
+
+class ReportCommand {
+    -reportType:String
+    -threshold:int
+    -reportHasItemsExecute():void
+    -createExpiryReport():void
+    -createLowStockReport():void
+    +execute():void
+    +isQuit():boolean
+}
+
+class Item {
+    {static}+getQuantity():int
+    {static}+getExpiryDate():LocalDate
+    {static}+sortByQuantity():Comparator<Item>
+    {static}+sortByDate():Comparator<Item>
+    {static}+isEmpty():boolean
+}
+
+class Parser {
+    {static}-parseReportCommand(input:String):NewCommand
+}
+
+class Inventory {
+    {static}+getItems():List<Item>
+}
+
+class Ui {
+    {static}+reportCommandSuccess(item:Item):void
+    {static}+reportNoItems(item:Item):void
+}
+
+note "Some parameters and methods \nomitted for brevity" as n1
+@enduml
+
+@startuml
+hide footbox
+participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
+participant ":ReportCommand" as ReportCommand #cbf7f4
+participant "Inventory" as Inventory <<class>> #d5eac2
+participant "Ui" as Ui <<class>> #e5c2ea
+participant "Item" as Item #fbffb2
+
+SuperTracker -> ReportCommand : execute()
+activate ReportCommand #cbf7f4
+
+ReportCommand -> Inventory : getItems()
+activate Inventory #d5eac2
+Inventory --> ReportCommand : items:List<Item>
+deactivate Inventory
+
+alt items.isEmpty()
+    ReportCommand -> Ui : reportNoItems()
+    activate Ui #e5c2ea
+    Ui -> ReportCommand
+    deactivate Ui
+
+else
+    ReportCommand -> ReportCommand : reportHasItemsExecute(items)
+    activate ReportCommand #cbf7f4
+    alt reportType.equals("low stock")
+        ReportCommand -> ReportCommand : createLowStockReport()
+        activate ReportCommand #cbf7f4
+        loop for each item in items
+            ReportCommand -> Item : getQuantity()
+            activate Item #fbffb2
+            Item -> ReportCommand
+            deactivate Item
+            opt items quantity is less than threshold
+                ReportCommand -> ReportCommand : reportLowStockItems.add(item)
+            end
+            ReportCommand -> ReportCommand : sort()
+            note right : items sorted by quantity
+            ReportCommand -> Ui : reportCommandSuccess()
+            activate Ui #e5c2ea
+            Ui -> ReportCommand
+            deactivate Ui
+        end
+        ReportCommand -> ReportCommand
+        deactivate ReportCommand
+
+    else reportType.equals("expiry")
+        ReportCommand -> ReportCommand : createExpiryReport();
+        activate ReportCommand #cbf7f4
+        loop for each item in items
+            ReportCommand -> Item : getExpiryDate()
+            activate Item #fbffb2
+            Item -> ReportCommand
+            deactivate Item
+            opt items with expiry dates that are between today and a week later
+                ReportCommand -> ReportCommand : reportExpiryItems.add(item)
+            end
+            opt items with expiry dates that have already passed
+                ReportCommand -> ReportCommand : reportExpiredItems.add(item)
+            end
+            ReportCommand -> ReportCommand : sort()
+            note right : items sorted by expiry date for both expiry reports
+            ReportCommand -> Ui : reportCommandSuccess()
+            note left : for both expiry reports
+            activate Ui #e5c2ea
+            Ui -> ReportCommand
+            deactivate Ui
+        end
+
+        ReportCommand -> ReportCommand
+        deactivate ReportCommand
+    end
+
+    ReportCommand -> ReportCommand
+    deactivate ReportCommand
+end
+
+note right : some parameters and methods \n are omitted for brevity
+
+ReportCommand --> SuperTracker
+deactivate ReportCommand
+
+@enduml
