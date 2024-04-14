@@ -1,11 +1,14 @@
 # Developer Guide
 
 ## Acknowledgements
-
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+- [CS2113 Website](https://nus-cs2113-ay2324s2.github.io/website/index.html)
+- [AB-3 User Guide](https://se-education.org/addressbook-level3/UserGuide.html)
+- [AB-3 Developer Guide](https://se-education.org/addressbook-level3/DeveloperGuide.html)
+- [PlantUML Docs](https://plantuml.com)
+- and most importantly our Professor **Akshay Narayan** and TA **Vishruti Ranjan** who guided us along this project :D
 
 ## Design & implementation
-This section describes how certain features are implemented
+
 
 ### Input Parsing
 The program handles user inputs in the Parser class where inputs are parsed into command classes that implement the Command interface. 
