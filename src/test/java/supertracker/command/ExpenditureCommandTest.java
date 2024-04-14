@@ -37,7 +37,7 @@ public class ExpenditureCommandTest {
     private static final String CURR_MINUS_TWO_WEEK_FORMATTED = CURR_MINUS_TWO_WEEK.format(VALID_EX_DATE_FORMAT);
     private static final LocalDate INVALID_DATE = LocalDate.parse
             (INVALID_EX_DATE, DateTimeFormatter.ofPattern(INVALID_EX_DATE_FORMAT));
-    private final ByteArrayOutputStream outcontent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     /**
      * Sets up the inventory and executes initial commands before running any test.
@@ -66,7 +66,7 @@ public class ExpenditureCommandTest {
      */
     @BeforeEach
     public void setUpStreams() {
-        System.setOut(new PrintStream(outcontent));
+        System.setOut(new PrintStream(outContent));
     }
 
 
@@ -88,7 +88,7 @@ public class ExpenditureCommandTest {
                 "        Quantity: 20" + LINE_SEPARATOR +
                 "        Price: $1.00" + LINE_SEPARATOR +
                 "        Transaction Date: " + CURR_DATE_FORMATTED + LINE_SEPARATOR;
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
@@ -119,7 +119,7 @@ public class ExpenditureCommandTest {
                 "        Price: $1.50" + LINE_SEPARATOR +
                 "        Transaction Date: " + CURR_MINUS_TWO_WEEK_FORMATTED + LINE_SEPARATOR;
 
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
@@ -142,7 +142,7 @@ public class ExpenditureCommandTest {
                 "        Price: $0.50" + LINE_SEPARATOR +
                 "        Transaction Date: " + CURR_MINUS_TWO_FORMATTED + LINE_SEPARATOR;
 
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
@@ -171,7 +171,7 @@ public class ExpenditureCommandTest {
                 "        Price: $0.50" + LINE_SEPARATOR +
                 "        Transaction Date: " + CURR_MINUS_TWO_FORMATTED + LINE_SEPARATOR;
 
-        String actual = outcontent.toString();
+        String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 

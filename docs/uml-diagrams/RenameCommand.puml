@@ -29,8 +29,8 @@ class RenameCommand {
     -name:String
     -newName:String
     +RenameCommand()
-    +execute(): void
-    +isQuit(): boolean
+    +execute():void
+    +isQuit():boolean
 }
 
 class Item {

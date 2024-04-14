@@ -1,0 +1,113 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+
+interface Command
+class Ui
+class TransactionList
+class ExpenditureCommand
+class Parser
+class Item
+
+ExpenditureCommand <.. Parser
+Command <|. ExpenditureCommand
+Ui <.. ExpenditureCommand
+TransactionList <.. ExpenditureCommand
+Item <.. ExpenditureCommand
+
+interface Command <<interface>> {
+    +execute():void
+    +isQuit():boolean
+}
+
+class ExpenditureCommand {
+    -startDate:LocalDate
+    -endDate:LocalDate
+    -task:String
+    -expenditure:BigDecimal
+    +execute():void
+    +isQuit():boolean
+}
+
+class Ui {
+    {static}+printRevenueExpenditure():void
+}
+
+class Parser {
+    {static}-parseExpenditureCommand(input:String):NewCommand
+}
+
+class TransactionList {
+    {static}+calculateDay():BigDecimal
+    {static}+calculateTotal():BigDecimal
+    {static}+calculateRange():BigDecimal
+    {static}+getFilteredTransactionList():ArrayList<Transaction>
+}
+
+class Item {
+    {static}-sortByDate():Comparator<Item>
+}
+
+note "Some parameters and methods \nomitted for brevity" as n1
+@enduml
+
+@startuml
+hide footbox
+participant "SuperTracker" as SuperTracker <<class>> #f5e3a9
+participant ":ExpenditureCommand" as ExpenditureCommand #cbf7f4
+participant "TransactionList" as TransactionList <<class>> #d5eac2
+participant "Ui" as Ui <<class>> #e5c2ea
+participant "Collections" as Collections <<class>> #ffcdd6
+
+SuperTracker -> ExpenditureCommand : execute()
+activate ExpenditureCommand #cbf7f4
+alt task is "today"
+    ExpenditureCommand -> TransactionList : calculateDay()
+    activate TransactionList #d5eac2
+    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    deactivate TransactionList
+
+else task is "total"
+    ExpenditureCommand -> TransactionList : calculateTotal()
+    activate TransactionList #d5eac2
+    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    deactivate TransactionList
+
+else task is "day"
+    ExpenditureCommand -> TransactionList : calculateDay()
+    activate TransactionList #d5eac2
+    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    deactivate TransactionList
+
+else task is "range"
+    ExpenditureCommand -> TransactionList : calculateRange()
+    activate TransactionList #d5eac2
+    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    deactivate TransactionList
+end
+note right : some parameters and methods \n are omitted for brevity
+
+ExpenditureCommand -> TransactionList : getFilteredTransactionList()
+activate TransactionList #d5eac2
+TransactionList -> ExpenditureCommand : filteredList:ArrayList<Transaction>
+deactivate TransactionList
+
+ExpenditureCommand -> ExpenditureCommand : sort()
+note right : Transactions sorted by date
+
+ExpenditureCommand -> Collections : reverse(filteredList:ArrayList<Transaction>)
+activate Collections #ffcdd6
+Collections -> ExpenditureCommand
+deactivate Collections
+
+ExpenditureCommand -> Ui : printRevenueExpenditure()
+activate Ui #e5c2ea
+Ui -> ExpenditureCommand
+deactivate Ui
+
+ExpenditureCommand -> SuperTracker
+deactivate ExpenditureCommand
+
+@enduml
