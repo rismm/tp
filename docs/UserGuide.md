@@ -408,8 +408,8 @@ All buy transactions will be listed from most recent to least recent.
 Format: `exp type/EXPENDITURE_TYPE [from/START_DATE] [to/END_DATE]`
 
 > Note: If the type is **today** or **total**, START_DATE and END_DATE are not supposed to be filled. 
-> If the type is **day**, START_DATE is compulsory and ND_DATE is not supposed to be filled.
-> If the type is **range**, both START_DATE and ND_DATE are compulsory.
+> If the type is **day**, START_DATE is compulsory and END_DATE is not supposed to be filled.
+> If the type is **range**, both START_DATE and END_DATE are compulsory.
 
 Example: `exp type/today`
 
