@@ -67,7 +67,7 @@ public class ReportCommandTest {
         Command c = Parser.parseCommand(userInput);
         c.execute();
 
-        String expected = "     There is 1 items low on stocks!" + LINE_SEPARATOR +
+        String expected = "     There is 1 item low on stocks!" + LINE_SEPARATOR +
                 "     1. Name: orange" + LINE_SEPARATOR +
                 "        Quantity: 10" + LINE_SEPARATOR;
         String actual = outContent.toString();

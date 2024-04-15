@@ -928,7 +928,7 @@ Test case: `report r/low stock t/100`
 
 Expected: Prints Ham as it is the only item with quantity less than 100. Pie is not printed out as it has a quantity of exactly 100.
 ```
-There is 1 items low on stocks!
+There is 1 item low on stocks!
 1. Name: Ham
    Quantity: 0
 ```
