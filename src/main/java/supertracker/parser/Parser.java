@@ -40,6 +40,10 @@ public class Parser {
     private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final int PARAM_POS_START = 1;
+    private static final int PARAM_POS_END = 2;
+    private static final int SORT_PARAM_POS_START = 2;
+    private static final int SORT_PARAM_POS_END = 3;
     private static final int MAX_INT_LENGTH = 10;
     private static final double ROUNDING_FACTOR = 100.0;
     private static final String EMPTY_STRING = "";
@@ -624,9 +628,9 @@ public class Parser {
         try {
             int paramPos = paramOrder.get(index);
             if (isSort) {
-                return input.substring(paramPos + 2, paramPos + 3);
+                return input.substring(paramPos + SORT_PARAM_POS_START, paramPos + SORT_PARAM_POS_END);
             }
-            return input.substring(paramPos + 1, paramPos + 2);
+            return input.substring(paramPos + PARAM_POS_START, paramPos + PARAM_POS_END);
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {
             return EMPTY_STRING;
         }
