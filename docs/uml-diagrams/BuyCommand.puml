@@ -50,7 +50,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseBuyCommand(input:String):buyCommand
+    {static}-parseBuyCommand(input:String):BuyCommand
 }
 
 class TransactionStorage {
