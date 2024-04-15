@@ -749,6 +749,9 @@ In the text file `transaction.txt`, with valid lines of data being `NAME: name ,
     indicating that there were corrupted lines of data. There should also be an additional message that tells the user
     that the date edited is a date that has not happened yet. The edited line of data should also be deleted from `transactions.txt`
 
+> Note: Run all the test cases below consecutively for accurate results. 
+> Start off by deleting all text in `data/items.txt` and `data/transactions.txt`.
+
 ### Create a new item
 Test case: `new n/Pie q/20 p/3 e/19-04-2024`
 
@@ -828,39 +831,278 @@ No Pie removed as you don't have any!
 ```
 
 ### Update an item
+Test case: `update n/Pie q/300 p/5 e/21-04-2024`
 
+Expected: Pie is successfully updated with the given parameters
+```
+Pie has been successfully updated!
+Quantity: 300
+Price: $5.00
+Expiry Date: 21/04/2024
+```
+
+Test case: `update n/Pie q/0 p/0`
+
+Expected: Quantity and price of Pie is successfully updated to 0
+```
+Pie has been successfully updated!
+Quantity: 0
+Price: $0.00
+Expiry Date: 21/04/2024
+```
+
+Test case: `update n/Pie e/nil`
+
+Expected: Expiry date of Pie has been successfully removed
+```
+Pie has been successfully updated!
+Quantity: 0
+Price: $0.00
+```
 
 ### Find an item
+Test case: `find n/pi`
 
+Expected: Pie is successfully found as it contains "pi" (case-insensitive)
+```
+Here are your found items:
+1. Name: Pie
+   Quantity: 0
+   Price: $0.00
+```
+
+Test case: `find n/Apple Pie`
+
+Expected: Pie is not found as it does not contain "Apple"
+```
+So sorry, Your item: Apple Pie could not be found.
+```
 
 ### Rename an item
+Test case: `rename n/Pie r/Ham`
 
+Expected: Pie is successfully renamed to Ham
+```
+Pie has been successfully renamed to Ham.
+Name: Ham
+Quantity: 0
+Price: $0.00
+```
+
+Before this test case, run `new n/Pie q/100 p/4 e/22-04-2024`
+
+Test case: `rename n/Ham r/Pie`
+
+Expected: Unable to rename Ham to Pie as Pie already exists in the inventory
+```
+Oh no! An error has occurred
+Pie already exists in the inventory. Please choose another new name
+```
 
 ### List all items
+Before this test case, run `new n/Egg q/200 p/2 e/22-05-2024`
 
+Test case: `list q/ e/ sp/`
+
+Expected: The list is sorted in order of ascending quantity, the parameters of each item are printed in the order of name, quantity, expiry date, price
+```
+There are 3 unique items in your inventory:
+1. Name: Ham    Quantity: 0    Price: $0.00
+2. Name: Egg    Quantity: 200    Expiry Date: 22/05/2024    Price: $2.00
+3. Name: Pie    Quantity: 100    Expiry Date: 22/04/2024    Price: $4.00
+```
+
+Test case: `list r/`
+
+Expected: The list is sorted from Z-A, with name being the only parameter displayed
+```
+There are 3 unique items in your inventory:
+1. Name: Pie
+2. Name: Ham
+3. Name: Egg
+```
 
 ### Print report
+Test case: `report r/low stock t/100`
 
+Expected: Prints Ham as it is the only item with quantity less than 100. Pie is not printed out as it has a quantity of exactly 100.
+```
+There is 1 items low on stocks!
+1. Name: Ham
+   Quantity: 0
+```
+
+Before this test case, run `update n/Ham e/22-03-2024`. Assuming today is 19/04/2024:
+
+Test case: `report r/expiry`
+
+Expected: Pie will be listed as close to expiry and Ham will be listed as expired. Egg will not be listed since it's more than a week from expiry
+```
+There is 1 item close to expiry!
+1. Name: Pie
+   Expiry Date: 22/04/2024
+There is 1 item that is expired!
+1. Name: Ham
+   Expiry Date: 22/03/2024
+```
 
 ### Buy items
+Test case: `buy n/Ham q/50 p/5`
 
+Expected: Quantity of Ham is successfully increased to 50 and a new buy transaction is added to the transaction list
+```
+50 Ham bought at $5.00 each for $250.00 in total
+Quantity: 50
+```
+
+Test case: `buy n/Pie q/60`
+
+Expected: Unable to buy more Pie as compulsory parameter price is missing
+```
+Oh no! An error has occurred
+Invalid buy command format!
+```
 
 ### Sell items
+Test case: `sell n/Pie q/30`
 
+Expected: Quantity of Pie is successfully decreased to 20 and a new sell transaction is added to the transaction list
+```
+30 Pie sold at $4.00 each for $120.00 in total
+Quantity: 70
+```
+
+Test case: `sell n/Pie q/-1 q/10`
+
+Expected: Unable to sell Pie as the command takes in the first quantity parameter which is -1 and quantity cannot be negative
+```
+Oh no! An error has occurred
+Quantity should be a non-negative integer
+```
 
 ### Clear transactions
+Assuming today is 19/04/2024:
 
+Test case: `clear`
+
+Expected: 
+```
+Are you sure you want to clear all transactions before 19/04/2024?
+Enter 'y' or 'Y' if you wish to proceed
+Enter anything else if you wish to cancel the clear operation
+```
+
+Test case: `y`
+
+Expected: Nothing cleared as the transaction must have strictly occurred before today and not on today itself 
+```
+Nothing cleared. No transactions before 19/04/2024 available to clear
+```
+
+Test case: `clear b/01-01-2025`
+
+Expected:
+```
+Are you sure you want to clear all transactions before 01/01/2025?
+Enter 'y' or 'Y' if you wish to proceed
+Enter anything else if you wish to cancel the clear operation
+```
+
+Test case: `y `
+
+Expected: Clear operation cancelled as confirmation input must be strictly `y` or `Y` without any whitespaces
+```
+Clear operation has been cancelled
+```
+
+Test case: `clear b/31-12-2024`
+
+Expected:
+```
+Are you sure you want to clear all transactions before 31/12/2024?
+Enter 'y' or 'Y' if you wish to proceed
+Enter anything else if you wish to cancel the clear operation
+```
+
+Test case: `Y`
+
+Expected: The 2 transactions before 31/12/2024 are successfully cleared
+```
+2 transactions before 31/12/2024 successfully cleared!
+```
 
 ### Print expenditure
+Before this test case, run `buy n/Ham q/20 p/3`. Assuming today is 19/04/2024:
 
+Test case: `exp type/day from/19-04-2024`
+
+Expected: 1 buy transaction that occurred today is printed
+```
+expenditure on 19/04/2024 was $60.00
+1. Name: Ham
+   Quantity: 20
+   Price: $3.00
+   Transaction Date: 19/04/2024
+```
 
 ### Print revenue
+Before this test case, run `sell n/Pie q/60`. Assuming today is 19/04/2024:
 
+Test case: `rev type/range from/18-04-2024 to/20-04-2024`
+
+Expected: 1 sell transaction that occurred today is printed
+```
+revenue between 18/04/2024 and 20/04/2024 was $240.00
+1. Name: Pie
+   Quantity: 60
+   Price: $4.00
+   Transaction Date: 19/04/2024
+```
 
 ### Print profit
+Test case: `profit type/today`
 
+Expected: Profit of $180.00
+```
+Today's profit is $180.00
+Nice! You have a profit.
+```
 
 ### Print a help list
+Test case: `help me`
 
+Expected: Help command works normally as extra parameter "me" is ignored
+```
+Hello! These are the list of commands that I can help you with:
+1. Create a new item: type 'new' to show parameters
+2. Delete an item: type 'delete' to show parameters
+3. Change quantity of an item: type 'change' to show parameters
+4. Update an item: type 'update' to show parameters
+5. Find an item: type 'find' to show parameters
+6. Rename an item: type 'rename' to show parameters
+7. List all items: type 'list' to show parameters
+8. Print a report: type 'report' to show parameters
+9. Print expenditure: type 'exp' to show parameters
+10. Print revenue: type 'rev' to show parameters
+11. Print profit: type 'profit' to show parameters
+12. Buy or sell items: type 'transaction' to show parameters
+13. Clear transactions: type 'clear' to show parameters
+** Any other invalid input will bring you back to the main console
+```
+
+Test case: `delete new`
+
+Expected: Help command prints the command format for delete as the extra parameter "new" is ignored
+```
+A delete command should look like this: delete n/NAME
+** Refer to UserGuide for further explanation
+** DO NOTE that you have been returned to the main console
+```
 
 ### Quit the program
+Test case: `quit quit quit`
+
+Expected: Successfully quits the program as extra parameters are ignored
+```
+Goodbye!
+```
