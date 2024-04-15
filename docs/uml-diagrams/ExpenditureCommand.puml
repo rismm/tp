@@ -67,32 +67,33 @@ activate ExpenditureCommand #cbf7f4
 alt task is "today"
     ExpenditureCommand -> TransactionList : calculateDay()
     activate TransactionList #d5eac2
-    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    TransactionList --> ExpenditureCommand : expenditure:BigDecimal
     deactivate TransactionList
 
 else task is "total"
     ExpenditureCommand -> TransactionList : calculateTotal()
     activate TransactionList #d5eac2
-    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    TransactionList --> ExpenditureCommand : expenditure:BigDecimal
     deactivate TransactionList
 
 else task is "day"
     ExpenditureCommand -> TransactionList : calculateDay()
     activate TransactionList #d5eac2
-    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    TransactionList --> ExpenditureCommand : expenditure:BigDecimal
     deactivate TransactionList
 
 else task is "range"
     ExpenditureCommand -> TransactionList : calculateRange()
     activate TransactionList #d5eac2
-    TransactionList -> ExpenditureCommand : expenditure:BigDecimal
+    TransactionList --> ExpenditureCommand : expenditure:BigDecimal
     deactivate TransactionList
 end
+
 note right : some parameters and methods \nomitted for brevity
 
 ExpenditureCommand -> TransactionList : getFilteredTransactionList()
 activate TransactionList #d5eac2
-TransactionList -> ExpenditureCommand : filteredList:ArrayList<Transaction>
+TransactionList --> ExpenditureCommand : filteredList:ArrayList<Transaction>
 deactivate TransactionList
 
 ExpenditureCommand -> ExpenditureCommand : sort()
@@ -100,15 +101,15 @@ note right : Transactions sorted by date
 
 ExpenditureCommand -> Collections : reverse(filteredList:ArrayList<Transaction>)
 activate Collections #ffcdd6
-Collections -> ExpenditureCommand
+Collections --> ExpenditureCommand
 deactivate Collections
 
 ExpenditureCommand -> Ui : printRevenueExpenditure()
 activate Ui #e5c2ea
-Ui -> ExpenditureCommand
+Ui --> ExpenditureCommand
 deactivate Ui
 
-ExpenditureCommand -> SuperTracker
+ExpenditureCommand --> SuperTracker
 deactivate ExpenditureCommand
 
 @enduml
