@@ -41,7 +41,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseClearCommand(input:String):clearCommand
+    {static}-parseClearCommand(input:String):ClearCommand
 }
 
 class TransactionStorage {
