@@ -22,12 +22,30 @@
   - [Revenue Command](#revenue-command)
   - [Profit Command](#profit-command)
   - [Help Command](#help-command)
-- [Appendix](#appendix)
+- [Appendix: Requirements](#appendix-requirements)
   - [Product Scope](#product-scope)
   - [User Stories](#user-stories)
   - [Non Functional Requirements](#non-functional-requirements)
   - [Glossary](#glossary)
-  - [Instructions for Manual Testing](#instructions-for-manual-testing)
+- [Appendix: Instructions for Manual Testing](#appendix-instructions-for-manual-testing)
+  - [Saving data](#saving-data)
+  - [Create a new item](#create-a-new-item)
+  - [Delete an item](#delete-an-item)
+  - [Increase quantity](#increase-quantity)
+  - [Decrease quantity](#decrease-quantity)
+  - [Update an item](#update-an-item)
+  - [Find an item](#find-an-item)
+  - [Rename an item](#rename-an-item)
+  - [List all items](#list-all-items)
+  - [Print report](#print-report)
+  - [Buy items](#buy-items)
+  - [Sell items](#sell-items)
+  - [Clear transactions](#clear-transactions)
+  - [Print expenditure](#print-expenditure)
+  - [Print revenue](#print-revenue)
+  - [Print profit](#print-profit)
+  - [Print a help list](#print-a-help-list)
+  - [Quit the program](#quit-the-program)
 
 ## Acknowledgements
 - [CS2113 Website](https://nus-cs2113-ay2324s2.github.io/website/index.html)
@@ -640,7 +658,7 @@ The following sequence diagram shows the execution of a HelpCommand<br>
 Else, the `printInvalidHelpMessage` method of the `HelpCommandUi` is called to notify that the user has input an invalid command
 5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has been returned to the main console
 
-## Appendix
+## Appendix: Requirements
 ### Product scope
 #### Target user profile:
 * Works as a supermarket inventory manager
@@ -687,18 +705,18 @@ Else, the `printInvalidHelpMessage` method of the `HelpCommandUi` is called to n
 ### Non-Functional Requirements
 
 1. Should work on any _mainstream OS_ as long as it has Java `11` installed.
-2. Should be able to hold up to 1000 items or transactions without a noticeable sluggishness in performance 
+2. Should be able to hold up to 1000 unique items or transactions without a noticeable sluggishness in performance 
 for typical usage.
 3. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) 
 should be able to accomplish most of the tasks faster using commands than using the mouse.
 
 ### Glossary
 
-* ***Mainstream OS*** - Windows, Linux, MacOS, Unix
+* ***Mainstream OS*** - Windows, Linux, macOS, Unix
 
-### Instructions for manual testing
+## Appendix: Instructions for manual testing
 
-#### Saving data
+### Saving data
 Dealing with corrupted data files
 - Prerequisite: Existing data files `items.txt` and `transactions.txt` in the `./data/` directory. Multiple valid lines of data in text files.
 - **For item data:**\
@@ -730,3 +748,119 @@ In the text file `transaction.txt`, with valid lines of data being `NAME: name ,
     - Expected behaviour: Relaunch the program. Similarly, the program should output an error message
     indicating that there were corrupted lines of data. There should also be an additional message that tells the user
     that the date edited is a date that has not happened yet. The edited line of data should also be deleted from `transactions.txt`
+
+### Create a new item
+Test case: `new n/Pie q/20 p/3 e/19-04-2024`
+
+Expected: Pie is successfully added to the inventory
+```
+Pie has been added to the inventory!
+Quantity: 20
+Price: $3.00
+Expiry Date: 19/04/2024
+```
+
+Test case: `new n/Pie q/20 p/3 e/20-04-2024`
+
+Expected: Pie is unable to be added as it already exists in the inventory
+```
+Oh no! An error has occurred
+Pie already exists in inventory. Use the update command instead.
+```
+
+### Delete an item
+Test case: `delete n/Pie`
+
+Expected: Pie is successfully deleted from the inventory
+```
+Pie has been deleted!
+```
+
+Test case: `delete n/pie`
+
+Expected: pie is unable to be deleted as it does not exist in the inventory 
+```
+Oh no! An error has occurred
+pie does not exist in inventory. Unable to delete something that does not exist. =(
+```
+
+### Increase quantity
+Before this test case, run `new n/Pie q/100 p/3 e/19-04-2024`
+
+Test case: `add n/Pie q/200`
+
+Expected: Quantity of Pie is increased to 300
+```
+200 Pie added to inventory!
+Quantity: 300
+```
+
+Test case: `add n/Pie q/2147483647`
+
+Expected: Unable to increase quantity of Pie due to integer overflow
+```
+Oh no! An error has occurred
+Unable to add your specified number of items. Why do you need more than 2147483647 items anyway?
+```
+
+### Decrease quantity
+Test case: `remove n/Pie q/100`
+
+Expected: Quantity of Pie is decreased to 200
+```
+100 Pie removed from inventory!
+Quantity: 200
+```
+
+Test case: `remove n/Pie q/300`
+
+Expected: Quantity of Pie is decreased to 0 as the quantity given in the command exceeds the current quantity of Pie
+```
+200 Pie removed from inventory!
+Quantity: 0
+```
+
+Test case: `remove n/Pie q/1`
+
+Expected: Quantity of Pie remains at 0 as quantity cannot be negative
+```
+No Pie removed as you don't have any!
+```
+
+### Update an item
+
+
+### Find an item
+
+
+### Rename an item
+
+
+### List all items
+
+
+### Print report
+
+
+### Buy items
+
+
+### Sell items
+
+
+### Clear transactions
+
+
+### Print expenditure
+
+
+### Print revenue
+
+
+### Print profit
+
+
+### Print a help list
+
+
+### Quit the program
