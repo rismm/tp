@@ -35,10 +35,13 @@ Given below are my contributions to the project.
     - Added documentation for the features of saving, loading and editing file data
   - [Developer Guide:](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
     - Added implementation details of input parsing (the use of regex) and storage (data file saving and loading)
-    - Used PlantUML to create the following UML class and sequence diagrams for input parsing and the storage implementation
+    - Used PlantUML to create the UML class and sequence diagrams for input parsing and the storage implementation
+    - Added the architecture diagram its descriptions of the components
+    - Filled in the user stories in the appendix
 
 
 - **Contributions to team-based tasks:**
   - Teammate PRs reviewed: [#40](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/40), [#70](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/70), [#73](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/73)
   - Contributed to JUnit tests for parser and storage, also helped fix JUnit tests for the update command
   - Helped detect bugs and provided suggestions to teammates on fixes/improvements that they can make
+  - Created and assigned issues to teammates
