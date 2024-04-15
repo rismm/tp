@@ -67,32 +67,33 @@ activate RevenueCommand #cbf7f4
 alt task is "today"
     RevenueCommand -> TransactionList : calculateDay()
     activate TransactionList #d5eac2
-    TransactionList -> RevenueCommand : revenue:BigDecimal
+    TransactionList --> RevenueCommand : revenue:BigDecimal
     deactivate TransactionList
 
 else task is "total"
     RevenueCommand -> TransactionList : calculateTotal()
     activate TransactionList #d5eac2
-    TransactionList -> RevenueCommand : revenue:BigDecimal
+    TransactionList --> RevenueCommand : revenue:BigDecimal
     deactivate TransactionList
 
 else task is "day"
     RevenueCommand -> TransactionList : calculateDay()
     activate TransactionList #d5eac2
-    TransactionList -> RevenueCommand : revenue:BigDecimal
+    TransactionList --> RevenueCommand : revenue:BigDecimal
     deactivate TransactionList
 
 else task is "range"
     RevenueCommand -> TransactionList : calculateRange()
     activate TransactionList #d5eac2
-    TransactionList -> RevenueCommand : revenue:BigDecimal
+    TransactionList --> RevenueCommand : revenue:BigDecimal
     deactivate TransactionList
 end
-note right : some parameters and methods \n are omitted for brevity
+
+note right : some parameters and methods \nomitted for brevity
 
 RevenueCommand -> TransactionList : getFilteredTransactionList()
 activate TransactionList #d5eac2
-TransactionList -> RevenueCommand : filteredList:ArrayList<Transaction>
+TransactionList --> RevenueCommand : filteredList:ArrayList<Transaction>
 deactivate TransactionList
 
 RevenueCommand -> RevenueCommand : sort()
@@ -100,15 +101,15 @@ note right : Transactions sorted by date
 
 RevenueCommand -> Collections : reverse(filteredList:ArrayList<Transaction>)
 activate Collections #ffcdd6
-Collections -> RevenueCommand
+Collections --> RevenueCommand
 deactivate Collections
 
 RevenueCommand -> Ui : printRevenueExpenditure()
 activate Ui #e5c2ea
-Ui -> RevenueCommand
+Ui --> RevenueCommand
 deactivate Ui
 
-RevenueCommand -> SuperTracker
+RevenueCommand --> SuperTracker
 deactivate RevenueCommand
 
 @enduml
