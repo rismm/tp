@@ -365,7 +365,7 @@ A FindCommand instance is created by the `parseFindCommand` method called by `Pa
 - `Inventory`: For getting the list of items in the inventory
 - `Ui`: To notify the user about the successful execution of `FindCommand`
 
-The following sequence diagram shows the execution of a FindCommand<br>  
+The following sequence diagram shows the execution of a FindCommand<br>
 ![FindCommandSequence](uml-diagrams/FindCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `FindCommand`
@@ -389,7 +389,7 @@ A RenameCommand instance is created by the `parseRenameCommand` method called by
 - `Ui`: To notify the user about the successful execution of `RenameCommand`
 - `ItemStorage`: To save the renamed item onto the hard disk
 
-The following sequence diagram shows the execution of a RenameCommand<br>  
+The following sequence diagram shows the execution of a RenameCommand<br>
 ![RenameCommandSequence](uml-diagrams/RenameCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `RenameCommand`
@@ -554,9 +554,10 @@ The following sequence diagram shows the execution of a ClearCommand<br>
 2. The `clearCommandConfirmation` method of the `Ui` class is called to confirm with the user if they want to proceed with the clear operation
 3. The User then inputs his/her response
 4. If the input is not `y` or `Y`, the `clearCommandCancelled` method of the `Ui` class is called to notify the user that the clear operation has been cancelled
-5. Else if the input is 'y' or 'Y', the private method `clearOldTransactions` is called to clear all transactions before the specified date, 
+5. Else if the input is `y` or `Y`, the private method `clearOldTransactions` is called to clear all transactions before the specified date, 
 and the number of transactions cleared is returned
-6. The `resaveCurrentTransactions` method of the `TransactionStorage` class is called to remove the cleared transactions from the hard disk
+6. The `clearCommandSuccess` method of the `Ui` class is called to notify the user that the clear operation has been successfully completed
+7. The `resaveCurrentTransactions` method of the `TransactionStorage` class is called to remove the cleared transactions from the hard disk
 
 ### Expenditure Command
 The following is a class diagram of the ExpenditureCommand and its relevant dependencies<br>
@@ -648,7 +649,7 @@ A HelpCommand instance is created by the `parseCommand` method called by Parser.
 #### Dependencies
 - `HelpCommandUi`: To print various help messages
 
-The following sequence diagram shows the execution of a HelpCommand<br>  
+The following sequence diagram shows the execution of a HelpCommand<br>
 ![HelpCommandSequence](uml-diagrams/HelpCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `HelpCommand` 
