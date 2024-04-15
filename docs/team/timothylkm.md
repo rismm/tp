@@ -37,12 +37,16 @@ Given below are my contributions to the project.
 - **Documentation:**
   - [User Guide](https://ay2324s2-cs2113-t13-4.github.io/tp/UserGuide.html)
     - Added documentation for Rename, Find and Help command
-  - [Developer Guide:](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
-    - Added implementation details of Find command
-    - Used PlantUML to create the UML class and sequence diagrams for Find command
+    - Used PlantUML do make class and sequence diagrams for RenameCommand, FindCommand and HelpCommand.
 
+  - [Developer Guide:](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
+    - Added documentation for Rename, Find and Help Commands
+    - Used PlantUML do make class and sequence diagrams for RenameCommand, FindCommand and HelpCommand.
+      <br><br>
 
 - **Contributions to team-based tasks:**
   - Teammate PRs reviewed: [#32](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/32), [#34](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/34), [#80](https://github.com/AY2324S2-CS2113-T13-4/tp/pull/80)
-  - Contributed to JUnit tests for Find Command.
+  - Contributed to JUnit tests for Find Command and Rename Command.
   - Helped give improvements and suggestions to my teammates. Resolved bugs immediately.
+  - Created and assigned issues. Checked and merged pull requests in a timely manner.
+  
