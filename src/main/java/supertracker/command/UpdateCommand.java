@@ -38,7 +38,7 @@ public class UpdateCommand implements Command {
      * Executes the update command to modify an existing item in the inventory.
      * Updates the specified item with new quantity, price, and expiry date.
      */
-    //@@ author dtaywd
+    //@@author dtaywd
     @Override
     public void execute() {
         assert Inventory.contains(name);
