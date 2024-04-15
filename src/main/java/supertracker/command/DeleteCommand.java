@@ -11,7 +11,6 @@ import java.io.IOException;
  * Represents a command to delete an item from the Inventory.
  */
 public class DeleteCommand implements Command {
-
     private String name;
 
     /**

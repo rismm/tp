@@ -12,7 +12,7 @@ class TransactionList
 class TransactionStorage
 class Ui
 
-AddCommand <|. BuyCommand
+AddCommand <|- BuyCommand
 Transaction <.. BuyCommand
 Ui <.. BuyCommand
 TransactionList <.. BuyCommand
@@ -50,7 +50,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseBuyCommand(input:String):buyCommand
+    {static}-parseBuyCommand(input:String):BuyCommand
 }
 
 class TransactionStorage {

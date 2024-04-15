@@ -68,7 +68,7 @@ Given below are my contributions to the project.
   that would throw a unique error in the case of invalid inputs.
 
 
-- **Enhancement to existing features:** Contributed to JUnit tests for new, list, add, remove, clear commands
+- **Enhancement to existing features:** Contributed to JUnit tests for new, list, add, remove, buy, sell, clear commands
   - What it does: Ensure that the commands still work as expected when the codebase is modified.
   - Justification: Oftentimes changing one part of the code might break another part, 
   hence writing automated tests would help to streamline the testing process.
@@ -81,12 +81,12 @@ Given below are my contributions to the project.
 
 - **Documentation:**
   - [User Guide](https://ay2324s2-cs2113-t13-4.github.io/tp/UserGuide.html)
-    - Added documentation for new, list, add, remove, clear commands
+    - Added documentation for new, list, add, remove, buy, sell, clear commands
     - Added notes about command format section
     - Added FAQ section
   - [Developer Guide](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
-    - Added implementation details of new, list, add, remove, clear commands
-    - Used PlantUML to create the UML class and sequence diagrams for new, list, add, remove, clear commands
+    - Added implementation details of new, list, add, remove, buy, sell, clear commands
+    - Used PlantUML to create the UML class and sequence diagrams for new, list, add, remove, buy, sell, clear commands
 
 
 - **Contributions to team-based tasks:**

@@ -12,7 +12,7 @@ class TransactionList
 class TransactionStorage
 class Ui
 
-RemoveCommand <|. SellCommand
+RemoveCommand <|- SellCommand
 Transaction <.. SellCommand
 Ui <.. SellCommand
 TransactionList <.. SellCommand
@@ -50,7 +50,7 @@ class Ui {
 }
 
 class Parser {
-    {static}-parseSellCommand(input:String):sellCommand
+    {static}-parseSellCommand(input:String):SellCommand
 }
 
 class TransactionStorage {
