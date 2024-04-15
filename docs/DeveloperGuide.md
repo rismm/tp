@@ -402,7 +402,7 @@ The following sequence diagram shows the execution of a RenameCommand<br>
 8. The `saveData` method of the `ItemStorage` class is called to save the renamed item onto the hard disk
 
 ### List Command
-The following is a class diagram of the FindCommand and its relevant dependencies<br>
+The following is a class diagram of the ListCommand and its relevant dependencies<br>
 ![ListCommandClass](uml-diagrams/ListCommandClass.png)
 
 The `ListCommand` class implements the `Command` interface and is responsible for printing out a list of items in the inventory to the output.
@@ -445,7 +445,7 @@ There are 8 main sorting modes in total
 7. `list se/`: Expiry date ascending (e.g. 2024-2025)
 8. `list se/ r/`: Expiry date descending (e.g. 2025-2024)
 
-The following sequence diagram shows the execution of a ListCommand<br>  
+The following sequence diagram shows the execution of a ListCommand<br>
 ![ListCommandSequence](uml-diagrams/ListCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `ListCommand`
