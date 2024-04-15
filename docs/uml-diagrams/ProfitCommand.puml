@@ -97,7 +97,7 @@ else task is "range"
     deactivate TransactionList
 end
 
-note right : some parameters and methods \n are omitted for brevity
+note right : some parameters and methods \nomitted for brevity
 
 ProfitCommand -> Ui : printProfit()
 activate Ui #e5c2ea

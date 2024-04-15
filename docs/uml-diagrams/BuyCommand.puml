@@ -12,7 +12,7 @@ class TransactionList
 class TransactionStorage
 class Ui
 
-AddCommand <|. BuyCommand
+AddCommand <|- BuyCommand
 Transaction <.. BuyCommand
 Ui <.. BuyCommand
 TransactionList <.. BuyCommand

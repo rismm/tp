@@ -38,10 +38,18 @@ import java.util.regex.Pattern;
 
 public class Parser {
     private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final DateTimeFormatter NULL_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", NULL_DATE_FORMAT);
+    private static final int FIRST_PARAM_INDEX = 0;
+    private static final int SECOND_PARAM_INDEX = 1;
+    private static final int THIRD_PARAM_INDEX = 2;
+    private static final int PARAM_POS_START = 1;
+    private static final int PARAM_POS_END = 2;
+    private static final int SORT_PARAM_POS_START = 2;
+    private static final int SORT_PARAM_POS_END = 3;
     private static final int MAX_INT_LENGTH = 10;
     private static final double ROUNDING_FACTOR = 100.0;
+    private static final String EMPTY_STRING = "";
     private static final String SPACE = " ";
     private static final String QUIT_COMMAND = "quit";
     private static final String NEW_COMMAND = "new";
@@ -163,7 +171,7 @@ public class Parser {
      */
     private static String getParameters(String input) {
         if (!input.contains(SPACE)) {
-            return "";
+            return EMPTY_STRING;
         }
         return input.substring(input.indexOf(SPACE)).trim();
     }
@@ -623,15 +631,15 @@ public class Parser {
         try {
             int paramPos = paramOrder.get(index);
             if (isSort) {
-                return input.substring(paramPos + 2, paramPos + 3);
+                return input.substring(paramPos + SORT_PARAM_POS_START, paramPos + SORT_PARAM_POS_END);
             }
-            return input.substring(paramPos + 1, paramPos + 2);
+            return input.substring(paramPos + PARAM_POS_START, paramPos + PARAM_POS_END);
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {
-            return "";
+            return EMPTY_STRING;
         }
     }
 
-    //@@ author dtaywd
+    //@@author dtaywd
     /**
      * Validates the input parameters for the report command to ensure they are not empty.
      *
@@ -736,8 +744,8 @@ public class Parser {
         boolean hasTo = !matcher.group(TO_GROUP).isEmpty();
 
         String type = matcher.group(TYPE_GROUP).trim();
-        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
-        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
+        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, EMPTY_STRING).trim();
+        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, EMPTY_STRING).trim();
 
         boolean hasStartParam = !fromString.isEmpty();
         boolean hasEndParam = !toString.isEmpty();
@@ -892,7 +900,7 @@ public class Parser {
         String nameInput = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).trim();
         String priceString = matcher.group(PRICE_GROUP).trim();
-        String dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
+        String dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, EMPTY_STRING);
 
         validateNonEmptyParam(nameInput);
         validateNonEmptyParam(quantityString);
@@ -926,9 +934,9 @@ public class Parser {
         }
 
         String name = matcher.group(NAME_GROUP).trim();
-        String quantityString = matcher.group(QUANTITY_GROUP).replace(QUANTITY_FLAG + BASE_FLAG, "").trim();
-        String priceString = matcher.group(PRICE_GROUP).replace(PRICE_FLAG + BASE_FLAG, "").trim();
-        String dateString = matcher.group(EX_DATE_GROUP).replace(EX_DATE_FLAG + BASE_FLAG, "").trim();
+        String quantityString = matcher.group(QUANTITY_GROUP).replace(QUANTITY_FLAG + BASE_FLAG, EMPTY_STRING).trim();
+        String priceString = matcher.group(PRICE_GROUP).replace(PRICE_FLAG + BASE_FLAG, EMPTY_STRING).trim();
+        String dateString = matcher.group(EX_DATE_GROUP).replace(EX_DATE_FLAG + BASE_FLAG, EMPTY_STRING).trim();
 
         validateNonEmptyParamsUpdate(name, quantityString, priceString, dateString);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_UPDATE);
@@ -1014,15 +1022,15 @@ public class Parser {
 
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
-        String firstParam = extractParam(input, paramOrder, 0, false);
-        String secondParam = extractParam(input, paramOrder, 1, false);
-        String thirdParam = extractParam(input, paramOrder, 2, false);
+        String firstParam = extractParam(input, paramOrder, FIRST_PARAM_INDEX, false);
+        String secondParam = extractParam(input, paramOrder, SECOND_PARAM_INDEX, false);
+        String thirdParam = extractParam(input, paramOrder, THIRD_PARAM_INDEX, false);
 
         ArrayList<Integer> sortParamOrder = getParamPositions(input, hasSortQuantity, hasSortPrice, hasSortExpiry,
                 SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, SORT_EX_DATE_FLAG);
-        String firstSortParam = extractParam(input, sortParamOrder, 0, true);
-        String secondSortParam = extractParam(input, sortParamOrder, 1, true);
-        String thirdSortParam = extractParam(input, sortParamOrder, 2, true);
+        String firstSortParam = extractParam(input, sortParamOrder, FIRST_PARAM_INDEX, true);
+        String secondSortParam = extractParam(input, sortParamOrder, SECOND_PARAM_INDEX, true);
+        String thirdSortParam = extractParam(input, sortParamOrder, THIRD_PARAM_INDEX, true);
 
         return new ListCommand(firstParam, secondParam, thirdParam,
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
@@ -1137,7 +1145,7 @@ public class Parser {
 
         String reportType = matcher.group(REPORT_TYPE_GROUP).trim();
         String thresholdString = matcher.group(THRESHOLD_GROUP).
-                replace(THRESHOLD_FLAG + BASE_FLAG, "").trim();
+                replace(THRESHOLD_FLAG + BASE_FLAG, EMPTY_STRING).trim();
 
         validateNonEmptyParamsReport(reportType, thresholdString);
         validateReportFormat(reportType, thresholdString);
@@ -1211,7 +1219,7 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_CLEAR_FORMAT);
         }
 
-        String dateString = matcher.group(BEFORE_DATE_GROUP).replace(BEFORE_DATE_FLAG + BASE_FLAG, "").trim();
+        String dateString = matcher.group(BEFORE_DATE_GROUP).replace(BEFORE_DATE_FLAG + BASE_FLAG, EMPTY_STRING).trim();
         LocalDate beforeDate = parseDate(dateString);
 
         if (beforeDate.isEqual(UNDEFINED_DATE)) {

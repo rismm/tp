@@ -283,7 +283,7 @@ The following sequence diagram shows the execution of an AddCommand<br>
 
 1. The `SuperTracker` class calls the `execute` method of `AddCommand`
 2. The private method `executeWithoutUi` is called to execute the command excluding Ui outputs
-3. The `get` method of `Inventory` is called to return the old instance of the item
+3. The `get` method of the `Inventory` class is called to return the old instance of the item
 4. The `getQuantity`, `getName`, `getPrice`, `getExpiry` methods of the old instance of the item are called to obtain the
    quantity, name, price, expiry date of the old item respectively
 5. A new `Item` object with the increased quantity is created and returned to `AddCommand`
@@ -312,10 +312,10 @@ The following sequence diagram shows the execution of a RemoveCommand<br>
 
 1. The `SuperTracker` class calls the `execute` method of `RemoveCommand`
 2. The private method `executeWithoutUi` is called to execute the command excluding Ui outputs
-3. The `get` method of `Inventory` is called to return the old instance of the item
+3. The `get` method of the `Inventory` class is called to return the old instance of the item
 4. The `getQuantity`, `getName`, `getPrice`, `getExpiry` methods of the old instance of the item are called to obtain the
    quantity, name, price, expiry date of the old item respectively
-5. A new `Item` object with the decreased quantity is created and returned to `AddCommand`
+5. A new `Item` object with the decreased quantity is created and returned to `RemoveCommand`
 6. The `put` method of the `Inventory` class is called to add the updated item into the inventory
 7. The `saveData` method of the `ItemStorage` class is called to save the updated item onto the hard disk
 8. The `removeCommandSuccess` method of the `Ui` class is called to notify that `RemoveCommand` has been successfully executed
