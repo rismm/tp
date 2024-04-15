@@ -7,10 +7,10 @@
   - [Storage Component](#storage-component)
 - [Implementation](#implementation)
   - [New Command](#new-command)
-  - [Update Command](#update-command)
+  - [Delete Command](#delete-command)
   - [Add Command](#add-command)
   - [Remove Command](#remove-command)
-  - [Delete Command](#delete-command)
+  - [Update Command](#update-command)
   - [Find Command](#find-command)
   - [Rename Command](#rename-command)
   - [List Command](#list-command)
@@ -222,37 +222,29 @@ The following sequence diagram shows the execution of a NewCommand<br>
 > Note that if the user inputs a name parameter that contains the file delimiter of the save file, the file delimiter in the name will be
 > replaced. e.g. If the file delimiter is determined to be `",,,"`, the item name `"app,,,le` will be renamed to `"app_le"`
 
-### Update Command
-The following is a class diagram of the UpdateCommand and its relevant dependencies<br>
-![UpdateCommandClass](uml-diagrams/UpdateCommandClass.png)
+### Delete Command
+The following is a class diagram of the DeleteCommand and its relevant dependencies<br>
+![DeleteCommandClass](uml-diagrams/DeleteCommandClass.png)
 
-The `UpdateCommand` class implements the `Command` interface and is responsible for updating an existing item in the 
-`Inventory`. A UpdateCommand instance is created by the `parseUpdateCommand` method called by Parser, which ensures 
-that the provided parameters (name, quantity, price, expiryDate) are valid. At least one of the optional parameters 
-(quantity, price, expiryDate) must be provided.
+The `DeleteCommand` class implements the `Command` interface and is responsible for deleting existing items in the
+inventory. A DeleteCommand instance is created when calling the `parseDeleteCommand` method called in Parser class.
+This method parses the input and ensures that the command parameter (item name) exists in the inventory. The `execute()`
+method in the class will call the `delete` method from `Inventory` class to remove the item. It will then execute
+the `saveData` method from `ItemStorage` class to save changes to the inventory.
 
 #### Dependencies
-- `Item`: To create a new instance of the updated item
-- `Inventory`: For adding the updated item into the inventory
-- `Ui`: To notify the user about the successful execution of `UpdateCommand`
-- `ItemStorage`: To save the updated item onto the hard disk
+- `Inventory`: To check if an item exists and delete it from the inventory
+- `Ui`: To notify the user about the successful execution of `DeleteCommand`
+- `ItemStorage`: To remove the deleted item from the hard disk
 
-The following sequence diagram shows the execution of a UpdateCommand<br>
-![UpdateCommandSequence](uml-diagrams/UpdateCommandSequence.png)
+The following sequence diagram shows the execution of a DeleteCommand<br>
+![DeleteCommandSequence](uml-diagrams/DeleteCommandSequence.png)
 
-1. The `SuperTracker` class calls the `execute` method of `UpdateCommand`
-2. The `get` method of `Inventory` is called to return the old instance of the item
-3. There is an optional check for newQuantity being -1 (an invalid value that indicates that quantity should not be 
-updated). If the condition holds true it retrieves the item's previous quantity.
-4. There is an optional check for newPrice being -1 (an invalid value that indicates that price should not be
-updated). If the condition holds true it retrieves the item's previous price.
-5. There is an optional check for newExpiryDate being "1-1-1" (an invalid value that indicates that expiry date should not be
-updated). If the condition holds true it retrieves the item's previous expiry date.
-6. The `getName` method of the old instance of the item is called to retrieve the item's previous name
-7. A new `Item` object with the updated parameters (quantity, price expiryDate) is created and returned to `UpdateCommand`
-8. The `put` method of the `Inventory` class is called to add the updated item into the inventory
-9. The `UpdateCommandSuccess` method of the `Ui` class is called to notify that `UpdateCommand` has been successfully executed
-10. The `saveData` method of the `ItemStorage` class is called to save updated item onto the hard disk
+1. The `SuperTracker` class calls the `execute` method of `DeleteCommand`
+2. The `contains` method of `Inventory` to check if the item exists in the inventory
+3. If item exists, the `delete` method of `Inventory` is called to delete the item from inventory
+4. Subsequently, the `deleteCommandSuccess` method of `Ui` is called to notify that `DeleteCommand` has been successfully executed
+5. The `saveData` method of `ItemStorage` is called to remove the deleted item from the hard disk
 
 ### Add Command
 The following is a class diagram of the AddCommand and its relevant dependencies<br>
@@ -274,8 +266,8 @@ The following sequence diagram shows the execution of an AddCommand<br>
 1. The `SuperTracker` class calls the `execute` method of `AddCommand`
 2. The private method `executeWithoutUi` is called to execute the command excluding Ui outputs
 3. The `get` method of `Inventory` is called to return the old instance of the item
-4. The `getQuantity`, `getName`, `getPrice`, `getExpiry` methods of the old instance of the item are called to obtain the 
-quantity, name, price, expiry date of the old item respectively
+4. The `getQuantity`, `getName`, `getPrice`, `getExpiry` methods of the old instance of the item are called to obtain the
+   quantity, name, price, expiry date of the old item respectively
 5. A new `Item` object with the increased quantity is created and returned to `AddCommand`
 6. The `put` method of the `Inventory` class is called to add the updated item into the inventory
 7. The `saveData` method of the `ItemStorage` class is called to save the updated item onto the hard disk
@@ -312,29 +304,37 @@ The following sequence diagram shows the execution of a RemoveCommand<br>
 
 > Note: The execute remove command without Ui block will be referenced by the sequence diagram of [SellCommand](#sell-command)
 
-### Delete Command
-The following is a class diagram of the DeleteCommand and its relevant dependencies<br>
-![DeleteCommandClass](uml-diagrams/DeleteCommandClass.png)
+### Update Command
+The following is a class diagram of the UpdateCommand and its relevant dependencies<br>
+![UpdateCommandClass](uml-diagrams/UpdateCommandClass.png)
 
-The `DeleteCommand` class implements the `Command` interface and is responsible for deleting existing items in the
-inventory. A DeleteCommand instance is created when calling the `parseDeleteCommand` method called in Parser class.
-This method parses the input and ensures that the command parameter (item name) exists in the inventory. The `execute()`
-method in the class will call the `delete` method from `Inventory` class to remove the item. It will then execute
-the `saveData` method from `ItemStorage` class to save changes to the inventory.
+The `UpdateCommand` class implements the `Command` interface and is responsible for updating an existing item in the 
+`Inventory`. A UpdateCommand instance is created by the `parseUpdateCommand` method called by Parser, which ensures 
+that the provided parameters (name, quantity, price, expiryDate) are valid. At least one of the optional parameters 
+(quantity, price, expiryDate) must be provided.
 
 #### Dependencies
-- `Inventory`: To check if an item exists and delete it from the inventory
-- `Ui`: To notify the user about the successful execution of `DeleteCommand`
-- `ItemStorage`: To remove the deleted item from the hard disk
+- `Item`: To create a new instance of the updated item
+- `Inventory`: For adding the updated item into the inventory
+- `Ui`: To notify the user about the successful execution of `UpdateCommand`
+- `ItemStorage`: To save the updated item onto the hard disk
 
-The following sequence diagram shows the execution of a DeleteCommand<br>
-![DeleteCommandSequence](uml-diagrams/DeleteCommandSequence.png)
+The following sequence diagram shows the execution of a UpdateCommand<br>
+![UpdateCommandSequence](uml-diagrams/UpdateCommandSequence.png)
 
-1. The `SuperTracker` class calls the `execute` method of `DeleteCommand`
-2. The `contains` method of `Inventory` to check if the item exists in the inventory
-3. If item exists, the `delete` method of `Inventory` is called to delete the item from inventory
-4. Subsequently, the `deleteCommandSuccess` method of `Ui` is called to notify that `DeleteCommand` has been successfully executed
-5. The `saveData` method of `ItemStorage` is called to remove the deleted item from the hard disk
+1. The `SuperTracker` class calls the `execute` method of `UpdateCommand`
+2. The `get` method of `Inventory` is called to return the old instance of the item
+3. There is an optional check for newQuantity being -1 (an invalid value that indicates that quantity should not be 
+updated). If the condition holds true it retrieves the item's previous quantity.
+4. There is an optional check for newPrice being -1 (an invalid value that indicates that price should not be
+updated). If the condition holds true it retrieves the item's previous price.
+5. There is an optional check for newExpiryDate being "1-1-1" (an invalid value that indicates that expiry date should not be
+updated). If the condition holds true it retrieves the item's previous expiry date.
+6. The `getName` method of the old instance of the item is called to retrieve the item's previous name
+7. A new `Item` object with the updated parameters (quantity, price expiryDate) is created and returned to `UpdateCommand`
+8. The `put` method of the `Inventory` class is called to add the updated item into the inventory
+9. The `UpdateCommandSuccess` method of the `Ui` class is called to notify that `UpdateCommand` has been successfully executed
+10. The `saveData` method of the `ItemStorage` class is called to save updated item onto the hard disk
 
 ### Find Command
 The following is a class diagram of the FindCommand and its relevant dependencies<br>
