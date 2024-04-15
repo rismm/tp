@@ -631,7 +631,7 @@ public class Parser {
         }
     }
 
-    //@@ author dtaywd
+    //@@author dtaywd
     /**
      * Validates the input parameters for the report command to ensure they are not empty.
      *
