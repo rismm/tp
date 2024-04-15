@@ -129,7 +129,8 @@ public class Ui {
     private static String reportLowStockOpening(int quantity) {
         assert quantity >= 0;
         String isOrAre = quantity == 1 ? "is " : "are ";
-        return "There " + isOrAre + quantity + " items low on stocks!";
+        String plural = quantity == 1 ? EMPTY_STRING : "s";
+        return "There " + isOrAre + quantity + " item" + plural + " low on stocks!";
     }
 
     /**
@@ -594,7 +595,7 @@ public class Ui {
             printIndent("Nothing cleared. No transactions before " + dateString + " available to clear");
             return;
         }
-        String plural = transactionsCleared == 1 ? "" : "s";
+        String plural = transactionsCleared == 1 ? EMPTY_STRING : "s";
         printIndent(transactionsCleared + " transaction" + plural
                 + " before " + dateString + " successfully cleared!");
     }
