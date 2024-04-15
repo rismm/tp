@@ -365,7 +365,7 @@ A FindCommand instance is created by the `parseFindCommand` method called by `Pa
 - `Inventory`: For getting the list of items in the inventory
 - `Ui`: To notify the user about the successful execution of `FindCommand`
 
-The following sequence diagram shows the execution of a FindCommand<br>  
+The following sequence diagram shows the execution of a FindCommand<br>
 ![FindCommandSequence](uml-diagrams/FindCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `FindCommand`
@@ -389,7 +389,7 @@ A RenameCommand instance is created by the `parseRenameCommand` method called by
 - `Ui`: To notify the user about the successful execution of `RenameCommand`
 - `ItemStorage`: To save the renamed item onto the hard disk
 
-The following sequence diagram shows the execution of a RenameCommand<br>  
+The following sequence diagram shows the execution of a RenameCommand<br>
 ![RenameCommandSequence](uml-diagrams/RenameCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `RenameCommand`
@@ -648,7 +648,7 @@ A HelpCommand instance is created by the `parseCommand` method called by Parser.
 #### Dependencies
 - `HelpCommandUi`: To print various help messages
 
-The following sequence diagram shows the execution of a HelpCommand<br>  
+The following sequence diagram shows the execution of a HelpCommand<br>
 ![HelpCommandSequence](uml-diagrams/HelpCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `HelpCommand` 
