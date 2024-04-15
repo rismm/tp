@@ -81,6 +81,11 @@ activate Inventory #d5eac2
 Inventory --> RenameCommand : oldItem:Item
 deactivate Inventory
 
+RenameCommand -> oldItem: getName()
+activate oldItem #ffa1a1
+oldItem --> RenameCommand: oldName:String
+deactivate oldItem
+
 RenameCommand -> oldItem: getQuantity()
 activate oldItem #ffa1a1
 oldItem --> RenameCommand: quantity:int
@@ -111,7 +116,7 @@ activate Inventory #d5eac2
 Inventory --> RenameCommand
 deactivate Inventory
 
-RenameCommand -> Ui : renameCommandSuccess(item:Item)
+RenameCommand -> Ui : renameCommandSuccess(newItem:Item, oldName:String)
 activate Ui #e5c2ea
 Ui --> RenameCommand
 deactivate Ui

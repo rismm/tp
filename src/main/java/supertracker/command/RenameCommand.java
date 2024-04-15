@@ -32,6 +32,7 @@ public class RenameCommand implements Command {
         assert Inventory.contains(name);
 
         Item oldItem = Inventory.get(name);
+        String oldName = oldItem.getName();
         int quantity = oldItem.getQuantity();
         double price = oldItem.getPrice();
         LocalDate expiryDate = oldItem.getExpiryDate();
@@ -40,7 +41,7 @@ public class RenameCommand implements Command {
         Inventory.delete(name);
 
         Inventory.put(newName, newItem);
-        Ui.renameCommandSuccess(newItem, name);
+        Ui.renameCommandSuccess(newItem, oldName);
 
         try {
             ItemStorage.saveData();

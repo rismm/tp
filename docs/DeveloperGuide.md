@@ -394,7 +394,7 @@ The following sequence diagram shows the execution of a RenameCommand<br>
 
 1. The `SuperTracker` class calls the `execute` method of `RenameCommand`
 2. The item object of the item to be renamed is obtained from `Inventory`
-3. The quantity, price and expiry date are obtained from the item
+3. The old name, quantity, price and expiry date are obtained from the item
 4. A new `Item` object with the given parameters (newName, quantity, price, expiry date) is created and returned to `RenameCommand`
 5. The `delete` method of the `Inventory` class is called to delete the old item
 6. The `put` method of the `Inventory` class is called to put the new item into the inventory
