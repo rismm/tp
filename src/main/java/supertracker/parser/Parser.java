@@ -42,6 +42,7 @@ public class Parser {
     private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
     private static final int MAX_INT_LENGTH = 10;
     private static final double ROUNDING_FACTOR = 100.0;
+    private static final String EMPTY_STRING = "";
     private static final String SPACE = " ";
     private static final String QUIT_COMMAND = "quit";
     private static final String NEW_COMMAND = "new";
@@ -163,7 +164,7 @@ public class Parser {
      */
     private static String getParameters(String input) {
         if (!input.contains(SPACE)) {
-            return "";
+            return EMPTY_STRING;
         }
         return input.substring(input.indexOf(SPACE)).trim();
     }
@@ -627,7 +628,7 @@ public class Parser {
             }
             return input.substring(paramPos + 1, paramPos + 2);
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {
-            return "";
+            return EMPTY_STRING;
         }
     }
 
@@ -736,8 +737,8 @@ public class Parser {
         boolean hasTo = !matcher.group(TO_GROUP).isEmpty();
 
         String type = matcher.group(TYPE_GROUP).trim();
-        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, "").trim();
-        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, "").trim();
+        String fromString = matcher.group(FROM_GROUP).replace(FROM_FLAG + BASE_FLAG, EMPTY_STRING).trim();
+        String toString = matcher.group(TO_GROUP).replace(TO_FLAG + BASE_FLAG, EMPTY_STRING).trim();
 
         boolean hasStartParam = !fromString.isEmpty();
         boolean hasEndParam = !toString.isEmpty();
@@ -892,7 +893,7 @@ public class Parser {
         String nameInput = matcher.group(NAME_GROUP).trim();
         String quantityString = matcher.group(QUANTITY_GROUP).trim();
         String priceString = matcher.group(PRICE_GROUP).trim();
-        String dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, "");
+        String dateString = matcher.group(EX_DATE_GROUP).trim().replace(EX_DATE_FLAG + BASE_FLAG, EMPTY_STRING);
 
         validateNonEmptyParam(nameInput);
         validateNonEmptyParam(quantityString);
@@ -926,9 +927,9 @@ public class Parser {
         }
 
         String name = matcher.group(NAME_GROUP).trim();
-        String quantityString = matcher.group(QUANTITY_GROUP).replace(QUANTITY_FLAG + BASE_FLAG, "").trim();
-        String priceString = matcher.group(PRICE_GROUP).replace(PRICE_FLAG + BASE_FLAG, "").trim();
-        String dateString = matcher.group(EX_DATE_GROUP).replace(EX_DATE_FLAG + BASE_FLAG, "").trim();
+        String quantityString = matcher.group(QUANTITY_GROUP).replace(QUANTITY_FLAG + BASE_FLAG, EMPTY_STRING).trim();
+        String priceString = matcher.group(PRICE_GROUP).replace(PRICE_FLAG + BASE_FLAG, EMPTY_STRING).trim();
+        String dateString = matcher.group(EX_DATE_GROUP).replace(EX_DATE_FLAG + BASE_FLAG, EMPTY_STRING).trim();
 
         validateNonEmptyParamsUpdate(name, quantityString, priceString, dateString);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_UPDATE);
@@ -1137,7 +1138,7 @@ public class Parser {
 
         String reportType = matcher.group(REPORT_TYPE_GROUP).trim();
         String thresholdString = matcher.group(THRESHOLD_GROUP).
-                replace(THRESHOLD_FLAG + BASE_FLAG, "").trim();
+                replace(THRESHOLD_FLAG + BASE_FLAG, EMPTY_STRING).trim();
 
         validateNonEmptyParamsReport(reportType, thresholdString);
         validateReportFormat(reportType, thresholdString);
@@ -1211,7 +1212,7 @@ public class Parser {
             throw new TrackerException(ErrorMessage.INVALID_CLEAR_FORMAT);
         }
 
-        String dateString = matcher.group(BEFORE_DATE_GROUP).replace(BEFORE_DATE_FLAG + BASE_FLAG, "").trim();
+        String dateString = matcher.group(BEFORE_DATE_GROUP).replace(BEFORE_DATE_FLAG + BASE_FLAG, EMPTY_STRING).trim();
         LocalDate beforeDate = parseDate(dateString);
 
         if (beforeDate.isEqual(UNDEFINED_DATE)) {
