@@ -1,11 +1,11 @@
 # Developer Guide
 
 - [Acknowledgements](#acknowledgements)
-- [Design & implementation](#design--implementation)
+- [Design](#design)
   - [Architecture](#architecture)
   - [Parser Component](#parser-component)
   - [Storage Component](#storage-component)
-- [Commands](#commands)
+- [Implementation](#implementation)
   - [New Command](#new-command)
   - [Update Command](#update-command)
   - [Add Command](#add-command)
@@ -36,7 +36,7 @@
 - [PlantUML Docs](https://plantuml.com)
 - and most importantly our Professor **Akshay Narayan** and TA **Vishruti Ranjan** who guided us along this project :D
 
-## Design & implementation
+## Design
 
 ### Architecture
 ![ArchitectureDiagram](uml-diagrams/ArchitectureDiagram.png)\
@@ -195,7 +195,7 @@ corrupted `Transaction` data will be dealt with accordingly.
 > Note: Including the criteria for corrupted data in `Item` data, if a transaction date has been edited such that the new date is of a date that has not occurred yet,
 > _(e.g. changing a date from today to 1 year from today)_, this will also be treated as corrupted 'Transaction' data.
 
-## Commands
+## Implementation
 
 ### New Command
 The following is a class diagram of the NewCommand and its relevant dependencies<br>
