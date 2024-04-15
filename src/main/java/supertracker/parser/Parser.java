@@ -38,8 +38,11 @@ import java.util.regex.Pattern;
 
 public class Parser {
     private static final DateTimeFormatter EX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private static final DateTimeFormatter DATE_FORMAT_NULL = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
-    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", DATE_FORMAT_NULL);
+    private static final DateTimeFormatter NULL_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyyy");
+    private static final LocalDate UNDEFINED_DATE = LocalDate.parse("01-01-99999", NULL_DATE_FORMAT);
+    private static final int FIRST_PARAM_INDEX = 0;
+    private static final int SECOND_PARAM_INDEX = 1;
+    private static final int THIRD_PARAM_INDEX = 2;
     private static final int PARAM_POS_START = 1;
     private static final int PARAM_POS_END = 2;
     private static final int SORT_PARAM_POS_START = 2;
@@ -1019,15 +1022,15 @@ public class Parser {
 
         ArrayList<Integer> paramOrder = getParamPositions(input, hasQuantity, hasPrice, hasExpiry,
                 QUANTITY_FLAG, PRICE_FLAG, EX_DATE_FLAG);
-        String firstParam = extractParam(input, paramOrder, 0, false);
-        String secondParam = extractParam(input, paramOrder, 1, false);
-        String thirdParam = extractParam(input, paramOrder, 2, false);
+        String firstParam = extractParam(input, paramOrder, FIRST_PARAM_INDEX, false);
+        String secondParam = extractParam(input, paramOrder, SECOND_PARAM_INDEX, false);
+        String thirdParam = extractParam(input, paramOrder, THIRD_PARAM_INDEX, false);
 
         ArrayList<Integer> sortParamOrder = getParamPositions(input, hasSortQuantity, hasSortPrice, hasSortExpiry,
                 SORT_QUANTITY_FLAG, SORT_PRICE_FLAG, SORT_EX_DATE_FLAG);
-        String firstSortParam = extractParam(input, sortParamOrder, 0, true);
-        String secondSortParam = extractParam(input, sortParamOrder, 1, true);
-        String thirdSortParam = extractParam(input, sortParamOrder, 2, true);
+        String firstSortParam = extractParam(input, sortParamOrder, FIRST_PARAM_INDEX, true);
+        String secondSortParam = extractParam(input, sortParamOrder, SECOND_PARAM_INDEX, true);
+        String thirdSortParam = extractParam(input, sortParamOrder, THIRD_PARAM_INDEX, true);
 
         return new ListCommand(firstParam, secondParam, thirdParam,
                 firstSortParam, secondSortParam, thirdSortParam, isReverse);
