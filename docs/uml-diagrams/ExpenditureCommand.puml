@@ -88,7 +88,7 @@ else task is "range"
     TransactionList -> ExpenditureCommand : expenditure:BigDecimal
     deactivate TransactionList
 end
-note right : some parameters and methods \n are omitted for brevity
+note right : some parameters and methods \nomitted for brevity
 
 ExpenditureCommand -> TransactionList : getFilteredTransactionList()
 activate TransactionList #d5eac2

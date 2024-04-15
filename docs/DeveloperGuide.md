@@ -544,19 +544,19 @@ and the number of transactions cleared is returned
 The following is a class diagram of the ExpenditureCommand and its relevant dependencies<br>
 ![ExpenditureCommandClass](uml-diagrams/ExpenditureCommandClass.png)
 
-The `ExpenditureCommand` class implements the `Command` interface and is responsible for printing out the expenditures to the output.
-A ExpenditureCommand instance is created by the `parseExpenditureCommand` method called by Parser, which parses the user input to determine the range of dates that the expenditure is supposed to print out.
+The `ExpenditureCommand` class implements the `Command` interface and is responsible for printing out the expenditure and relevant buy transactions to the output.
+A ExpenditureCommand instance is created by the `parseExpenditureCommand` method called by Parser, which parses the user input to determine the range of dates that the expenditure is supposed to calculate.
 
 #### Dependencies
 - `Item`: For getting the comparator needed to sort the list of transactions
-- `TransactionList`: For getting the list of transactions
-- `Ui`: To print the list of items in the inventory to the output
+- `TransactionList`: For calculating the expenditure and getting the filtered list of transactions
+- `Ui`: To print the filtered list of transactions to the output
 
 There are 4 types of expenditures that can be requested:
-1. `exp type/today`: Lists all the expenditures made today
-2. `exp type/total`: Lists all expenditures that have been made
-3. `exp type/day from/{startDate}`: Lists all expenditures made on that particular day
-4. `exp type/range from/{startDate} to/{endDate}`: Lists all expenditures within the range of dates not inclusive of the start and end dates
+1. `exp type/today`: Lists all buy transactions that occurred today
+2. `exp type/total`: Lists all buy transactions in total
+3. `exp type/day from/{startDate}`: Lists all buy transactions that occurred during the specified day
+4. `exp type/range from/{startDate} to/{endDate}`: Lists all buy transactions that occurred in the specified range of dates not inclusive of the start and end dates
 
 The following sequence diagram shows the execution of a ExpenditureCommand<br>
 ![ExpenditureCommandSequence](uml-diagrams/ExpenditureCommandSequence.png)
@@ -564,74 +564,80 @@ The following sequence diagram shows the execution of a ExpenditureCommand<br>
 1. The `SuperTracker` class calls the `execute` method of `ExpenditureCommand`
 2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the 
 method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
-which returns expenditure of type BigDecimal.
-3. The method `getFilteredTransactionList` of class `TransactionList` is then called which returns filteredList of ArrayList<Transaction>.
-4. filteredList is then sorted by calling sort from the ArrayList class and sorted by the transactions expiry date.
+which returns expenditure of type BigDecimal
+3. The method `getFilteredTransactionList` of class `TransactionList` is then called which returns filteredList of class `ArrayList<Transaction>`
+4. filteredList is then sorted by calling sort from the `ArrayList` class and sorted by the transaction date
 5. The `reverse` method of class `Collections` is called on filteredList
-6. `printRevenueExpenditure` method of class Ui is called and the list of filtered transactions is printed out.
+6. `printRevenueExpenditure` method of class `Ui` is called and the list of filtered buy transactions is printed out
 
 ### Revenue Command
 The following is a class diagram of the RevenueCommand and its relevant dependencies<br>
 ![RevenueCommandClass](uml-diagrams/RevenueCommandClass.png)
 
-The `RevenueCommand` class implements the `Command` interface and for calculating and printing out the revenue generated using Sell Command.
-A RevenueCommand instance is called by the parseRevenueCommand method in parser which parses the user input to determine the taskType and time frame of revenue to print out.
+The `RevenueCommand` class implements the `Command` interface and for calculating and printing out the revenue and relevant sell transactions to the output.
+A RevenueCommand instance is created by the `parseRevenueCommand` method called by Parser, which parses the user input to determine the range of dates that the revenue is supposed to calculate.
 
 #### Dependencies
-- `Item`: Comparator for sorting the lists of transactions.
-- `TransactionList`: List of buy and sell transactions.
-- `Ui`: To print various messages and parameters
+- `Item`: For getting the comparator needed to sort the list of transactions
+- `TransactionList`: For calculating the revenue and getting the filtered list of transactions
+- `Ui`: To print the filtered list of transactions to the output
 
-The following sequence diagram shows the execution of a RevenueCommandCommand<br>  
+There are 4 types of revenues that can be requested:
+1. `rev type/today`: Lists all sell transactions that occurred today
+2. `rev type/total`: Lists all sell transactions in total
+3. `rev type/day from/{startDate}`: Lists all sell transactions that occurred during the specified day
+4. `rev type/range from/{startDate} to/{endDate}`: Lists all sell transactions that occurred in the specified range of dates not inclusive of the start and end dates
+
+The following sequence diagram shows the execution of a RevenueCommand<br>
 ![RevenueCommandSequence](uml-diagrams/RevenueCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `RevenueCommand`
 2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the
    method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
-   which returns revenue of type BigDecimal.
-3. The method `getFilteredTransactionList` of class `TransactionList` is then called which returns filteredList of ArrayList<Transaction>.
-4. filteredList is then sorted by calling sort from the ArrayList class and sorted by the transaction date.
+   which returns revenue of type BigDecimal
+3. The method `getFilteredTransactionList` of class `TransactionList` is then called which returns filteredList of class `ArrayList<Transaction>`
+4. filteredList is then sorted by calling sort from the `ArrayList` class and sorted by the transaction date
 5. The `reverse` method of class `Collections` is called on filteredList
-6. `printRevenueExpenditure` method of class Ui is called and the list of filtered transactions is printed out.
+6. `printRevenueExpenditure` method of class `Ui` is called and the list of filtered sell transactions is printed out
 
 ### Profit Command
 The following is a class diagram of the ProfitCommand and its relevant dependencies<br>
 ![ProfitCommandClass](uml-diagrams/ProfitCommandClass.png)
 
-The `ProfitCommand` class implements the `Command` interface and for calculating and printing out the profit generated using Sell and Buy Commands.
-A ProfitCommand instance is called by the parseProfitCommand method in parser which parses the user input to determine the taskType and time frame of profit to print out.
+The `ProfitCommand` class implements the `Command` interface and is responsible for calculating and printing out the total profit generated over a specified time frame.
+A ProfitCommand instance is created by the `parseProfitCommand` method called by Parser, which parses the user input to determine the range of dates that the profit is supposed to calculate.
 
 #### Dependencies
-- `TransactionList`: List of buy and sell transactions.
-- `Ui`: To print various messages and parameters
+- `TransactionList`: For calculating the expenditure and revenue
+- `Ui`: To print the profit to the output
 
-The following sequence diagram shows the execution of a ProfitCommandCommand<br>  
+The following sequence diagram shows the execution of a ProfitCommand<br>
 ![ProfitCommandSequence](uml-diagrams/ProfitCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `ProfitCommand`
 2. There is an alternative path check for whether the task is "today", "total", "day" and "range" and the
    method `calculateDay`, `calculateTotal`, `calculateDay` and `calculateRange` of class `TransactionList` would be called respectively
-   which returns expenditure and revenue of type BigDecimal for calculation of profit. 
-3. `printProfit` method of class Ui is called and the profit over the specified period is printed out.
+   which returns expenditure and revenue of type BigDecimal for calculation of profit
+3. `printProfit` method of class `Ui` is called and the profit over the specified time frame is printed out
 
 ### Help Command
 The following is a class diagram of the HelpCommand and its relevant dependencies<br>
 ![HelpCommandClass](uml-diagrams/HelpCommandClass.png)
 
-The HelpCommand class implements the Command interface and is responsible for assisting users with various tasks.
-A HelpCommand instance is created by the parseHelpCommand method called by Parser, which ensures that the provided parameter (task) is valid.
+The `HelpCommand` class implements the `Command` interface and is responsible for helping users with the commands.
+A HelpCommand instance is created by the `parseCommand` method called by Parser.
 
 #### Dependencies
-- `Ui`: To print out a line
-- `HelpCommandUi`: To print various messages and parameters
+- `HelpCommandUi`: To print various help messages
 
 The following sequence diagram shows the execution of a HelpCommand<br>  
 ![HelpCommandSequence](uml-diagrams/HelpCommandSequence.png)
 
 1. The `SuperTracker` class calls the `execute` method of `HelpCommand` 
 2. The `helpCommandSuccess` method of the `HelpCommandUi` class is called to notify that the help command has been successfully executed
-3. `helpCommandSuccess` will also print a list of functions available for user to input
-4. Upon choosing a valid function, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen function
+3. `helpCommandSuccess` will also print a list of commands available for user to input
+4. If the user inputs a valid command, the `printCommandParams` method of the `HelpCommandUi` is called to print the parameters needed for the chosen command.
+Else, the `printInvalidHelpMessage` method of the `HelpCommandUi` is called to notify that the user has input an invalid command
 5. The `helpClosingMessage` method of the `HelpCommandUi` class is then called to notify that the user has been returned to the main console
 
 ## Appendix

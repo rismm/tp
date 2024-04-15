@@ -85,8 +85,8 @@ Given below are my contributions to the project.
     - Added notes about command format section
     - Added FAQ section
   - [Developer Guide](https://ay2324s2-cs2113-t13-4.github.io/tp/DeveloperGuide.html)
-    - Added implementation details of new and list commands
-    - Used PlantUML to create the UML class and sequence diagrams for the new and list commands
+    - Added implementation details of new, list, add, remove, clear commands
+    - Used PlantUML to create the UML class and sequence diagrams for new, list, add, remove, clear commands
 
 
 - **Contributions to team-based tasks:**

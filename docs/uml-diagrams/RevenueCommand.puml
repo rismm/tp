@@ -88,7 +88,7 @@ else task is "range"
     TransactionList -> RevenueCommand : revenue:BigDecimal
     deactivate TransactionList
 end
-note right : some parameters and methods \n are omitted for brevity
+note right : some parameters and methods \nomitted for brevity
 
 RevenueCommand -> TransactionList : getFilteredTransactionList()
 activate TransactionList #d5eac2

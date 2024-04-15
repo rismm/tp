@@ -57,41 +57,54 @@ participant "Ui" as Ui <<class>> #e5c2ea
 SuperTracker -> ProfitCommand : execute()
 activate ProfitCommand #cbf7f4
 alt task is "today"
-    ProfitCommand -> TransactionList : calculateDay()
+    ProfitCommand -> TransactionList : calculateToday()
     activate TransactionList #d5eac2
-    TransactionList -> ProfitCommand : revenue:BigDecimal
-    TransactionList -> ProfitCommand : expenditure:BigDecimal
+    TransactionList --> ProfitCommand : revenue:BigDecimal
+    deactivate TransactionList
+    ProfitCommand -> TransactionList : calculateToday()
+    activate TransactionList #d5eac2
+    TransactionList --> ProfitCommand : expenditure:BigDecimal
     deactivate TransactionList
 
 else task is "total"
     ProfitCommand -> TransactionList : calculateTotal()
     activate TransactionList #d5eac2
-    TransactionList -> ProfitCommand : revenue:BigDecimal
-    TransactionList -> ProfitCommand : expenditure:BigDecimal
+    TransactionList --> ProfitCommand : revenue:BigDecimal
+    deactivate TransactionList
+    ProfitCommand -> TransactionList : calculateTotal()
+    activate TransactionList #d5eac2
+    TransactionList --> ProfitCommand : expenditure:BigDecimal
     deactivate TransactionList
 
 else task is "day"
     ProfitCommand -> TransactionList : calculateDay()
     activate TransactionList #d5eac2
-    TransactionList -> ProfitCommand : revenue:BigDecimal
-    TransactionList -> ProfitCommand : expenditure:BigDecimal
+    TransactionList --> ProfitCommand : revenue:BigDecimal
+    deactivate TransactionList
+    ProfitCommand -> TransactionList : calculateDay()
+    activate TransactionList #d5eac2
+    TransactionList --> ProfitCommand : expenditure:BigDecimal
     deactivate TransactionList
 
 else task is "range"
     ProfitCommand -> TransactionList : calculateRange()
     activate TransactionList #d5eac2
-    TransactionList -> ProfitCommand : revenue:BigDecimal
-    TransactionList -> ProfitCommand : expenditure:BigDecimal
+    TransactionList --> ProfitCommand : revenue:BigDecimal
+    deactivate TransactionList
+    ProfitCommand -> TransactionList : calculateRange()
+    activate TransactionList #d5eac2
+    TransactionList --> ProfitCommand : expenditure:BigDecimal
     deactivate TransactionList
 end
+
 note right : some parameters and methods \n are omitted for brevity
 
 ProfitCommand -> Ui : printProfit()
 activate Ui #e5c2ea
-Ui -> ProfitCommand
+Ui --> ProfitCommand
 deactivate Ui
 
-ProfitCommand -> SuperTracker
+ProfitCommand --> SuperTracker
 deactivate ProfitCommand
 
 @enduml
