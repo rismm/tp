@@ -642,7 +642,7 @@ Else, the `printInvalidHelpMessage` method of the `HelpCommandUi` is called to n
 
 ## Appendix
 ### Product scope
-#### Target user profile
+#### Target user profile:
 * Works as a supermarket inventory manager
 * Has a need to manage a significant amount of items in an inventory
 * Has a need to manage a significant amount of transactions
@@ -653,7 +653,7 @@ Else, the `printInvalidHelpMessage` method of the `HelpCommandUi` is called to n
 #### Value proposition:
 **SuperTracker** is designed to provide the following benefits for inventory management:
 1. Fast and easy access to inventory information
-2. Efficient tracking of product stocks
+2. Efficient tracking of stock level
 3. Efficient tracking of expiring goods
 4. Recording transactional data (buying and selling of goods)
 5. Generation of expenditure and revenue reports
@@ -670,7 +670,7 @@ Else, the `printInvalidHelpMessage` method of the `HelpCommandUi` is called to n
 | v1.0    | user                              | list the full inventory of my products                                | know all products that are in my inventory                                                                |
 | v1.0    | user                              | know the specific number of items in the inventory                    | keep track of the quantity of items available                                                             |
 | v1.0    | user                              | know the price of an item in the inventory                            | draw correlations between price and sales                                                                 |
-| v1.0    | user                              | update an item's price and stock                                      | edit the parameters of my product item as I want                                                          |
+| v1.0    | user                              | update an item's price and quantity                                   | edit the parameters of my product item as I want                                                          |
 | v1.0    | user                              | add/remove a certain number of an item's quantity without calculation | modify an item's quantity simply without needing to do math                                               |
 | v1.0    | user unfamiliar with the commands | be shown error messages informing me of my invalid inputs             | know which part of my input is incorrect/invalid when I have entered an invalid command                   |
 | v2.0    | user                              | sort my items by the parameter of my choice                           | view my items in a sorted manner                                                                          |
