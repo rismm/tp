@@ -554,9 +554,10 @@ The following sequence diagram shows the execution of a ClearCommand<br>
 2. The `clearCommandConfirmation` method of the `Ui` class is called to confirm with the user if they want to proceed with the clear operation
 3. The User then inputs his/her response
 4. If the input is not `y` or `Y`, the `clearCommandCancelled` method of the `Ui` class is called to notify the user that the clear operation has been cancelled
-5. Else if the input is 'y' or 'Y', the private method `clearOldTransactions` is called to clear all transactions before the specified date, 
+5. Else if the input is `y` or `Y`, the private method `clearOldTransactions` is called to clear all transactions before the specified date, 
 and the number of transactions cleared is returned
-6. The `resaveCurrentTransactions` method of the `TransactionStorage` class is called to remove the cleared transactions from the hard disk
+6. The `clearCommandSuccess` method of the `Ui` class is called to notify the user that the clear operation has been successfully completed
+7. The `resaveCurrentTransactions` method of the `TransactionStorage` class is called to remove the cleared transactions from the hard disk
 
 ### Expenditure Command
 The following is a class diagram of the ExpenditureCommand and its relevant dependencies<br>
