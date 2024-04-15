@@ -595,7 +595,7 @@ public class Ui {
             printIndent("Nothing cleared. No transactions before " + dateString + " available to clear");
             return;
         }
-        String plural = transactionsCleared == 1 ? "" : "s";
+        String plural = transactionsCleared == 1 ? EMPTY_STRING : "s";
         printIndent(transactionsCleared + " transaction" + plural
                 + " before " + dateString + " successfully cleared!");
     }
