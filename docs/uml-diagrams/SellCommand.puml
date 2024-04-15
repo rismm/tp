@@ -12,7 +12,7 @@ class TransactionList
 class TransactionStorage
 class Ui
 
-RemoveCommand <|. SellCommand
+RemoveCommand <|- SellCommand
 Transaction <.. SellCommand
 Ui <.. SellCommand
 TransactionList <.. SellCommand
