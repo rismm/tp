@@ -76,7 +76,7 @@ deactivate Inventory
 alt items.isEmpty()
     ReportCommand -> Ui : reportNoItems()
     activate Ui #e5c2ea
-    Ui -> ReportCommand
+    Ui --> ReportCommand
     deactivate Ui
 
 else
@@ -88,7 +88,7 @@ else
         loop for each item in items
             ReportCommand -> Item : getQuantity()
             activate Item #fbffb2
-            Item -> ReportCommand
+            Item --> ReportCommand
             deactivate Item
             opt items quantity is less than threshold
                 ReportCommand -> ReportCommand : reportLowStockItems.add(item)
@@ -97,7 +97,7 @@ else
             note right : items sorted by quantity
             ReportCommand -> Ui : reportCommandSuccess()
             activate Ui #e5c2ea
-            Ui -> ReportCommand
+            Ui --> ReportCommand
             deactivate Ui
         end
         ReportCommand -> ReportCommand
@@ -109,7 +109,7 @@ else
         loop for each item in items
             ReportCommand -> Item : getExpiryDate()
             activate Item #fbffb2
-            Item -> ReportCommand
+            Item --> ReportCommand
             deactivate Item
             opt items with expiry dates that are between today and a week later
                 ReportCommand -> ReportCommand : reportExpiryItems.add(item)
@@ -122,7 +122,7 @@ else
             ReportCommand -> Ui : reportCommandSuccess()
             note left : for both expiry reports
             activate Ui #e5c2ea
-            Ui -> ReportCommand
+            Ui --> ReportCommand
             deactivate Ui
         end
 
