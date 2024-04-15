@@ -510,6 +510,15 @@ public class Parser {
      * @throws TrackerException If the item already exists in the inventory
      */
     private static String validateItemNotInInventory(String name, String errorMessage) throws TrackerException {
+        String itemName = replaceDelimitersInName(name);
+
+        if (Inventory.contains(itemName)) {
+            throw new TrackerException(itemName + errorMessage);
+        }
+        return itemName;
+    }
+
+    private static String replaceDelimitersInName(String name) {
         String itemName = name;
         if (name.contains(FILE_DELIMITER)) {
             while (itemName.contains(FILE_DELIMITER)) {
@@ -519,9 +528,6 @@ public class Parser {
             Ui.printItemNameLimitation(name, FILE_DELIMITER, itemName);
         }
 
-        if (Inventory.contains(itemName)) {
-            throw new TrackerException(itemName + errorMessage);
-        }
         return itemName;
     }
 
@@ -973,8 +979,11 @@ public class Parser {
         String newName = matcher.group(NEW_NAME_GROUP).trim();
         validateNonEmptyParam(newName);
         validateItemExistsInInventory(name, ErrorMessage.ITEM_NOT_IN_LIST_RENAME);
-        newName = validateItemNotInInventory(newName, ErrorMessage.ITEM_IN_LIST_RENAME);
+        newName = replaceDelimitersInName(newName);
 
+        if (!newName.equalsIgnoreCase(name)) {
+            newName = validateItemNotInInventory(newName, ErrorMessage.ITEM_IN_LIST_RENAME);
+        }
         return new RenameCommand(name, newName);
     }
     //@@author
